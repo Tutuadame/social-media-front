@@ -1,17 +1,17 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { deletePost, getProfilePosts } from "../../../../api/profile/postAPI";
-import { GetPageablePostsRequest, Post } from "../../../../interface/profile/post";
+import { deletePost, getProfilePosts } from "../../api/profile/postAPI.ts";
+import { GetPageablePostsRequest, Post } from "../../interface/profile/post.ts";
 import { useEffect, useState } from "react";
-import { useActivityContext } from "../../../../context/Profile/Activity/ActivityContext";
-import { PostComponent } from "../../../Home/PostComponent";
-import { getProfile } from "../../../../api/profile/profileAPI";
-import { ProfileResponse } from "../../../../interface/profile/profile";
-import { useLayoutContext } from "../../../../context/Layout/LayoutOutContext";
-import { IconButton } from "../../../Button/General/IconButton";
-import { createSvg } from "../../../../utils/htmlUtils";
-import { LoadMoreButton } from "../../../Button/General/LoadMoreButton";
+import { useActivityContext } from "../../context/Activity/ActivityContext.tsx";
+import { PostComponent } from "../Home/PostComponent.tsx";
+import { getProfile } from "../../api/profile/profileAPI.ts";
+import { ProfileResponse } from "../../interface/profile/profile.ts";
+import { useLayoutContext } from "../../context/Layout/LayoutOutContext.tsx";
+import { IconButton } from "../Button/General/IconButton.tsx";
+import { createSvg } from "../../utils/htmlUtils.tsx";
+import { LoadMoreButton } from "../Button/General/LoadMoreButton.tsx";
 
-export const PostsTable = () => {
+export const UserPostsComponent = () => {
 
     const { user } = useAuth0();
     const currentId = user?.sub?.split('|')[1] || "no-id";
@@ -69,12 +69,12 @@ export const PostsTable = () => {
       callUserPosts();
     }, []);
 
-    return <div className="flex flex-col w-full gap-10 h-full">
+    return <div className="flex flex-col w-full gap-10 h-[80vh]">
         <h2 className="text-white m-auto text-center h-fit w-fit text-4xl p-3 mt-10 mb-20 tracking-widest">Created Posts</h2>
         { posts?.length === 0 ? 
           <h3 className="text-white m-auto text-center h-fit w-fit text-2xl p-3 mt-10 mb-20 tracking-widest"> Go ahead and create something!</h3>
         :
-        <>
+        <div className={"flex flex-col gap-y-10 overflow-auto"}>
           {posts?.map((post) => {
             return (
               <div className="flex flex-row gap-y-10 m-auto">  
@@ -90,7 +90,7 @@ export const PostsTable = () => {
             loadMoreStyle={loadMoreStyle}
             style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"
           />
-        </>}
+        </div>}
       </div>
     
 };

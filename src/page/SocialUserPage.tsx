@@ -3,7 +3,7 @@ import { getProfile } from "../api/profile/profileAPI";
 import { ProfileResponse } from "../interface/profile/profile";
 import { useNavigate, useParams } from "react-router-dom";
 import { BasicButton } from "../components/Button/General/BasicButton";
-import { createConnection, isConnected } from "../api/profile/connectionAPI";
+import { createConnection, checkConnectionStatus } from "../api/profile/connectionAPI";
 import { useAuth0 } from "@auth0/auth0-react";
 import { CheckConnectionRequest } from "../interface";
 import { createConversation } from "../api/communication/conversationAPI";
@@ -11,16 +11,16 @@ import { CreateConversationRequest, SimpleConversation } from "../interface/comm
 import { CreateConnectionRequest } from "../interface";
 import { useLayoutContext } from "../context/Layout/LayoutOutContext";
 
-export const SocialUser = () => {
+export const SocialUserPage = () => {
 
   const { userId } = useParams<{userId: string}>();
   const { user } = useAuth0();
   const currentId = user?.sub?.split('|')[1] || "no-id";  
   const [userProfile, setUserProfile] = useState<ProfileResponse>();
-  const [connected, setConnected] = useState<boolean>(false);
+  const [connected, setConnected] = useState<string | undefined>(undefined);
   const infoRowContainerStyle = "w-4/5 flex flex-row gap-x-10 text-2xl tracking-widest text-slate-100 bg-slate-800 p-10 justify-between mx-auto shadow-xl rounded-xl font-thin";
   const lastInfoContainerStyle = "w-4/5 mb-10 flex flex-col gap-x-10 text-2xl tracking-widest text-slate-100 bg-slate-800 p-10 justify-between mx-auto shadow-xl rounded-xl font-thin";
-  const actionButton = "p-5 bg-slate-900 w-1/2 rounded-xl hover:outline hover:outline-2 hover:outline-offset-4 transition-all mx-auto";  
+  const actionButton = "p-5 bg-slate-900 w-1/2 rounded-xl hover:outline hover:outline-2 hover:outline-offset-4 transition-all mx-auto";
   const navigate = useNavigate();
   const { setConnections } = useLayoutContext();
   
@@ -41,7 +41,6 @@ export const SocialUser = () => {
       }
       const response = await createConnection(createRequest);
       setConnections(prev => [...prev, response]);
-      setConnected(true);
     }
   }
 
@@ -62,26 +61,36 @@ export const SocialUser = () => {
         currentUserId: currentId,
         targetUserId: userId
       }
-      const result = await isConnected(requestParams).then(result => result);
-      setConnected(result)     
+      const result = await checkConnectionStatus(requestParams).then(result => result);
+      console.log(result);
+      !result ? setConnected("") : setConnected(result);
     }
   }
 
   useEffect( () => {
-    if(!userProfile) {
-      callProfile();      
-    }
-    callConnectionCheck();
-  }, []);
+    (async () =>{
+      await callConnectionCheck();
+      if(!userProfile) {
+        await callProfile();
+      }
+    })()
+  }, [])
+  
+  if(connected === "BLOCKED") return <div className={"m-auto"}>
+    <h2 className={"tracking-widest text-2xl text-white"}>The user is not available!</h2>
+  </div>
 
   return <div className="flex flex-col h-fit w-full gap-y-10 overflow-auto max-w-[55%] bg-slate-400 p-5 border-2 rounded-xl shadow-2xl m-auto">    
     <div className="w-3/5 flex flex-row text-2xl tracking-widest justify-between mt-10 mx-auto p-1 text-white gap-x-5 items-center">
-      <img src={userProfile?.picture} className="w-36 h-36 m-auto rounded-full border-8-transparent bg-slate-100 p-1"/>
-      { connected ? 
-      <BasicButton style={actionButton} text="Message" action={() => {startConversation()}}/>
-        :
-      <BasicButton style={actionButton} text="Connect" action={() => {connect()}}/>
-      }      
+      <img src={userProfile?.picture} className="w-36 h-36 m-auto rounded-full border-8-transparent bg-slate-100 p-1" alt={"Profile"}/>
+      { connected === "ACCEPTED" ?
+        <BasicButton style={actionButton} text="Message" action={() => {startConversation()}}/>
+          :
+          connected === "PENDING" ?
+            <h2 className={"text-white text-2xl tracking-widest"}>Pending...</h2>
+            :
+          <BasicButton style={actionButton} text="Connect" action={() => {connect()}}/>
+      }
     </div>    
     <div className={infoRowContainerStyle}>
       <p className="">Name</p>

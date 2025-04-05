@@ -1,3 +1,5 @@
+import React from "react";
+
 type ButtonProps = {
   action: () => void;
   text: string;
@@ -8,7 +10,7 @@ type ButtonProps = {
 export const BasicButton: React.FC<ButtonProps> = ({
   action: onClick,
   text,
-  style = "h-[6vh] w-[5vw] text-white bg-slate-400 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 transition-all p-2 my-auto tracking-widest",
+  style = "h-[6vh] w-[6vw] text-white bg-slate-400 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 transition-all my-auto font-semibold tracking-widest",
   type = "button",
 }) => {
   return (

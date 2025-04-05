@@ -57,10 +57,10 @@ export const updateIntroduction = async (id: string, introduction: string) => {
             method: PATCH_METHOD,
             headers: CONTENT_TYPE_JSON,
             credentials: "include",
-            body: JSON.stringify({introduction})
+            body: JSON.stringify({ introduction })
         });
 
-        return response.json().then(result => result);
+        return response.json();
     } catch (e) {
         console.error(updateIntroductionErrorMessage, (e as Error).message);
     }

@@ -59,14 +59,13 @@ export const createConversation = async (params: CreateConversationRequest) => {
 
 export const updateConversationName = async (conversationId: string, name: string) => {
   try{
-    const callApi = await fetch(`${updateConversationNamePath}/${conversationId}`, {
+    const response = await fetch(`${updateConversationNamePath}/${conversationId}`, {
       method: PATCH_METHOD,
       headers: CONTENT_TYPE_JSON,
       credentials: "include",
       body: JSON.stringify({name})
     });
-    return callApi.json()
-      .then((result) => result);
+    return response.json();
   } catch (e){
     console.error(updateConversationNameErrorMessage, (e as Error).message); 
   }

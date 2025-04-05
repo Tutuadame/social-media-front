@@ -1,4 +1,4 @@
-import { Communication } from '../page/Communication';
+import { CommunicationPage } from '../page/CommunicationPage.tsx';
 import { ActivityButton } from './Button/Specific/DashBoard/ActivityButton';
 import { HomeButton } from './Button/Specific/DashBoard/HomeButton';
 import { IdentityButton } from './Button/Specific/DashBoard/IdentityButton';
@@ -8,17 +8,17 @@ import { NotificationButton } from './Button/Specific/DashBoard/NotificationButt
 import { LoginButton } from './Button/Specific/Home/LoginButton';
 import { RegistrationButton } from './Button/Specific/Home/RegistrationButton';
 import { DeleteButton } from './Button/Specific/Profile/DeleteButton';
-import { HomePage } from './Home/HomePage';
-import { WelcomePage } from './Home/WelcomePage';
+import { HomePageComponent } from './Home/HomePageComponent.tsx';
+import { WelcomePage } from '../page/WelcomePage.tsx';
 
 export {
   LoginButton,
   RegistrationButton,
   DeleteButton,
   IdentityButton,
-  Communication,
+  CommunicationPage,
   LogOutButton,
-  HomePage,
+  HomePageComponent,
   WelcomePage,
   HomeButton,
   ActivityButton,

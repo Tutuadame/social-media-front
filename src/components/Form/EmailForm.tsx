@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { BasicButton } from "../../Button/General/BasicButton.tsx";
-import { updateUserInfo } from "../../../api";
+import { BasicButton } from "../Button/General/BasicButton.tsx";
+import { updateUserInfo } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
-import { useSecurityMenuContext } from "../../../context/Profile/Identity/SecurityMenuContext.tsx";
+import { useSecurityMenuContext } from "../../context/Identity/SecurityMenuContext.tsx";
 
 export const EmailForm = () => {
   const [currentEmail, setCurrentEmail] = useState("");

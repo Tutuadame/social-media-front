@@ -1,7 +1,7 @@
-import { createContext, MutableRefObject, ReactNode, useContext, useRef, useState } from "react";
+import React, { createContext, MutableRefObject, ReactNode, useContext, useRef, useState } from "react";
 
 interface ActivityContextType {
-    category: "Posts" | "Connections" | "";
+    category: "Posts" | "Requests" | "";
     switchCategory: (profile: string) => void,    
     tablePage: MutableRefObject<number>,    
 }
@@ -9,11 +9,11 @@ interface ActivityContextType {
 export const ActivityContext = createContext<ActivityContextType | undefined>(undefined);
 
 export const ActivityMenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
-    const [category, setCategory] = useState<"Posts" | "Connections" | "">("Connections");    
+    const [category, setCategory] = useState<"Posts" | "Requests" | "">("Requests");
     const tablePage = useRef(0);
 
     const switchCategory = (category: string) => {
-        if(category === "Posts" || category === "Connections" || category === "") {
+        if(category === "Posts" || category === "Requests" || category === "") {
             setCategory(category);
         } else {
             throw new Error("There is no menu option for: "+category);

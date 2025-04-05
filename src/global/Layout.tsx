@@ -1,45 +1,45 @@
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { SideBar } from "./index";
-import { CSSProperties } from "react";
-import { LayoutContextProvider } from "../context/Layout/LayoutOutContext";
-import { Auth0Provider } from "@auth0/auth0-react";
-
-const Auth0ProviderWithRedirect = ({ children }: { children: React.ReactNode }) => {
-  const navigate = useNavigate();
-
-  const domain = import.meta.env.VITE_AUTH0_DOMAIN!;
-  const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID!;
-  const redirectUri = window.location.origin;
-
-  return (
-    <Auth0Provider
-      domain={domain}
-      clientId={clientId}
-      authorizationParams={{ redirect_uri: redirectUri }}
-      onRedirectCallback={(appState) => {        
-        console.log("APP STATE:", appState);
-        if (appState?.flow === "signup") {
-          navigate("/registration");
-        } else {
-          navigate("/");
-        }        
-      }}
-    >
-      {children}
-    </Auth0Provider>
-  );
-}
+import {CSSProperties, useEffect} from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import {ActivityMenuProvider} from "../context/Activity/ActivityContext.tsx";
+import {SecurityMenuProvider} from "../context/Identity/SecurityMenuContext.tsx";
+import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
+import {getProfile} from "../api/profile/profileAPI.ts";
+import {getAcceptedConnectionsByUser} from "../api/profile/connectionAPI.ts";
 
 export const Layout = () => {
   const layoutStyle = "flex flex-row flex-nowrap flex-auto bg-slate-600";
   const mainStyle: CSSProperties = {
     width: "100vw",
   };
+  const { user, isLoading} = useAuth0();
+  const { profile, setProfile, setConnections } = useLayoutContext();
+  
+  const callUserProfile = async (id: string) => {
+    const response = await getProfile(id).then(response => response);
+    setProfile(response);
+  }
+  
+  const callConnections = async (profileId: string) => {
+     const tempConnections = await getAcceptedConnectionsByUser(profileId).then(result => result);
+     setConnections(tempConnections)
+  }
+  
+  useEffect(() => {
+    if (!isLoading && user && !profile.id) {
+      // @ts-ignore we check for user above
+      const currentId = user?.sub.split('|')[1];
+      callUserProfile(currentId);
+      callConnections(currentId);
+    }
+  }, [isLoading]);
 
+  
   return (
     <>
-      <Auth0ProviderWithRedirect>
-      <LayoutContextProvider>
+      <ActivityMenuProvider>
+      <SecurityMenuProvider>
           <div className={layoutStyle}>
             <SideBar />
             <main
@@ -49,8 +49,8 @@ export const Layout = () => {
               <Outlet />
             </main>
           </div>
-      </LayoutContextProvider>
-      </Auth0ProviderWithRedirect>
+      </SecurityMenuProvider>
+      </ActivityMenuProvider>
     </>
   );
 };

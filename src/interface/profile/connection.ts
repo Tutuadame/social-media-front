@@ -1,21 +1,21 @@
 export interface CreateConnectionRequest {
     initiatorId: string,
     targetId: string,
-};
+}
 
 export interface CheckConnectionRequest {
     currentUserId: string,
     targetUserId: string,
-};
+}
 
 export interface UpdateConnectionsStatusRequest {
     id: number,
     status: string,
-};
+}
 
 export interface UpdateConnectionStatusResponse {
     id: number    
-};
+}
 
 export interface ConnectionResponse {
     id: number;
@@ -23,7 +23,7 @@ export interface ConnectionResponse {
     firstName: string;
     lastName: string;
     picture: string;
-};
+}
 
 export interface PagedConnections {
     content: ConnectionResponse[],

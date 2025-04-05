@@ -11,8 +11,7 @@ const isConnectedErrorMessage = "Error checking connection: ";
 
 export const getAcceptedConnectionsByUser = async (profileId: string) => {    
     try {
-      const id = profileId.split("|")[1];
-      const response = await fetch(`${getAcceptedConnectionsByUserPath}/${id}`, {
+      const response = await fetch(`${getAcceptedConnectionsByUserPath}/${profileId}`, {
         method: POST_METHOD,
         headers: CONTENT_TYPE_JSON,
         credentials: "include",
@@ -84,7 +83,7 @@ export const createConnection = async (requestParams: CreateConnectionRequest) =
     }
 };
 
-export const isConnected = async (requestParams: CheckConnectionRequest) => {
+export const checkConnectionStatus = async (requestParams: CheckConnectionRequest) => {
   const { currentUserId, targetUserId } = requestParams;
   const params = new URLSearchParams({
     currentUserId: currentUserId.toString(),
@@ -97,7 +96,7 @@ export const isConnected = async (requestParams: CheckConnectionRequest) => {
       headers: CONTENT_TYPE_JSON,
       credentials: "include",
     });
-  return response.json();    
+  return response.text();
 
   } catch (e) {
     console.error(isConnectedErrorMessage, (e as Error).message);

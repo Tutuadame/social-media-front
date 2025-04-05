@@ -3,7 +3,6 @@ import { GetPageablePostsRequest, Post } from "../../interface/profile/post";
 import { getConnectionPosts } from "../../api/profile/postAPI";
 import { useAuth0 } from "@auth0/auth0-react";
 import { LoadMoreButton } from "../Button/General/LoadMoreButton";
-import { getAcceptedConnectionsByUser } from "../../api/profile/connectionAPI";
 import { ConnectionResponse } from "../../interface/profile/connection";
 import { PostComponent } from "./PostComponent";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext";
@@ -15,10 +14,10 @@ import { FoundItemsComponent } from "./FoundItemsComponent";
 import { BasicButton } from "../Button/General/BasicButton";
 import { SearchBar } from "../SearchBar";
 
-export const HomePage = () => {
+export const HomePageComponent = () => {
   const { user } = useAuth0();     
   const [posts, setPosts] = useState<Post[]>([]);
-  const {connections, setConnections} = useLayoutContext();
+  const { connections } = useLayoutContext();
   const postsPageRef = useRef<number>(0);
   const searchPageRef = useRef<number>(0);
   const [isSearchOn, setIsSearchOn] = useState(false);
@@ -74,13 +73,6 @@ export const HomePage = () => {
     }        
   }
 
-  const callConnections = async () => {
-    if (user?.sub) {
-      const tempConnections = await getAcceptedConnectionsByUser(user?.sub).then(result => result);
-      setConnections(tempConnections)
-    }
-  }
-
   const checkProfile = (post: Post) => {
     let conversationMember: ConversationMember | undefined = undefined;
     let connectionProfile: ConnectionResponse | undefined = connections.find(
@@ -101,10 +93,7 @@ export const HomePage = () => {
   }
 
   useEffect(() => {
-
-
     setPosts([]);
-    callConnections();
     callPosts();
     if (searchExpression !== "") {
       setFoundProfiles(prev => prev.filter(p => {

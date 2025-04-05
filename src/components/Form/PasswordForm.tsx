@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { BasicButton } from "../../Button/General/BasicButton.tsx";
-import { useSecurityMenuContext } from "../../../context/Profile/Identity/SecurityMenuContext.tsx";
-import { updateUserInfo } from "../../../api";
+import { BasicButton } from "../Button/General/BasicButton.tsx";
+import { useSecurityMenuContext } from "../../context/Identity/SecurityMenuContext.tsx";
+import { updateUserInfo } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export const PasswordForm = () => {

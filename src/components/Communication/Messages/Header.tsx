@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import { Conversation, SimpleConversation } from "../../../interface/communication/conversation";
 import { createSvg } from "../../../utils/htmlUtils";
 import { IconButton } from "../../Button/General/IconButton";
@@ -29,7 +29,7 @@ export const Header: React.FC<HeaderProps> = ({ handleSelectConversation, handle
     };
 
     const callNameChange = async () => {
-      const updatedConversation = await updateConversationName(conversation?.id, conversation?.name || "");      
+      const updatedConversation = await updateConversationName(conversation.id, conversation.name).then(result => result);
       handleConversationUpdate(updatedConversation);
       setRename(false);
     }
@@ -52,15 +52,15 @@ export const Header: React.FC<HeaderProps> = ({ handleSelectConversation, handle
         }
         { openManagement ? 
             <>  
-                <IconButton action={() => {setOpenManagement(false)}} active={true}>
-                    {membersSVG}
-                </IconButton>
+              <IconButton action={() => {setOpenManagement(false)}} active={true}>
+                  {membersSVG}
+              </IconButton>
             </>
             :
             <>
-                <IconButton action={() => {setOpenManagement(true)}}>
-                    {membersSVG}
-                </IconButton>
+              <IconButton action={() => {setOpenManagement(true)}}>
+                  {membersSVG}
+              </IconButton>
             </>
         }
         <IconButton action={() => {handleSelectConversation("start")}} style="w-[5vw] text-white bg-slate-400 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 transition-all p-2 m-1 ml-auto">

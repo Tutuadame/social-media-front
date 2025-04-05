@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { UpdateConnectionsStatusRequest, UpdateConnectionStatusResponse } from "../../../../interface/profile/connection";
-import { getPendingConnectionsByUser, updateConnection } from "../../../../api/profile/connectionAPI";
+import { UpdateConnectionsStatusRequest, UpdateConnectionStatusResponse } from "../../interface/profile/connection.ts";
+import { getPendingConnectionsByUser, updateConnection } from "../../api/profile/connectionAPI.ts";
 import { useAuth0 } from "@auth0/auth0-react";
-import { GetPageablePostsRequest } from "../../../../interface/profile/post";
-import { useActivityContext } from "../../../../context/Profile/Activity/ActivityContext";
-import { IconButton } from "../../../Button/General/IconButton";
-import { createSvg } from "../../../../utils/htmlUtils";
-import { useLayoutContext } from "../../../../context/Layout/LayoutOutContext";
-import { LoadMoreButton } from "../../../Button/General/LoadMoreButton";
-import { ProfileButton } from "../../../Button/Specific/Global/ProfileButton";
-import { ConversationMember } from "../../../../interface/communication/member";
+import { GetPageablePostsRequest } from "../../interface/profile/post.ts";
+import { useActivityContext } from "../../context/Activity/ActivityContext.tsx";
+import { IconButton } from "../Button/General/IconButton.tsx";
+import { createSvg } from "../../utils/htmlUtils.tsx";
+import { useLayoutContext } from "../../context/Layout/LayoutOutContext.tsx";
+import { LoadMoreButton } from "../Button/General/LoadMoreButton.tsx";
+import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
+import { ConversationMember } from "../../interface/communication/member.ts";
 
-export const ConnectionsTable = () => {
+export const PendingConnectionsComponent = () => {
     const { connections, setConnections} = useLayoutContext();
     const { tablePage } = useActivityContext();
     const [loadMoreStyle, setLoadMoreStyle] = useState("flex justify-center");
@@ -63,11 +63,11 @@ export const ConnectionsTable = () => {
     }, [])
 
     return (
-      <div className="flex flex-col w-1/3 mx-auto mt-5">
+      <div className="flex flex-col w-full mx-auto mt-5 h-[80vh]">
         <h2 className="text-white m-auto text-center h-fit w-fit text-4xl p-3 mt-10 mb-20 tracking-widest">Pending Connections</h2>
 
         {connections?.length !== 0 ? 
-        <> {connections?.map((connection) => {
+        <div className={"overflow-auto"}> {connections?.map((connection) => {
           const cM : ConversationMember = {
             id: connection.profileId,
             firstName: connection.firstName,
@@ -75,7 +75,7 @@ export const ConnectionsTable = () => {
             picture: connection.picture
           }
           return (
-            <div className="flex flex-row gap-y-10 gap-x-16 my-auto mb-[2vh] justify-center bg-slate-900 p-5 rounded-xl">
+            <div className="flex flex-row gap-y-10 gap-x-16 m-auto mb-[2vh] justify-center bg-slate-900 p-5 rounded-xl w-fit">
               <ProfileButton profile={cM}/>              
               <div className="flex flex-row gap-x-3">
                 <IconButton style={optionStyle} action={() => {callUpdateConnection(connection.id, ACCEPTED_STATUS)}}> {checkSVG} </IconButton>
@@ -90,7 +90,7 @@ export const ConnectionsTable = () => {
             loadMoreStyle={loadMoreStyle}
             style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"              
           />
-        </>
+        </div>
         : <h3 className="text-white m-auto text-center h-fit w-fit text-2xl p-3 mt-10 mb-20 tracking-widest"> Nobody added you yet! </h3>}
       </div>
     );

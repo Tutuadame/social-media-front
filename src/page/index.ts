@@ -1,4 +1,4 @@
-import { Home } from "./Home";
+import { HomePage } from "./HomePage.tsx";
 import { NoPage } from "./NoPage";
 
-export { Home, NoPage };
+export { HomePage, NoPage };

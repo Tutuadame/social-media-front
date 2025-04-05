@@ -4,7 +4,7 @@ import { UIProvider } from "../context/Communication/UIContext";
 import { CommunicationComponent } from "../components/Communication/CommunicationComponent";
 import { useParams } from "react-router-dom";
 
-export const Communication = () => {  
+export const CommunicationPage = () => {
   const { conversationId } = useParams<{conversationId: string}>();
   
   return (

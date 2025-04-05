@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from "react";
-import { BasicButton } from "../Button/General/BasicButton";
-import {RegistrationButton} from "../Button/Specific/Home/RegistrationButton.tsx";
-import {LoginButton} from "../Button/Specific/Home/LoginButton.tsx";
+import { BasicButton } from "../components/Button/General/BasicButton.tsx";
+import {RegistrationButton} from "../components/Button/Specific/Home/RegistrationButton.tsx";
+import {LoginButton} from "../components/Button/Specific/Home/LoginButton.tsx";
 
 export const WelcomePage = () => {
     
@@ -22,7 +22,7 @@ export const WelcomePage = () => {
 
     return (
     <>
-        <img style={homePageStyle} src="src/assets/home_unauth_bg.webp" alt="Background"/>
+        <img style={homePageStyle} src="../assets/home_unauth_bg.webp" alt="Background"/>
         <div className={pageStyle}>   
             <h1 className={"mt-28 text-center tracking-widest text-6xl text-white mb-64"}>It all starts now!</h1>
             {isRegister ? <RegistrationButton /> : <LoginButton />}
