@@ -1,5 +1,20 @@
+import { ProfileInfo } from "./auth0/profile";
 import { ResponseMessage } from "./ResponseMessage";
-import { ProfileInfo, ProfileMenuOption, ProfileOption } from "./Profile"
-import { MessageResponse } from "./messageAPI";
+import { MessageResponse } from "./communication/message";
+import {
+  CheckConnectionRequest,  
+  CreateConnectionRequest,  
+  UpdateConnectionsStatusRequest,
+} from "./profile/connection";
+import { AddMemberRequest, DeleteMemberFromConversationRequest } from "./communication/member";
 
-export type { MessageResponse as Message, ResponseMessage, ProfileInfo, ProfileMenuOption, ProfileOption };
+export type {
+  MessageResponse,
+  ResponseMessage,
+  ProfileInfo,
+  CheckConnectionRequest,
+  CreateConnectionRequest,  
+  UpdateConnectionsStatusRequest,
+  AddMemberRequest,  
+  DeleteMemberFromConversationRequest
+};

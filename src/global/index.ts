@@ -1,5 +1,4 @@
-import { Header } from './Header';
-import { Footer } from './Footer';
+import { SideBar } from './SideBar';
 import { Layout } from './Layout';
 
-export { Header, Footer, Layout };
+export { SideBar, Layout };

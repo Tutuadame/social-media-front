@@ -1,85 +1,71 @@
-import { MessageResponse } from "../../interface/messageAPI";
+import { CONTENT_TYPE_JSON, DELETE_METHOD, PATCH_METHOD, POST_METHOD } from "../methods";
+import { deleteMessagePath, getMessagesPath, sendMessagePath, updateMessagePath } from "./paths";
 
-export const getMessages = async (conversationId:number = 2, pageNumber = 0, pageSize = 10) => {
-    try {      
-      const callApi = await fetch(`http://social.media:8444/messageApi/${conversationId}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ 
-        pageNumber,
-        pageSize
-        }),
+const getMessagesErrorMessage = "Error fetching conversation messages: ";
+const sendMessageErrorMessage = "Error sending message: ";
+const updateMessageErrorMessage = "Error updating message: ";
+
+export const getMessages = async (conversationId:string = "2", pageNumber = 0, pageSize = 10) => {
+    try {
+      const response = await fetch(`${getMessagesPath}/${conversationId}`, {
+        method: POST_METHOD,
+        headers: CONTENT_TYPE_JSON,
+        credentials: "include",
+        body: JSON.stringify({pageNumber, pageSize}),
       });
-      return callApi.json()
-        .then((result) => {
-          return result.content;
-        });
+
+      return response.json()
+        .then((result) => {return result.content});
     } catch (e) {
-      console.error("Error fetching user conversations:", (e as Error).message);
+      console.error(getMessagesErrorMessage, (e as Error).message);
     }
 };
 
-export const sendMessage = async (conversationId: number, senderId: string, content: string) : Promise<MessageResponse> => {
+export const sendMessage = async (conversationId: string, senderId: string, content: string) => {
   try {
-    const response = await fetch("http://social.media:8444/messageApi/new", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(sendMessagePath, {
+      method: POST_METHOD,
+      headers: CONTENT_TYPE_JSON,
+      credentials: "include",
       body: JSON.stringify({
         conversationId,
         content,
         senderId,
         sentAt: new Date().toISOString().split(".")[0],
-      }),
+      })
     });
-    if (!response.ok) {      
-      throw new Error(`HTTP error! Status: ${response.status}`);      
-    }
 
-    const result: MessageResponse = await response.json();
-    return result;
+    return response.json().then(result => result);    
   } catch (e) {
-    console.error("Error sending message:", (e as Error).message);
-    throw e;
+    console.error(sendMessageErrorMessage, (e as Error).message);    
   }
 };
 
 export const updateMessage = async (messageId: number, messageContent: string) => {
   try {
-    const response = await fetch(`http://social.media:8444/messageApi/${messageId}`, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
+    const response = await fetch(`${updateMessagePath}/${messageId}`, {
+      method: PATCH_METHOD,
+      headers: CONTENT_TYPE_JSON,
+      credentials: "include",
       body: JSON.stringify({
         messageContent
       }),
     });
-    if (!response.ok) {      
-      throw new Error(`HTTP error! Status: ${response.status}`);
-    }
 
-    const result: MessageResponse = await response.json();
-    return result;
+    return response.json();    
   } catch (e) {
-    console.error("Error updating message:", (e as Error).message);
-    throw e;
+    console.error(updateMessageErrorMessage, (e as Error).message);    
   }
 };
 
 export const deleteMessage = async (messageId: number) => {
   try {
-    await fetch(`http://social.media:8444/messageApi/${messageId}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      }
+    await fetch(`${deleteMessagePath}/${messageId}`, {
+      method: DELETE_METHOD,
+      headers: CONTENT_TYPE_JSON,
+      credentials: "include",
     });
   } catch (e) {
-    console.error("Error deleting message:", (e as Error).message);
-    throw e;
+    console.error("Error deleting message:", (e as Error).message);    
   }
 };

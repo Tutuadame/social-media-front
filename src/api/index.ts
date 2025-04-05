@@ -1,7 +1,4 @@
-import { deleteUser } from "./auth0/deleteUser";
-import { healthCheck } from "./healthCheck";
-import { getUserInfo } from "./auth0/getUserInfo";
-import { updateSecurityInfo } from "./auth0/updateUser";
+import { deleteAuth0User, getUserInfo, updateUserInfo } from "./auth0/auth0API";
 import { getConversations } from "./communication/conversationAPI";
 
-export { healthCheck, getUserInfo, deleteUser, updateSecurityInfo, getConversations };
+export { getUserInfo, deleteAuth0User, updateUserInfo, getConversations };

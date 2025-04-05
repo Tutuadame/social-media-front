@@ -1,25 +1,27 @@
-import { DeleteButton } from "./TextButton/DeleteButton";
-import { LoginButton } from "./TextButton/LoginButton";
-import { ProfileButton } from "./Profile/Button/ProfileButton";
-import { HealthCheckButton } from "./TextButton/HealthCheckButton";
-import { RegistrationButton } from "./TextButton/RegistrationButton";
-import { ProfileOptionButton } from "./Profile/Button/ProfileOptionButton";
-import { IdentityProfile } from "./Profile/Page/Identity/IdentityProfile";
-import { SecurityProfile } from "./Profile/Page/Security/SecurityProfile";
-import { ProfileMenuButton } from "./Profile/Button/ProfileMenuButton";
-import { ProfileHeaderMenu } from "./Profile/ProfileHeaderMenu";
-import { MainMenu } from "./Profile/MainMenu";
+import { Communication } from '../page/Communication';
+import { ActivityButton } from './Button/Specific/DashBoard/ActivityButton';
+import { HomeButton } from './Button/Specific/DashBoard/HomeButton';
+import { IdentityButton } from './Button/Specific/DashBoard/IdentityButton';
+import { LogOutButton } from './Button/Specific/DashBoard/LogOutButton';
+import { MessagesButton } from './Button/Specific/DashBoard/MessagesButton';
+import { NotificationButton } from './Button/Specific/DashBoard/NotificationButton';
+import { LoginButton } from './Button/Specific/Home/LoginButton';
+import { RegistrationButton } from './Button/Specific/Home/RegistrationButton';
+import { DeleteButton } from './Button/Specific/Profile/DeleteButton';
+import { HomePage } from './Home/HomePage';
+import { WelcomePage } from './Home/WelcomePage';
 
 export {
   LoginButton,
-  ProfileButton,  
-  HealthCheckButton,
   RegistrationButton,
   DeleteButton,
-  ProfileOptionButton,
-  IdentityProfile,
-  SecurityProfile,
-  ProfileMenuButton,
-  ProfileHeaderMenu,
-  MainMenu
+  IdentityButton,
+  Communication,
+  LogOutButton,
+  HomePage,
+  WelcomePage,
+  HomeButton,
+  ActivityButton,
+  MessagesButton,
+  NotificationButton
 };
