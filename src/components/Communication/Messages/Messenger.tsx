@@ -1,13 +1,14 @@
-import { CSSProperties, useEffect, useState } from "react";
+import React, {CSSProperties, useEffect, useRef, useState} from "react";
 import { createSvg, orderMessagesToGroupsByConsecutiveIds } from "../../../utils/htmlUtils";
 import { IconButton } from "../../Button/General/IconButton";
-import { MessageResponse } from "../../../interface/communication/message";
+import { MessageResponse } from "../../../interface";
 import { getMessages, sendMessage } from "../../../api/communication/messageAPI";
 import { LoadMoreButton } from "../../Button/General/LoadMoreButton";
 import { useAuth0 } from "@auth0/auth0-react";
 import { MessageBoard } from "./MessageBoard";
 import { useMessageContext } from "../../../context/Communication/MessageContext";
-import { useUIContext } from "../../../context/Communication/UIContext";
+import { useConversationUIContext } from "../../../context/Communication/ConversationUIContext.tsx";
+import {useLayoutContext} from "../../../context/Layout/LayoutOutContext.tsx";
 
 type MessengerProps = {  
   groupedMessages: MessageResponse[][],
@@ -35,31 +36,34 @@ export const Messenger : React.FC<MessengerProps> = ({
   const { user } = useAuth0();
   const currentId = user?.sub?.split('|')[1] || "no-id";
   const [loadMoreStyle, setLoadMoreStyle] = useState("flex justify-center");
-  const [formData, setFormData] = useState({ content: "" });  
+  const messageInputRef = useRef<HTMLInputElement>(null);
   const { messagePage }  = useMessageContext();
-  const { openManagement } = useUIContext();
+  const { openManagement } = useConversationUIContext();
+  const { accessToken } = useLayoutContext();
   
   const onSubmit = async () => {
-    if(conversationId) {
-      const response: MessageResponse | undefined = await sendMessage(conversationId, currentId, formData.content);
-      const newGroupedMessages = groupedMessages;
-
-      if (groupedMessages.length && response) {
-        newGroupedMessages[0] = [response, ...newGroupedMessages[0]];
-      } else if (response) {
-        newGroupedMessages.push([response]);
-      }
-      setFormData({content: ""});
-      setGroupedMessages([...newGroupedMessages]);
+    if (!messageInputRef.current?.value) throw new Error("Empty message content!")
+    
+    const response: MessageResponse | undefined = await sendMessage(conversationId, currentId, messageInputRef.current.value.trim(), accessToken.current);
+    const newGroupedMessages = groupedMessages;
+    
+    if (groupedMessages.length && response) {
+      newGroupedMessages[0] = [response, ...newGroupedMessages[0]];
+    } else if (response) {
+      newGroupedMessages.push([response]);
     }
+    setGroupedMessages([...newGroupedMessages]);
+    messageInputRef.current.value = "";
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (messageInputRef.current) {
+      messageInputRef.current.value = e.target.value;
+    }
   };
 
   async function callMessages(){
-    const response: MessageResponse[] = await getMessages(conversationId, messagePage.current);    
+    const response: MessageResponse[] = await getMessages(conversationId, messagePage.current, 10, accessToken.current);
     if (response.length < 10) {
       setLoadMoreStyle("flex justify-center hidden");
     } else {      
@@ -73,8 +77,7 @@ export const Messenger : React.FC<MessengerProps> = ({
       setGroupedMessages([...orderMessagesToGroupsByConsecutiveIds(response)]);  
     }  
   }
-    
-
+  
   useEffect( () => {
     setGroupedMessages([]);
     setLoadMoreStyle("flex justify-center");
@@ -110,8 +113,8 @@ export const Messenger : React.FC<MessengerProps> = ({
           <></>
           : 
           <div className="relative flex-row h-14 w-fit shadow-2xl mx-auto mt-10 content-center" style={sendMessageFieldStyle}>
-            <input className="absolute h-14 p-4 w-10/12 border bottom-0 outline-none border-none shadow-2xl rounded-l-2xl" placeholder="Type here..." type="text" name="content" value={formData.content} onChange={handleChange}/>
-            <IconButton ariaLabel="Send" action={()=>{ onSubmit() }} style="transition-all float-right rounded-r-2xl mr-0 w-2/12 h-14 bg-slate-200 hover:bg-slate-900 hover:text-slate-100">
+            <input ref={messageInputRef} className="absolute h-14 p-4 w-10/12 border bottom-0 outline-none border-none shadow-2xl rounded-l-2xl" placeholder="Type here..." type="text" name="content" onChange={handleChange}/>
+            <IconButton ariaLabel="Send" action={()=> { onSubmit() }} style="transition-all float-right rounded-r-2xl mr-0 w-2/12 h-14 bg-slate-200 hover:bg-slate-900 hover:text-slate-100">
               {sendMessageSVG}
             </IconButton>
           </div>

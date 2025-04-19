@@ -6,12 +6,15 @@ const getProfileErrorMessage = "Error getting user profile: ";
 const updateIntroductionErrorMessage = "Error updating user introduction: ";
 const createProfileErrorMessage = "Error creating user profile: ";
 
-export const createProfile = async (requestParams: CreateProfileRequest) => {
+export const createProfile = async (requestParams: CreateProfileRequest, accessToken: string) => {
     const { profileId, firstName, lastName, gender } = requestParams;
     try {
         const response = await fetch(profileRegistrationPath, {
-            headers: CONTENT_TYPE_JSON,
             method: POST_METHOD,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify({ profileId, firstName, lastName, gender })
         });
@@ -22,11 +25,14 @@ export const createProfile = async (requestParams: CreateProfileRequest) => {
     }
 }
 
-export const getProfile = async (id: string) => {
+export const getProfile = async (id: string, accessToken: string) => {
     try {
         const response = await fetch(`${getProfilePath}/${id}`, {
             method: POST_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
         });
 
@@ -36,11 +42,14 @@ export const getProfile = async (id: string) => {
     }
 };
 
-export const deleteProfile = async (id: string) => {
+export const deleteProfile = async (id: string, accessToken: string) => {
     try {
         const response = await fetch(`${deleteProfilePath}/${id}`, {
             method: DELETE_METHOD,
-            headers: CONTENT_TYPE_TEXT,
+            headers: {
+                ...CONTENT_TYPE_TEXT,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
         });
 
@@ -50,12 +59,15 @@ export const deleteProfile = async (id: string) => {
     }
 };
 
-export const updateIntroduction = async (id: string, introduction: string) => {
+export const updateIntroduction = async (id: string, introduction: string, accessToken: string) => {
 
     try {
         const response = await fetch(`${updateProfileIntroductionPath}/${id}`, {
             method: PATCH_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify({ introduction })
         });
@@ -66,7 +78,7 @@ export const updateIntroduction = async (id: string, introduction: string) => {
     }
 };
 
-export const searchForProfiles = async (requestParams: SearchForProfileRequest) => {
+export const searchForProfiles = async (requestParams: SearchForProfileRequest, accessToken: string) => {
     const params = new URLSearchParams({
         pageNumber: requestParams.pageNumber.toString(),
         pageSize: requestParams.pageSize.toString(),
@@ -76,7 +88,10 @@ export const searchForProfiles = async (requestParams: SearchForProfileRequest) 
     try {
         const response = await fetch(`${searchForProfilesPath}?${params.toString()}`, {
             method: GET_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
         });
 

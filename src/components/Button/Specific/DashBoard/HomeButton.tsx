@@ -15,6 +15,6 @@ export const HomeButton = () => {
         <IconButton action={homeButtonOnClick} style={homeButtonStyle}> 
             {homeButtonSVG}
         </IconButton>
-        <p className="tracking-wider text-center w-18">Home</p>
+        <p className="tracking-wider text-center w-18 text-slate-100">Home</p>
     </div>
 }

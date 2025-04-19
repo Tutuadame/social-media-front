@@ -1,4 +1,4 @@
-import { MessageResponse } from "../interface/communication/message";
+import { MessageResponse } from "../interface";
 import { format } from "date-fns";
 
 export const createSvg = (paths:string[], strokeWidth = 1, style="") => (  

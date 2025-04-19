@@ -16,7 +16,7 @@ export const ActivityButton = () => {
         <IconButton action={activityButtonOnClick} style={activityButtonStyle}> 
             {activityButtonSVG}
         </IconButton>
-        <p className="tracking-wider text-center w-18">Activity</p>
+        <p className="tracking-wider text-center w-18 text-slate-100">Activity</p>
     </div>
 }
 

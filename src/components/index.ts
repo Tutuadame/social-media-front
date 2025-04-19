@@ -8,7 +8,7 @@ import { NotificationButton } from './Button/Specific/DashBoard/NotificationButt
 import { LoginButton } from './Button/Specific/Home/LoginButton';
 import { RegistrationButton } from './Button/Specific/Home/RegistrationButton';
 import { DeleteButton } from './Button/Specific/Profile/DeleteButton';
-import { HomePageComponent } from './Home/HomePageComponent.tsx';
+import { MainComponent } from './Home/MainComponent.tsx';
 import { WelcomePage } from '../page/WelcomePage.tsx';
 
 export {
@@ -18,7 +18,7 @@ export {
   IdentityButton,
   CommunicationPage,
   LogOutButton,
-  HomePageComponent,
+  MainComponent,
   WelcomePage,
   HomeButton,
   ActivityButton,

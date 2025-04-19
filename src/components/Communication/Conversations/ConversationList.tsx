@@ -1,11 +1,12 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import { SimpleConversation } from "../../../interface/communication/conversation";
-import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
+import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { getConversations } from "../../../api";
 import { LoadMoreButton } from "../../Button/General/LoadMoreButton";
 import { searchForConversations } from "../../../api/communication/conversationAPI";
 import { ConversationComponent } from "./Conversation";
 import { SearchBar } from "../../SearchBar";
+import {useLayoutContext} from "../../../context/Layout/LayoutOutContext.tsx";
 
 type ConversationsProps = {    
   conversations: SimpleConversation[],
@@ -21,12 +22,13 @@ export const Conversations: React.FC<ConversationsProps>= ({conversations, setCo
   const conversationPage = useRef(0);
   const [loadMoreStyle, setLoadMoreStyle] = useState("flex justify-center");
   const [foundConversations, setFoundConversations] = useState<SimpleConversation[]>([]);
-  const [ searchExpression, setSearchExpression ] = useState<string>("");
+  const [searchExpression, setSearchExpression] = useState<string>("");
+  const { accessToken } = useLayoutContext();
 
   const onConversationSearch = async (name: string) => {
     conversationPage.current = 0;
     setSearchExpression(name);
-    const result = await searchForConversations(name, currentId, conversationPage.current, 10).then(result => result.content);    
+    const result = await searchForConversations(name, currentId, conversationPage.current, 10, accessToken.current).then(result => result.content);
     setFoundConversations(result);
     if (result.length === 0) {
       setLoadMoreStyle((prev) => prev + " hidden");
@@ -36,7 +38,7 @@ export const Conversations: React.FC<ConversationsProps>= ({conversations, setCo
   }
 
   async function callMoreSearchedConversation() {
-    const result = await searchForConversations(searchExpression, currentId, conversationPage.current, 10).then(result => result.content);    
+    const result = await searchForConversations(searchExpression, currentId, conversationPage.current, 10,  accessToken.current).then(result => result.content);
     setFoundConversations(prev => [...prev, ...result]);
     if (result.length === 0) {
       setLoadMoreStyle((prev) => prev + " hidden");
@@ -47,7 +49,8 @@ export const Conversations: React.FC<ConversationsProps>= ({conversations, setCo
 
   async function callConversations() {
     if (user) {
-      const response: SimpleConversation[] = await getConversations(user, conversationPage.current);      
+      const response: SimpleConversation[] = await getConversations(user, conversationPage.current,  10, accessToken.current).then(result => result.content);
+      console.log(response);
       if (response) {        
         if (response.length === 0) {
           setLoadMoreStyle((prev) => prev + " hidden");

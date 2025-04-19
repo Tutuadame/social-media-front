@@ -3,11 +3,13 @@ import { BasicButton } from "../Button/General/BasicButton.tsx";
 import { useSecurityMenuContext } from "../../context/Identity/SecurityMenuContext.tsx";
 import { updateUserInfo } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
+import {useLayoutContext} from "../../context/Layout/LayoutOutContext.tsx";
 
 export const PasswordForm = () => {
 
   const [formData, setFormData] = useState({"password":"", "passwordAgain":""});
   const [isValid, setIsValid] = useState(true);
+  const { accessToken } = useLayoutContext();
   const { user } = useAuth0();
   const labelStyle = "text-2xl font-normal text-white my-auto";
   const inputStyle = "w-[13vw] border-4 border-slate-400 p-3 rounded-xl";
@@ -27,7 +29,7 @@ export const PasswordForm = () => {
   const onSubmit = async () => {
     const currentId = user?.sub?.split('|')[1] || "no-id";
     if(isStrongPassword(formData.password) && formData.password === formData.passwordAgain) {
-      await updateUserInfo(currentId, "password", formData.password);      
+      await updateUserInfo(currentId, "password", formData.password, accessToken.current);
       setIsValid(true);
       setFormData({"password":"", "passwordAgain":""});
       switchOption("Overview");

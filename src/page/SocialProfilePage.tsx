@@ -10,7 +10,7 @@ export const SocialProfilePage = () => {
    const { user } = useAuth0();
    const currentId = user?.sub?.split('|')[1] || "no-id";
    const navigate = useNavigate();
-   const { profile } = useLayoutContext();
+   const { profile, accessToken } = useLayoutContext();
    const [intro, setIntro] = useState(profile?.introduction);
    const [edit, setEdit] = useState(false);
    const isSecurity = window.location.href.includes("security");
@@ -26,7 +26,7 @@ export const SocialProfilePage = () => {
 
    const onSubmit = async () => {
        if(!intro) return;
-       const introduction = await updateIntroduction(currentId, intro).then(result => result.introduction);
+       const introduction = await updateIntroduction(currentId, intro, accessToken.current).then(result => result.introduction);
        setEdit(false);
        setIntro(introduction);
    }

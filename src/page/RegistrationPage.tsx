@@ -2,24 +2,22 @@ import { useState } from "react";
 import { BasicButton } from "../components/Button/General/BasicButton";
 import { createProfile } from "../api/profile/profileAPI";
 import { useAuth0 } from "@auth0/auth0-react";
-import { CreateProfileRequest } from "../interface/profile/profile";
+import {CreateProfileRequest, ProfileResponse} from "../interface/profile/profile";
 import { createMember } from "../api/communication/memberAPI";
 import { CreateMemberRequest } from "../interface/communication/member";
 import { useNavigate } from "react-router-dom";
+import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 
 export const RegistrationPage = () => {
 
   const { user } = useAuth0();
+  const { setProfile, accessToken } = useLayoutContext();
   const currentId = user?.sub?.split('|')[1] || "no-id";
   const inputContainerStyle = "flex flex-row w-full justify-between bg-slate-800 p-5 rounded-xl shadow-xl";
   const labelStyle = "text-2xl font-normal text-white my-auto";
   const inputStyle = "w-[13vw] border-4 border-slate-400 p-3 rounded-xl focus:outline-none";
   const submitButtonStyle = "w-1/3 h-fit bg-slate-400 text-white text-3xl tracking-widest p-3 transition-all font-light mx-auto rounded-xl hover:outline hover:outline-4 hover:outline-offset-4";
-  const [formData, setFormData] = useState({
-    "firstName": "",
-    "lastName": "",
-    "gender": ""
-  });
+  const [formData, setFormData] = useState({"firstName": "", "lastName": "", "gender": "" });
   const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {    
@@ -41,13 +39,15 @@ export const RegistrationPage = () => {
       memberId: currentId
     }
 
-    await createProfile(requestParamsProfile).then(result => result);
-    await createMember(requestParamsMember).then(result => result);
-
+    const response : ProfileResponse = await createProfile(requestParamsProfile, accessToken.current).then(result => result);
+    setProfile(response);
+    console.log(response);
+    await createMember(requestParamsMember, accessToken.current).then(result => result);
+    
     navigate("/");
   }
 
-  return <div className="flex flex-col w-full text-center">
+  return <div className="flex flex-col w-full h-full text-center">
     <h2 className="text-4xl tracking-widest text-white my-10">ACCOUNT REGISTRATION</h2>
     <div className="flex flex-col mx-auto w-2/5 bg-slate-700 p-10 gap-y-14 rounded-xl shadow-xl my-auto">
       <h3 className="text-left text-2xl tracking-widest text-white">ENTER YOUR DETAILS</h3>

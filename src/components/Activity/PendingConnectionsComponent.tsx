@@ -12,7 +12,7 @@ import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
 import { ConversationMember } from "../../interface/communication/member.ts";
 
 export const PendingConnectionsComponent = () => {
-    const { connections, setConnections} = useLayoutContext();
+    const { connections, setConnections, accessToken} = useLayoutContext();
     const { tablePage } = useActivityContext();
     const [loadMoreStyle, setLoadMoreStyle] = useState("flex justify-center");
     const { user } = useAuth0();
@@ -30,7 +30,7 @@ export const PendingConnectionsComponent = () => {
           status: status,
       };
       if (connections) {
-          const response: UpdateConnectionStatusResponse = await updateConnection(request).then(result => result);            
+          const response: UpdateConnectionStatusResponse = await updateConnection(request, accessToken.current).then(result => result);
           setConnections(connections.filter(con => con.id !== response.id));
       } else {
           throw new Error("connections are undefined!");
@@ -42,7 +42,7 @@ export const PendingConnectionsComponent = () => {
         pageNumber: tablePage.current,
         pageSize: pageSize,
       }
-      const response = await getPendingConnectionsByUser(currentId, pageable).then(response => response.content);
+      const response = await getPendingConnectionsByUser(currentId, pageable, accessToken.current).then(response => response.content);
       if (response.length < 10) {
         setLoadMoreStyle("flex justify-center hidden");
       } else {

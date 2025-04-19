@@ -5,11 +5,14 @@ const getMessagesErrorMessage = "Error fetching conversation messages: ";
 const sendMessageErrorMessage = "Error sending message: ";
 const updateMessageErrorMessage = "Error updating message: ";
 
-export const getMessages = async (conversationId:string = "2", pageNumber = 0, pageSize = 10) => {
+export const getMessages = async (conversationId:string = "2", pageNumber = 0, pageSize = 10, accessToken: string) => {
     try {
       const response = await fetch(`${getMessagesPath}/${conversationId}`, {
         method: POST_METHOD,
-        headers: CONTENT_TYPE_JSON,
+        headers: {
+          ...CONTENT_TYPE_JSON,
+          "Authorization": `Bearer ${accessToken}`
+        },
         credentials: "include",
         body: JSON.stringify({pageNumber, pageSize}),
       });
@@ -21,11 +24,14 @@ export const getMessages = async (conversationId:string = "2", pageNumber = 0, p
     }
 };
 
-export const sendMessage = async (conversationId: string, senderId: string, content: string) => {
+export const sendMessage = async (conversationId: string, senderId: string, content: string, accessToken: string) => {
   try {
     const response = await fetch(sendMessagePath, {
       method: POST_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
       body: JSON.stringify({
         conversationId,
@@ -41,11 +47,14 @@ export const sendMessage = async (conversationId: string, senderId: string, cont
   }
 };
 
-export const updateMessage = async (messageId: number, messageContent: string) => {
+export const updateMessage = async (messageId: number, messageContent: string, accessToken: string) => {
   try {
     const response = await fetch(`${updateMessagePath}/${messageId}`, {
       method: PATCH_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
       body: JSON.stringify({
         messageContent
@@ -58,11 +67,14 @@ export const updateMessage = async (messageId: number, messageContent: string) =
   }
 };
 
-export const deleteMessage = async (messageId: number) => {
+export const deleteMessage = async (messageId: number, accessToken: string) => {
   try {
     await fetch(`${deleteMessagePath}/${messageId}`, {
       method: DELETE_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
     });
   } catch (e) {

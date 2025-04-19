@@ -8,6 +8,7 @@ import {useEffect, useState} from "react";
 import {ProfileResponse} from "../interface/profile/profile.ts";
 import {getProfile} from "../api/profile/profileAPI.ts";
 import {useNavigate} from "react-router-dom";
+import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 
 export const SecurityProfilePage = () => {
     const { option } = useSecurityMenuContext();
@@ -18,9 +19,10 @@ export const SecurityProfilePage = () => {
     const navigate = useNavigate();
     const { user } = useAuth0();
     const currentId = user?.sub?.split('|')[1] || "no-id";
+    const { accessToken } = useLayoutContext();
     
     const callUserProfile = async (id: string) => {
-        const response = await getProfile(id).then(response => response);
+        const response = await getProfile(id, accessToken.current).then(response => response);
         setProfile(response);
     }
     

@@ -2,7 +2,8 @@ import { useAuth0 } from "@auth0/auth0-react";
 import { CreatePostRequest } from "../../interface/profile/post";
 import { createPost } from "../../api/profile/postAPI";
 import { BasicButton } from "../Button/General/BasicButton";
-import { useState } from "react";
+import React, { useState } from "react";
+import {useLayoutContext} from "../../context/Layout/LayoutOutContext.tsx";
 
 export const CreatePostComponent = () => {
 
@@ -12,6 +13,7 @@ export const CreatePostComponent = () => {
   const { user } = useAuth0();
   const currentId = user?.sub?.split('|')[1] || "no-id";
   const [newContent, setNewContent] = useState<string>("");
+  const { accessToken } = useLayoutContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewContent(e.target.value);
@@ -22,7 +24,7 @@ export const CreatePostComponent = () => {
       content: newContent,
       profileId: currentId
     }
-    await createPost(requestParams).then(result => result);  
+    await createPost(requestParams, accessToken.current).then(result => result);
     setNewContent("");  
   }
 

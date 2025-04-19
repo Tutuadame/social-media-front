@@ -1,8 +1,8 @@
-import { getRelativeTime } from "../../utils/htmlUtils";
-import { Post } from "../../interface/profile/post";
+import { getRelativeTime } from "../../utils/htmlUtils.tsx";
+import { Post } from "../../interface/profile/post.ts";
 import React, { useState } from "react";
-import { ProfileButton } from "../Button/Specific/Global/ProfileButton";
-import { ConversationMember } from "../../interface/communication/member";
+import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
+import { ConversationMember } from "../../interface/communication/member.ts";
 import {VoteButton} from "../Button/Specific/Home/VoteButton.tsx";
 
 type PostProps = {

@@ -16,6 +16,6 @@ export const MessagesButton = () => {
         <IconButton action={messagesButtonOnClick} style={messagingButtonStyle}> 
             {messagesButtonSVG}
         </IconButton>
-        <p className="tracking-wider text-center w-18">Messages</p>
+        <p className="tracking-wider text-center w-18 text-slate-100">Messages</p>
     </div>
 }

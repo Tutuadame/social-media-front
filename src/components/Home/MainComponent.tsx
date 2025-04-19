@@ -4,7 +4,7 @@ import { getConnectionPosts } from "../../api/profile/postAPI";
 import { useAuth0 } from "@auth0/auth0-react";
 import { LoadMoreButton } from "../Button/General/LoadMoreButton";
 import { ConnectionResponse } from "../../interface/profile/connection";
-import { PostComponent } from "./PostComponent";
+import { PostComponent } from "../General/PostComponent.tsx";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext";
 import { ConversationMember } from "../../interface/communication/member";
 import { CreatePostComponent } from "./CreatePostComponent";
@@ -13,18 +13,20 @@ import { GenericProfileResponse, SearchForProfileRequest } from "../../interface
 import { FoundItemsComponent } from "./FoundItemsComponent";
 import { BasicButton } from "../Button/General/BasicButton";
 import { SearchBar } from "../SearchBar";
+import {getAcceptedConnectionsByUser} from "../../api/profile/connectionAPI.ts";
 
-export const HomePageComponent = () => {
-  const { user } = useAuth0();     
+export const MainComponent = () => {
+  const { user } = useAuth0();
+  let currentId = user?.sub?.includes('|') ? user.sub.split('|')[1] : null;
   const [posts, setPosts] = useState<Post[]>([]);
-  const { connections } = useLayoutContext();
+  const { connections, setConnections, accessToken } = useLayoutContext();
   const postsPageRef = useRef<number>(0);
   const searchPageRef = useRef<number>(0);
   const [isSearchOn, setIsSearchOn] = useState(false);
   const [postsLoadMoreStyle, setPostsLoadMoreStyle] = useState("flex justify-center");
   const [searchLoadMoreStyle, setSearchLoadMoreStyle] = useState("flex justify-center");
   const [foundProfiles, setFoundProfiles] = useState<GenericProfileResponse[]>([]);
-  const [ searchExpression, setSearchExpression ] = useState<string>("");
+  const [searchExpression, setSearchExpression] = useState<string>("");
   const expressionRef = useRef<string>("");
   const pageSize = 10;
 
@@ -42,10 +44,7 @@ export const HomePageComponent = () => {
       name: name        
     }
 
-    const response = await searchForProfiles(requestParams).then(result => {
-      console.log(result.content.length);
-      return result.content
-    });
+    const response = await searchForProfiles(requestParams, accessToken.current).then(result => { return result.content });
     setFoundProfiles(prev => [...prev, ...response]);
     
     if (response.length < 10) {
@@ -59,7 +58,8 @@ export const HomePageComponent = () => {
     if(!user) return;
 
     const request: GetPageablePostsRequest = { pageNumber: postsPageRef.current, pageSize: pageSize };                
-    const tempPosts = await getConnectionPosts(user, request).then(response => response.content);
+    const tempPosts = await getConnectionPosts(user, request, accessToken.current).then(response => response.content);
+    console.log(request, tempPosts, connections);
     if (postsPageRef.current === 0) {
       setPosts(tempPosts);
     } else {               
@@ -78,6 +78,7 @@ export const HomePageComponent = () => {
     let connectionProfile: ConnectionResponse | undefined = connections.find(
       (connection) => connection.profileId === post.profileId
     );
+    
     if(connectionProfile) {
       conversationMember = {
         id: connectionProfile.profileId,
@@ -85,21 +86,32 @@ export const HomePageComponent = () => {
         lastName: connectionProfile.lastName,
         picture: connectionProfile.picture
       }
-    }            
+    }
+    
     if(!conversationMember) return <>Profile not found in Connections!</>;
     return <div className="flex-row flex gap-3 group">
       <PostComponent post={post} profile={conversationMember}/>
     </div>
   }
+  
+  const callConnections = async (profileId: string) => {
+    const tempConnections = await getAcceptedConnectionsByUser(profileId, accessToken.current).then(result => result);
+    setConnections(tempConnections)
+  }
 
   useEffect(() => {
-    setPosts([]);
-    callPosts();
-    if (searchExpression !== "") {
-      setFoundProfiles(prev => prev.filter(p => {
-        p.firstName.includes(searchExpression) || p.lastName.includes(searchExpression) || (p.firstName + p.lastName).includes(searchExpression)
-      }))
+    const fetchData = async () => {
+      if(currentId) await callConnections(currentId);
+      setPosts([]);
+      await callPosts();
+      if (searchExpression !== "") {
+        setFoundProfiles(prev => prev.filter(p => {
+          p.firstName.includes(searchExpression) || p.lastName.includes(searchExpression) || (p.firstName + p.lastName).includes(searchExpression)
+        }))
+      }
     }
+    
+    fetchData();
   }, []);
 
   return (

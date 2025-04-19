@@ -1,7 +1,6 @@
 import { CSSProperties, useState } from "react";
 import { BasicButton } from "../components/Button/General/BasicButton.tsx";
-import {RegistrationButton} from "../components/Button/Specific/Home/RegistrationButton.tsx";
-import {LoginButton} from "../components/Button/Specific/Home/LoginButton.tsx";
+import {LoginButton, RegistrationButton} from "../components";
 
 export const WelcomePage = () => {
     

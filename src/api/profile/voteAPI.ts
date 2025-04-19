@@ -5,12 +5,15 @@ import { addVotePath, checkVotePath } from "./paths";
 const addVoteErrorMessage = "Error creating a vote: ";
 const checkVoteErrorMessage = "Error creating a vote: ";
 
-export const addVote = async (createParams: CreateVoteRequest) => {
+export const addVote = async (createParams: CreateVoteRequest, accessToken: string) => {
     const {profileId, vote, postId} = createParams;
     try {
         const response = await fetch(addVotePath, {
             method: POST_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify({
                 profileId,
@@ -24,11 +27,14 @@ export const addVote = async (createParams: CreateVoteRequest) => {
     }
 };
 
-export const checkVote = async (profileId: string, postId: number) => {
+export const checkVote = async (profileId: string, postId: number, accessToken: string) => {
     try {
         const response = await fetch(`${checkVotePath}/${profileId}/${postId}`, {
             method: GET_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
         });
         return response.json();

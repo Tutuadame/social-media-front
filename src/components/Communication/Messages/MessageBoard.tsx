@@ -7,10 +7,11 @@ import { AddMemberRequest, ConversationMember, DeleteMemberFromConversationReque
 import { addMember, deleteMemberFromConversation, searchForMembers } from "../../../api/communication/memberAPI";
 import { IconButton } from "../../Button/General/IconButton";
 import { useConversationContext } from "../../../context/Communication/ConversationContext";
-import { useUIContext } from "../../../context/Communication/UIContext";
+import { useConversationUIContext } from "../../../context/Communication/ConversationUIContext.tsx";
 import React, { useState } from "react";
 import { ProfileButton } from "../../Button/Specific/Global/ProfileButton";
 import { SearchBar } from "../../SearchBar";
+import {useLayoutContext} from "../../../context/Layout/LayoutOutContext.tsx";
 
 type MessageBoardProps = {
   groupedMessages: MessageResponse[][],
@@ -31,19 +32,20 @@ export const MessageBoard: React.FC<MessageBoardProps> = ({groupedMessages, curr
   const deleteMemberStyle = "transition-all w-[4vw] h-16 border-solid hover:bg-red-600 rounded-xl bg-red-200";
   const userListStyle = "flex flex-row w-full mx-auto justify-center gap-x-10 h-fit py-2";
   const {setMembers, members} = useConversationContext();
-  const {openManagement, setSearchOn, searchOn} = useUIContext();
+  const {openManagement, setSearchOn, searchOn} = useConversationUIContext();
   const [foundProfiles, setFoundProfiles] = useState([] as ConversationMember[]);
   const [searchExpression, setSearchExpression] = useState("");
+  const { accessToken } = useLayoutContext();
 
   const onSearch = async (name: string) => {
-    const result = await searchForMembers(name, currentId).then(response => response.content);
+    const result = await searchForMembers(name, currentId, 0, 10, accessToken.current).then(response => response.content);
     setFoundProfiles(result.filter(
       (match: ConversationMember) => !members?.some(m => m.id === match.id)
     ));
   }
 
   const onAdd = async (request: AddMemberRequest) => {
-    const result = await addMember(request);
+    const result = await addMember(request, accessToken.current);
     const temp = members;
     if (temp) setMembers(temp?.concat(result));
     setFoundProfiles(foundProfiles.filter(
@@ -53,7 +55,7 @@ export const MessageBoard: React.FC<MessageBoardProps> = ({groupedMessages, curr
 
   const onUpdate = async (messageId: number, updatedContent: string) => {
     try {
-      const response = await updateMessage(messageId, updatedContent) as SimpleMessageResponse;
+      const response = await updateMessage(messageId, updatedContent, accessToken.current) as SimpleMessageResponse;
       let tempMessages = groupedMessages.flat();
       tempMessages = tempMessages.map((message) => {
         if (message.id === response.id) message.content = response.content;
@@ -67,7 +69,7 @@ export const MessageBoard: React.FC<MessageBoardProps> = ({groupedMessages, curr
 
   const onDelete = async (messageId: number) => {
     try {
-      await deleteMessage(messageId);
+      await deleteMessage(messageId, accessToken.current);
       let tempMessages = groupedMessages.flat();
       tempMessages = tempMessages.filter((message) => message.id !== messageId);
       setGroupedMessages(orderMessagesToGroupsByConsecutiveIds(tempMessages));
@@ -82,7 +84,7 @@ export const MessageBoard: React.FC<MessageBoardProps> = ({groupedMessages, curr
       conversationId: conversationId,
     };
 
-    const response = await deleteMemberFromConversation(deleteRequest);
+    const response = await deleteMemberFromConversation(deleteRequest, accessToken.current);
     if (response === lastMemberDeleteMessage) deleteConversation(conversationId);
     if (members) setMembers(members?.filter((m) => m.id !== userId));        
   }
@@ -153,6 +155,7 @@ export const MessageBoard: React.FC<MessageBoardProps> = ({groupedMessages, curr
                   picture={member?.picture}
                   updateMessage={onUpdate}
                   deleteMessage={onDelete}
+                  isLastMessage={index === 0}
                   />
               </div>
             )

@@ -10,12 +10,15 @@ const searchForMembersErrorMessage = "Error searching for members to add: ";
 const createMemberErrorMessage = "Error creating a messenger profile: ";
 const deleteMemberErrorMessage = "Error deleting messenger profile: ";
 
-export const addMember = async (requestParams: AddMemberRequest) => {
+export const addMember = async (requestParams: AddMemberRequest, accessToken: string) => {
     const { memberId, conversationId } = requestParams;
     try {
         const response = await fetch(addMemberPath, {
             method: POST_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify({memberId, conversationId})
         });
@@ -26,12 +29,15 @@ export const addMember = async (requestParams: AddMemberRequest) => {
     }
 };
 
-export const createMember = async (requestParams: CreateMemberRequest) => {
+export const createMember = async (requestParams: CreateMemberRequest, accessToken: string) => {
     const { memberId, firstName, lastName } = requestParams;
     try {
         const response = await fetch(createMemberPath, {
             method: POST_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify({memberId, firstName, lastName})
         });
@@ -42,11 +48,14 @@ export const createMember = async (requestParams: CreateMemberRequest) => {
     }
 };
 
-export const deleteMember = async (profileId: string) => {    
+export const deleteMember = async (profileId: string, accessToken: string) => {
     try {
         const response = await fetch(`${deleteMemberPath}/${profileId}`, {
             method: DELETE_METHOD,
-            headers: CONTENT_TYPE_TEXT,
+            headers: {
+                ...CONTENT_TYPE_TEXT,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
         });
 
@@ -56,12 +65,15 @@ export const deleteMember = async (profileId: string) => {
     }
 };
 
-export const deleteMemberFromConversation = async (requestParams: DeleteMemberFromConversationRequest) => {
+export const deleteMemberFromConversation = async (requestParams: DeleteMemberFromConversationRequest, accessToken: string) => {
     const { memberId, conversationId } = requestParams;
     try {
         const response = await fetch(deleteMemberFromConversationPath, {
-            method: DELETE_METHOD, 
-            headers: CONTENT_TYPE_JSON,
+            method: DELETE_METHOD,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify({memberId, conversationId})
         });        
@@ -71,11 +83,14 @@ export const deleteMemberFromConversation = async (requestParams: DeleteMemberFr
     }
 };
 
-export const getMembers = async (members: string[]) => {    
+export const getMembers = async (members: string[], accessToken: string) => {
     try {        
         const response = await fetch(getMembersPath, {
             method: POST_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
             body: JSON.stringify(members)
         });
@@ -86,7 +101,7 @@ export const getMembers = async (members: string[]) => {
     }
 };
 
-export const searchForMembers = async (name:string, id:string, pageNumber: number = 0, pageSize:number = 10) => {
+export const searchForMembers = async (name:string, id:string, pageNumber: number = 0, pageSize:number = 10, accessToken: string) => {
     try {
         const params = new URLSearchParams({
             name,
@@ -97,7 +112,10 @@ export const searchForMembers = async (name:string, id:string, pageNumber: numbe
           
         const response = await fetch(`${searchForMembersPath}?${params.toString()}`,{
             method: GET_METHOD,
-            headers: CONTENT_TYPE_JSON,
+            headers: {
+                ...CONTENT_TYPE_JSON,
+                "Authorization": `Bearer ${accessToken}`
+            },
             credentials: "include",
         });
         return response.json(); //Pageable

@@ -9,31 +9,41 @@ import {getProfile} from "../api/profile/profileAPI.ts";
 import {getAcceptedConnectionsByUser} from "../api/profile/connectionAPI.ts";
 
 export const Layout = () => {
+  const { getAccessTokenSilently } = useAuth0();
+  const { accessToken } = useLayoutContext();
+  
+  
   const layoutStyle = "flex flex-row flex-nowrap flex-auto bg-slate-600";
   const mainStyle: CSSProperties = {
     width: "100vw",
+    height: "100vh",
   };
-  const { user, isLoading} = useAuth0();
+  const { user } = useAuth0();
   const { profile, setProfile, setConnections } = useLayoutContext();
+  let currentId = user?.sub?.includes('|') ? user.sub.split('|')[1] : null;
   
   const callUserProfile = async (id: string) => {
-    const response = await getProfile(id).then(response => response);
+    const response = await getProfile(id, accessToken.current).then(response => response);
     setProfile(response);
   }
   
   const callConnections = async (profileId: string) => {
-     const tempConnections = await getAcceptedConnectionsByUser(profileId).then(result => result);
+     const tempConnections = await getAcceptedConnectionsByUser(profileId, accessToken.current).then(result => result);
      setConnections(tempConnections)
   }
   
   useEffect(() => {
-    if (!isLoading && user && !profile.id) {
-      // @ts-ignore we check for user above
-      const currentId = user?.sub.split('|')[1];
-      callUserProfile(currentId);
-      callConnections(currentId);
-    }
-  }, [isLoading]);
+    const fetchData = async () => {
+      accessToken.current = await getAccessTokenSilently();
+      if (currentId && !profile.id && accessToken.current) {
+        await callUserProfile(currentId);
+        await callConnections(currentId);
+      }
+    };
+    
+    fetchData();
+  }, [user, profile.id]);
+
 
   
   return (

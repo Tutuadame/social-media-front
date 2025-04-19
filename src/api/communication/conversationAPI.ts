@@ -10,28 +10,33 @@ const searchForConversationsErrorMessage = "Error searching for conversations: "
 const createConversationErrorMessage = "Error creating conversation: ";
 const getSelectedConversationErrorMessage = "Error getting selected conversation: ";
 
-export const getConversations = async (user : User, pageNumber = 0, pageSize = 10) => {
+export const getConversations = async (user : User, pageNumber = 0, pageSize = 10, accessToken: string) => {
     try {
       const memberId = user?.sub?.split('|')[1];
       const response = await fetch(`${getConversationsPath}/${memberId}`, {
         method: POST_METHOD,
-        headers: CONTENT_TYPE_JSON,
+        headers: {
+          ...CONTENT_TYPE_JSON,
+          "Authorization": `Bearer ${accessToken}`
+        },
         credentials: "include",
         body: JSON.stringify({pageNumber, pageSize})
       });
 
-      return response.json()
-        .then((result) => result.content);
+      return response.json();
     } catch (e) {
       console.error(getConversationsErrorMessage, (e as Error).message);
     }
 }
 
-export const getSelectedConversation = async (conversationId: string) => {
+export const getSelectedConversation = async (conversationId: string, accessToken: string) => {
   try {    
     const response = await fetch(`${getSingleConversationPath}/${conversationId}`, {
       method: GET_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include"     
     });
 
@@ -41,12 +46,15 @@ export const getSelectedConversation = async (conversationId: string) => {
   }
 }
 
-export const createConversation = async (params: CreateConversationRequest) => {
+export const createConversation = async (params: CreateConversationRequest, accessToken: string) => {
   const { members, name } = params;
   try {
     const response = await fetch(createConversationPath, {
       method: POST_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
       body: JSON.stringify({members, name})
     });
@@ -57,11 +65,14 @@ export const createConversation = async (params: CreateConversationRequest) => {
   }
 }
 
-export const updateConversationName = async (conversationId: string, name: string) => {
+export const updateConversationName = async (conversationId: string, name: string, accessToken: string) => {
   try{
     const response = await fetch(`${updateConversationNamePath}/${conversationId}`, {
       method: PATCH_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
       body: JSON.stringify({name})
     });
@@ -71,11 +82,14 @@ export const updateConversationName = async (conversationId: string, name: strin
   }
 };
 
-export const deleteConversation = async (conversationId: string) => {
+export const deleteConversation = async (conversationId: string, accessToken: string) => {
   try{
     await fetch(`${createConversationPath}/${conversationId}`, {
       method: DELETE_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
     });    
   } catch (e){
@@ -83,7 +97,7 @@ export const deleteConversation = async (conversationId: string) => {
   }
 };
 
-export const searchForConversations = async (name:string, id:string, pageNumber: number = 0, pageSize:number = 10) => {
+export const searchForConversations = async (name:string, id:string, pageNumber: number = 0, pageSize:number = 10, accessToken: string) => {
   const params = new URLSearchParams({
     name,
     requesterId: id.toString(),
@@ -94,7 +108,10 @@ export const searchForConversations = async (name:string, id:string, pageNumber:
   try {
     const response = await fetch(`${searchForConversationsPath}?${params.toString()}`,{
       method: GET_METHOD,
-      headers: CONTENT_TYPE_JSON,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include",
     });
 

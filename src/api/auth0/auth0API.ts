@@ -6,14 +6,16 @@ const deleteUserErrorMessage = "Error while deleting user: ";
 const getUserInfoErrorMessage = "Error fetching user data: ";
 const updateUserInfoErrorMessage = "Error updating user data: ";
 
-export const deleteAuth0User = async (profileId: string) => {
+export const deleteAuth0User = async (profileId: string, accessToken: string) => {
   try {
     const response = await fetch(`${deleteUserPath}/${profileId}`, {
       method: DELETE_METHOD,
-      headers: CONTENT_TYPE_TEXT,
+      headers: {
+        ...CONTENT_TYPE_TEXT,
+        "Authorization": `Bearer ${accessToken}`
+      },
       credentials: "include"
     });
-    console.log(response);
 
     return response.text();
   } catch (e) {
@@ -21,27 +23,34 @@ export const deleteAuth0User = async (profileId: string) => {
   }
 };
 
-export const getUserInfo = async (user: User) => {
+export const getUserInfo = async (user: User, accessToken: string) => {
     try {      
       const id = user?.sub?.split('|')[1];
       const response = await fetch(`${getUserInfoPath}/${id}`, {
         method: GET_METHOD,
-        headers: CONTENT_TYPE_JSON,
+        headers: {
+          ...CONTENT_TYPE_JSON,
+          "Authorization": `Bearer ${accessToken}`
+        },
         credentials: "include"
-      });      
+      });
+      
       return response.json();
     } catch (e) {
       console.error(getUserInfoErrorMessage, (e as Error).message);
     }
 };
 
-export const updateUserInfo = async (userId: string, key: string, value: string) => {
+export const updateUserInfo = async (userId: string, key: string, value: string, accessToken: string) => {
     try {
       const response = await fetch(`${updateUserInfoPath}/${userId}`, {
         method: PATCH_METHOD,
-        headers: CONTENT_TYPE_JSON,
+        headers: {
+          ...CONTENT_TYPE_JSON,
+          "Authorization": `Bearer ${accessToken}`
+        },
         credentials: "include",
-        body: JSON.stringify({key, value})   
+        body: JSON.stringify({ key, value })
       });
 
       return response.text();

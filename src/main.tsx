@@ -10,12 +10,18 @@ const Auth0ProviderWithRedirect = ({ children }: { children: React.ReactNode }) 
   const domain = import.meta.env.VITE_AUTH0_DOMAIN!;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID!;
   const redirectUri = window.location.origin;
+  const audience = "https://tutuadame.eu.auth0.com/api/v2/";
+  const scope ='openid profile email'
   
   return (
     <Auth0Provider
       domain={domain}
       clientId={clientId}
-      authorizationParams={{ redirect_uri: redirectUri }}
+      authorizationParams={{
+        redirect_uri: redirectUri,
+        audience: audience,
+        scope: scope
+      }}
       onRedirectCallback={(appState) => {
         console.log("APP STATE:", appState);
         if (appState?.flow === "signup") {
@@ -23,6 +29,7 @@ const Auth0ProviderWithRedirect = ({ children }: { children: React.ReactNode }) 
         } else {
           window.location.href = "/";
         }
+        
       }}
     >
       {children}

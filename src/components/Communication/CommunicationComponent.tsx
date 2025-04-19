@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useConversationContext } from "../../context/Communication/ConversationContext";
 import { useMessageContext } from "../../context/Communication/MessageContext";
-import { useUIContext } from "../../context/Communication/UIContext";
+import { useConversationUIContext } from "../../context/Communication/ConversationUIContext.tsx";
 import { MessageResponse } from "../../interface";
 import { Conversation, SimpleConversation } from "../../interface/communication/conversation";
 import { Conversations } from "./Conversations/ConversationList";
@@ -11,6 +11,7 @@ import { Messenger } from "./Messages/Messenger";
 import { getSelectedConversation } from "../../api/communication/conversationAPI";
 import { ConversationMember } from "../../interface/communication/member";
 import { getMembers } from "../../api/communication/memberAPI";
+import {useLayoutContext} from "../../context/Layout/LayoutOutContext.tsx";
 
 type CommunicationComponentProps = {
   conversationId: string
@@ -20,17 +21,18 @@ export const CommunicationComponent: React.FC<CommunicationComponentProps> = ({ 
 
   const { setMembers } = useConversationContext();    
   const { messagePage }  = useMessageContext();
-  const { setOpenManagement }  = useUIContext();
+  const { setOpenManagement, setRename }  = useConversationUIContext();
   const [groupedMessages, setGroupedMessages] = useState<MessageResponse[][]>([]);
   const [conversations, setConversations] = useState<SimpleConversation[]>([]);    
   const navigate = useNavigate();
   const [conversation, setConversation] = useState<Conversation>();
+  const { accessToken } = useLayoutContext();
   
   const openConversation = async (conversationId: string) => {
-    const result = await getSelectedConversation(conversationId).then(result => result);    
+    const result = await getSelectedConversation(conversationId, accessToken.current).then(result => result);
     setConversation(result);
     if (result?.memberIds) {
-      const conversationMembers: ConversationMember[] = await getMembers(result.memberIds);      
+      const conversationMembers: ConversationMember[] = await getMembers(result.memberIds, accessToken.current);
       setMembers(conversationMembers);      
     }
     navigate(`/communication/conversation/${conversationId}`);                       
@@ -59,7 +61,8 @@ export const CommunicationComponent: React.FC<CommunicationComponentProps> = ({ 
     }    
     messagePage.current = 0;
     setGroupedMessages([]);
-    setOpenManagement(false);  
+    setOpenManagement(false);
+    setRename(false);
   };
 
   const deleteConversation = (conversationId: string) => {

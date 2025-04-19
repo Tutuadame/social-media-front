@@ -12,6 +12,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ profile }) => {
 
   const navigate = useNavigate();
   const { user } = useAuth0();
+  // @ts-ignore
   const currentId = user?.sub.split('|')[1];
   const buttonStyle = "transition-all flex flex-row bg-slate-100 rounded-xl min-w-[12vw] max-w-[20] p-2 text-slate-900 gap-x-3 justify-start hover:bg-slate-900 hover:text-slate-100 hover:outline hover:outline-offset-4";
   const goToUserProfile = (userId: string) => {

@@ -23,12 +23,14 @@ export const SocialUserPage = () => {
   const actionButton = "p-5 bg-slate-900 w-1/2 rounded-xl hover:outline hover:outline-2 hover:outline-offset-4 transition-all mx-auto";
   const navigate = useNavigate();
   const { setConnections } = useLayoutContext();
+  const { accessToken } = useLayoutContext();
+  
   
   if(!userId) return <>The Profile ID is UNDEFINED</>;
 
   async function callProfile() {
     if(userId) {
-      const result = await getProfile(userId).then(result => result);
+      const result = await getProfile(userId, accessToken.current).then(result => result);
       setUserProfile(result);
     }
   }
@@ -39,8 +41,9 @@ export const SocialUserPage = () => {
         initiatorId: currentId,
         targetId: userId,
       }
-      const response = await createConnection(createRequest);
+      const response = await createConnection(createRequest, accessToken.current);
       setConnections(prev => [...prev, response]);
+      setConnected("PENDING");
     }
   }
 
@@ -50,7 +53,7 @@ export const SocialUserPage = () => {
         members: [userId, currentId],
         name: `${userProfile.firstName} ${userProfile.lastName}`
       }
-      const response: SimpleConversation = await createConversation(createRequest).then(result => result);      
+      const response: SimpleConversation = await createConversation(createRequest, accessToken.current).then(result => result);
       navigate(`/communication/conversation/${response.id}`);
     }
   }
@@ -61,7 +64,7 @@ export const SocialUserPage = () => {
         currentUserId: currentId,
         targetUserId: userId
       }
-      const result = await checkConnectionStatus(requestParams).then(result => result);
+      const result = await checkConnectionStatus(requestParams, accessToken.current).then(result => result);
       console.log(result);
       !result ? setConnected("") : setConnected(result);
     }

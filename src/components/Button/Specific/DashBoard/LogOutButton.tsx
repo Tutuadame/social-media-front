@@ -13,7 +13,7 @@ export const LogOutButton = () => {
         <IconButton action={logOutAction} ariaLabel='log out' style={logOutStyle}>
             {logOutSVG}
         </IconButton>
-        <p className="tracking-wider text-center w-18">Log Out</p>
+        <p className="tracking-wider text-center w-18 text-slate-100">Log Out</p>
     </div>
 }
 

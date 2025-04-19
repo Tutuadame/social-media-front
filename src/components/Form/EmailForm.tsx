@@ -3,11 +3,13 @@ import { BasicButton } from "../Button/General/BasicButton.tsx";
 import { updateUserInfo } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useSecurityMenuContext } from "../../context/Identity/SecurityMenuContext.tsx";
+import {useLayoutContext} from "../../context/Layout/LayoutOutContext.tsx";
 
 export const EmailForm = () => {
   const [currentEmail, setCurrentEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [isValid, setIsValid] = useState(true);
+  const { accessToken } = useLayoutContext()
   const { user } = useAuth0();
   const { switchOption } = useSecurityMenuContext();
   const currentId = user?.sub?.split('|')[1] || "no-id";
@@ -31,7 +33,7 @@ export const EmailForm = () => {
 
   const onSubmit = async () => {
     if (isValid && user?.email === currentEmail) {
-      await updateUserInfo(currentId, "email", newEmail);      
+      await updateUserInfo(currentId, "email", newEmail, accessToken.current);
       setCurrentEmail("");
       setNewEmail("");
       setIsValid(true);

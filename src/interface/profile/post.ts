@@ -1,12 +1,12 @@
 export interface GetPageablePostsRequest {
     pageNumber: number,
     pageSize: number,
-};
+}
 
 export interface CreatePostRequest {
     profileId: string,
     content: string,
-};
+}
 
 export interface Post {
     id: number;
@@ -15,7 +15,7 @@ export interface Post {
     createdAt: string;
     likes: number;
     dislikes: number;
-};
+}
 
 export interface PagedPosts {
     content: Post[],

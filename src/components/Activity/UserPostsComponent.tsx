@@ -3,7 +3,7 @@ import { deletePost, getProfilePosts } from "../../api/profile/postAPI.ts";
 import { GetPageablePostsRequest, Post } from "../../interface/profile/post.ts";
 import { useEffect, useState } from "react";
 import { useActivityContext } from "../../context/Activity/ActivityContext.tsx";
-import { PostComponent } from "../Home/PostComponent.tsx";
+import { PostComponent } from "../General/PostComponent.tsx";
 import { getProfile } from "../../api/profile/profileAPI.ts";
 import { ProfileResponse } from "../../interface/profile/profile.ts";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext.tsx";
@@ -17,7 +17,7 @@ export const UserPostsComponent = () => {
     const currentId = user?.sub?.split('|')[1] || "no-id";
     const [posts, setPosts] = useState<Post[]>();
     const { tablePage } = useActivityContext();
-    const { setProfile } = useLayoutContext();
+    const { setProfile, accessToken } = useLayoutContext();
     const [loadMoreStyle, setLoadMoreStyle] = useState("flex justify-center");
     const pageSize = 10;
     const deletePostStyle = "transition-all w-fit hover:bg-red-600 rounded-r-xl bg-red-200 p-3";
@@ -34,7 +34,7 @@ export const UserPostsComponent = () => {
       
 
       try {
-        const response = await getProfilePosts(currentId, pageable).then(response => response.content);
+        const response = await getProfilePosts(currentId, pageable, accessToken.current).then(response => response.content);
         if (response.length < 10) {
           setLoadMoreStyle("flex justify-center hidden");
         } else {
@@ -52,12 +52,12 @@ export const UserPostsComponent = () => {
     }
 
     async function callUserProfile() {
-      const response : ProfileResponse = await getProfile(currentId).then(response => response);
+      const response : ProfileResponse = await getProfile(currentId, accessToken.current).then(response => response);
       setProfile(response);
     }
 
     const deleteUserPost = async (id: number) => {
-      await deletePost(id);
+      await deletePost(id, accessToken.current);
       setPosts(
         posts?.filter(p => p.id !== id)
       );
