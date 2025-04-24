@@ -16,7 +16,7 @@ export default defineConfig({
     host: 'social.media', // Use custom domain
     port: 3000,
     cors: {
-      origin: 'social.media', // Allow all origins
+      origin: ['social.media', 'localhost'], // Allow all origins
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'], // Allow specific methods
       allowedHeaders: ['Content-Type', 'Authorization'], // Allow specific headers
     }

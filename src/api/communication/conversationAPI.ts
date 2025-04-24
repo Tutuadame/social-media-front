@@ -1,5 +1,12 @@
 import { User } from "@auth0/auth0-react";
-import { createConversationPath, getConversationsPath, getSingleConversationPath, searchForConversationsPath, updateConversationNamePath } from "./paths";
+import {
+  createConversationPath,
+  deleteConversationPath,
+  getConversationsPath,
+  getSingleConversationPath,
+  searchForConversationsPath,
+  updateConversationNamePath
+} from "./paths";
 import { CONTENT_TYPE_JSON, DELETE_METHOD, GET_METHOD, PATCH_METHOD, POST_METHOD } from "../methods";
 import { CreateConversationRequest } from "../../interface/communication/conversation";
 
@@ -84,7 +91,7 @@ export const updateConversationName = async (conversationId: string, name: strin
 
 export const deleteConversation = async (conversationId: string, accessToken: string) => {
   try{
-    await fetch(`${createConversationPath}/${conversationId}`, {
+    await fetch(`${deleteConversationPath}/${conversationId}`, {
       method: DELETE_METHOD,
       headers: {
         ...CONTENT_TYPE_JSON,

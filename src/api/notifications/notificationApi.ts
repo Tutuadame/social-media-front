@@ -1,6 +1,6 @@
 import {CONTENT_TYPE_JSON, GET_METHOD} from "../methods.ts";
 
-const listNotificationsPath = "https://social.media:8446/notificationApi/notifications";
+const listNotificationsPath = "https://localhost:8446/notificationApi/notifications";
 
 export const listNotifications = async (userId: string, pageNumber:number, pageSize:number, accessToken: string) => {
   
