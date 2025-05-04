@@ -36,8 +36,7 @@ export const sendMessage = async (conversationId: string, senderId: string, cont
       body: JSON.stringify({
         conversationId,
         content,
-        senderId,
-        sentAt: new Date().toISOString().split(".")[0],
+        senderId
       })
     });
 

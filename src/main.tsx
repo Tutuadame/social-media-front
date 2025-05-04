@@ -2,8 +2,9 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import App from './App.tsx'
 import './index.css'
-import { LayoutContextProvider } from './context/Layout/LayoutOutContext.tsx';
 import {Auth0Provider} from "@auth0/auth0-react";
+import {QueryClient, QueryClientProvider} from "react-query";
+import {LayoutContextProvider} from "./context/Layout/LayoutOutContext.tsx";
 
 const Auth0ProviderWithRedirect = ({ children }: { children: React.ReactNode }) => {
  
@@ -22,27 +23,22 @@ const Auth0ProviderWithRedirect = ({ children }: { children: React.ReactNode }) 
         audience: audience,
         scope: scope
       }}
-      onRedirectCallback={(appState) => {
-        console.log("APP STATE:", appState);
-        if (appState?.flow === "signup") {
-          window.location.href = "/registration";
-        } else {
-          window.location.href = "/";
-        }
-        
-      }}
     >
       {children}
     </Auth0Provider>
   );
 }
 
+const queryClient = new QueryClient();
+
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
+    <QueryClientProvider client={queryClient}>
     <Auth0ProviderWithRedirect>
     <LayoutContextProvider>
       <App />
     </LayoutContextProvider>
     </Auth0ProviderWithRedirect>
+    </QueryClientProvider>
   </StrictMode>
 );

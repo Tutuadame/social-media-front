@@ -3,3 +3,7 @@ export interface CreateVoteRequest {
     postId: number,
     vote: boolean,
 }
+
+export interface VoteResponse {
+    type: string,
+}

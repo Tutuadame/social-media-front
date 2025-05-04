@@ -1,21 +1,21 @@
 //Conversation API
-export const getConversationsPath = "https://localhost:8444/conversationApi/conversations";
-export const updateConversationNamePath = "https://localhost:8444/conversationApi/naming";
-export const deleteConversationPath = "https://localhost:8444/conversationApi";
-export const searchForConversationsPath = "https://localhost:8444/conversationApi/search";
-export const createConversationPath = "https://localhost:8444/conversationApi/new";
-export const getSingleConversationPath = "https://localhost:8444/conversationApi/conversations";
+export const getConversationsPath = "https://social.media:8444/conversationApi/conversations";
+export const updateConversationNamePath = "https://social.media:8444/conversationApi/naming";
+export const deleteConversationPath = "https://social.media:8444/conversationApi";
+export const searchForConversationsPath = "https://social.media:8444/conversationApi/search";
+export const createConversationPath = "https://social.media:8444/conversationApi/new";
+export const getSingleConversationPath = "https://social.media:8444/conversationApi/conversations";
 
 //Message API
-export const getMessagesPath = "https://localhost:8444/messageApi";
-export const sendMessagePath = "https://localhost:8444/messageApi/new";
-export const updateMessagePath = "https://localhost:8444/messageApi";
-export const deleteMessagePath = "https://localhost:8444/messageApi";
+export const getMessagesPath = "https://social.media:8444/messageApi";
+export const sendMessagePath = "https://social.media:8444/messageApi/new";
+export const updateMessagePath = "https://social.media:8444/messageApi";
+export const deleteMessagePath = "https://social.media:8444/messageApi";
 
 //Member API
-export const addMemberPath = "https://localhost:8444/memberApi/add";
-export const createMemberPath = "https://localhost:8444/memberApi/new";
-export const deleteMemberFromConversationPath = "https://localhost:8444/memberApi/members";
-export const deleteMemberPath = "https://localhost:8444/memberApi";
-export const getMembersPath = "https://localhost:8444/memberApi/members";
-export const searchForMembersPath = "https://localhost:8444/memberApi/search";
+export const addMemberPath = "https://social.media:8444/memberApi/add";
+export const createMemberPath = "https://social.media:8444/memberApi/new";
+export const deleteMemberFromConversationPath = "https://social.media:8444/memberApi/members";
+export const deleteMemberPath = "https://social.media:8444/memberApi";
+export const getMembersPath = "https://social.media:8444/memberApi/members";
+export const searchForMembersPath = "https://social.media:8444/memberApi/search";

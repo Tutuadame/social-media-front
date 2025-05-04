@@ -1,9 +1,7 @@
-import { User } from "@auth0/auth0-react";
-import { deleteUserPath, getUserInfoPath, updateUserInfoPath } from "./paths";
-import { CONTENT_TYPE_JSON, CONTENT_TYPE_TEXT, DELETE_METHOD, GET_METHOD, PATCH_METHOD } from "../methods";
+import { deleteUserPath, updateUserInfoPath } from "./paths";
+import { CONTENT_TYPE_JSON, CONTENT_TYPE_TEXT, DELETE_METHOD, PATCH_METHOD } from "../methods";
 
 const deleteUserErrorMessage = "Error while deleting user: ";
-const getUserInfoErrorMessage = "Error fetching user data: ";
 const updateUserInfoErrorMessage = "Error updating user data: ";
 
 export const deleteAuth0User = async (profileId: string, accessToken: string) => {
@@ -21,24 +19,6 @@ export const deleteAuth0User = async (profileId: string, accessToken: string) =>
   } catch (e) {
     console.error(deleteUserErrorMessage, (e as Error).message);
   }
-};
-
-export const getUserInfo = async (user: User, accessToken: string) => {
-    try {      
-      const id = user?.sub?.split('|')[1];
-      const response = await fetch(`${getUserInfoPath}/${id}`, {
-        method: GET_METHOD,
-        headers: {
-          ...CONTENT_TYPE_JSON,
-          "Authorization": `Bearer ${accessToken}`
-        },
-        credentials: "include"
-      });
-      
-      return response.json();
-    } catch (e) {
-      console.error(getUserInfoErrorMessage, (e as Error).message);
-    }
 };
 
 export const updateUserInfo = async (userId: string, key: string, value: string, accessToken: string) => {

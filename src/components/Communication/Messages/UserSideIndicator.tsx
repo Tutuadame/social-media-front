@@ -1,17 +1,23 @@
+import React from "react";
+
 type UserSideIndicatorProps = {
-    userSide: boolean,
-    firstName: string | undefined,
-    lastName: string | undefined,
+    isUserSide: boolean,
+    firstName: string,
+    lastName: string,
 }
 
-export const UserSideIndicator: React.FC<UserSideIndicatorProps> = ({userSide, firstName = undefined, lastName = undefined}) => {
+export const UserSideIndicator: React.FC<UserSideIndicatorProps> = ({isUserSide, firstName, lastName}) => {
 
+    const dynamicMargin = isUserSide ? "mr-28" : "ml-28";
+    const dynamicPosition = isUserSide ? "justify-end" : "justify-start";
+    const nameStyle = "text-slate-200 px-2";
+    
     return <>        
-        <div className={`flex ${userSide ? "justify-end" : "justify-start"} ${userSide ? "mr-28" : "ml-28"}`}>
+        <div className={`flex ${dynamicPosition} ${dynamicMargin}`}>
             {firstName && lastName ?
-                <p className={`text-slate-600 px-2`}>{firstName || "firstName"}, {lastName || "lastName"}</p>
+                <p className={nameStyle}>{firstName}, {lastName}</p>
             :
-                <p className={`text-slate-600 px-2`}>Removed User</p>
+                <p className={nameStyle}>Removed User</p>
             }            
         </div>
     </>

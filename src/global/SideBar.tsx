@@ -1,22 +1,22 @@
 import { ActivityButton, HomeButton, LogOutButton, MessagesButton, NotificationButton, IdentityButton } from '../components';
 import { IconButton } from '../components/Button/General/IconButton';
-import {createSvg, getRelativeTime} from '../utils/htmlUtils';
-import {useEffect, useState} from 'react';
+import {createSvg, getRelativeTime, handleArrayMutation} from '../utils/htmlUtils';
+import {useEffect, useRef, useState} from 'react';
 import { MadeByMark } from './MadeByMark';
 import {KafkaNotification} from "../interface/notification/kafkaNotification.ts";
-import {useAuth0} from "@auth0/auth0-react";
 import {listNotifications} from "../api/notifications/notificationApi.ts";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
+import {LoadMoreButton} from "../components/Button/General/LoadMoreButton.tsx";
+import {useQuery} from "react-query";
+import {Loader} from "../components/General/Loader.tsx";
 
 export const SideBar = () => {
   const sidebarMoverSVG = createSvg(['m8.25 4.5 7.5 7.5-7.5 7.5'], 2, "size-9");
-  const [open, setOpen] = useState(true);
+  const [openSideBar, setOpenSideBar] = useState(true);
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
-  const [notifications, setNotifications] = useState<KafkaNotification[]>();
-  const { profile, accessToken } = useLayoutContext();
-  const { user } = useAuth0();
-  // @ts-ignore
-  const currentId = user?.sub.split('|')[1];
+  const [notifications, setNotifications] = useState<KafkaNotification[]>([]);
+  const { userProfile, userAccessToken, refetchProfile } = useLayoutContext();
+  const notificationPageRef = useRef(0);
 
   const getSidebarStyles = (isOpen: boolean) => ({
     container: `relative transition-all bg-slate-800 h-[100vh] border-r-4 border-white shadow-md flex flex-col ${
@@ -36,67 +36,73 @@ export const SideBar = () => {
   const notificationHeaderStyle = "text-slate-900 text-2xl text-center py-5 tracking-widest";
   const timeStyle = "text-slate-black rounded-xl text-right tracking-widest";
   const messageStyle = "text-slate-black p-3 rounded-xl text-left w-full mx-auto tracking-widest";
-  const noNotificationsParagraphStyle = "text-slate-900 text-center tracking-widest w-2/3 mx-auto";
   
-  async function callNotifications(userId: string) {
-    const response = await listNotifications(userId, 0, 10, accessToken.current).then(result => result.content); //Refactor
-    setNotifications(response);
+  async function callNotifications() {
+    const response = await listNotifications(userProfile.current.id, notificationPageRef.current, 10, userAccessToken).then(result => result.content);
+    handleArrayMutation(setNotifications, notificationPageRef.current, response);
     notifications?.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
+  
+  const {isLoading: isNotificationsLoading } = useQuery({
+    queryFn: async  () => await callNotifications(),
+    queryKey: "setNotifications",
+    enabled: showNotifications
+  })
 
-  const styles = getSidebarStyles(open);
+  const styles = getSidebarStyles(openSideBar);
   
   useEffect(() => {
-    const fetchData = async () => {
-      if(currentId && profile.id) await callNotifications(currentId);
-    }
-    
-    fetchData();
-  }, [profile]);
+    (async () => {
+      await refetchProfile();
+    })()
+  }, []); //Do not remove! Loads the user info!
   
-  if (!profile.id) return <></>
-
   return (
-      <div className={styles.container}>
-          <h1 className={styles.title}>Dashboard</h1>
-          <nav className={styles.nav}>
-              <IdentityButton key={"IdentityButton"}/>
-              <LogOutButton key={"LogOutButton"}/>
-              <HomeButton key={"HomeButton"}/>
-              <ActivityButton key={"ActivityButton"}/>
-              <MessagesButton key={"MessagesButton"}/>
-              <NotificationButton
-                key={"NotificationButton"}
-                setShowNotifications={setShowNotifications}
-                showNotifications={showNotifications}
-                numberOfNotifications={ notifications?.length || 0 }
-              />
-          </nav>
-          <div className={styles.notificationContainer}>
-            <h2 className={notificationHeaderStyle}>Notifications</h2>
-            {
-              notifications?.length !== 0 ?
-                notifications?.map((notification) => {
-                  return <div className={notificationStyle}>
-                    <div>
-                      <p className={timeStyle}>{getRelativeTime(notification.createdAt)}</p>
-                    </div>
-                    <p className={messageStyle}>{notification.message}</p>
-                  </div>
-                })
-              :
-              <p className={noNotificationsParagraphStyle}>Your notifications will appear here.</p>
-            }
-            
-          </div>
-          <IconButton
-              style={styles.toggleButton}
-              action={() => setOpen(prev => !prev)}
-              ariaLabel="move menu"
-          >
-              {sidebarMoverSVG}
-          </IconButton>
-          <MadeByMark  style={styles.madeByStyle}/>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Dashboard</h1>
+      <nav className={styles.nav}>
+        <IdentityButton key="IdentityButton"/>
+        <LogOutButton key="LogOutButton"/>
+        <HomeButton key="HomeButton"/>
+        <ActivityButton key="ActivityButton"/>
+        <MessagesButton key="MessagesButton"/>
+        <NotificationButton
+          key="NotificationButton"
+          setShowNotifications={setShowNotifications}
+          showNotifications={showNotifications}
+          numberOfNotifications={notifications?.length || 0}
+        />
+      </nav>
+      <div className={styles.notificationContainer}> {/* Remove key={nanoid()} */}
+        <h2 className={notificationHeaderStyle}>Notifications</h2>
+        {!isNotificationsLoading ? notifications?.map((notification, index) => {
+          if(!notification) return null;
+          return (
+            <div
+              className={notificationStyle}
+              key={`notification-${index}-${notification.createdAt}`}
+            >
+              <div>
+                <p className={timeStyle}>{getRelativeTime(notification.createdAt)}</p>
+              </div>
+              <p className={messageStyle}>{notification.message}</p>
+            </div>
+          );
+        }) : <Loader />}
+        <LoadMoreButton
+          pageRef={notificationPageRef}
+          callItems={callNotifications}
+          style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"
+        />
       </div>
+      <IconButton
+        style={styles.toggleButton}
+        action={() => setOpenSideBar(prev => !prev)}
+        ariaLabel="move menu"
+      >
+        {sidebarMoverSVG}
+      </IconButton>
+      <MadeByMark style={styles.madeByStyle}/>
+    </div>
   );
 };

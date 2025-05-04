@@ -1,4 +1,3 @@
-import { User } from "@auth0/auth0-react";
 import {
   createConversationPath,
   deleteConversationPath,
@@ -7,8 +6,9 @@ import {
   searchForConversationsPath,
   updateConversationNamePath
 } from "./paths";
-import { CONTENT_TYPE_JSON, DELETE_METHOD, GET_METHOD, PATCH_METHOD, POST_METHOD } from "../methods";
-import { CreateConversationRequest } from "../../interface/communication/conversation";
+import {CONTENT_TYPE_JSON, DELETE_METHOD, GET_METHOD, PATCH_METHOD, POST_METHOD} from "../methods";
+import {Conversation, CreateConversationRequest} from "../../interface/communication/conversation";
+import {useQuery, UseQueryOptions} from "react-query";
 
 const getConversationsErrorMessage = "Error fetching user conversations: ";
 const updateConversationNameErrorMessage = "Error updating user conversation: ";
@@ -17,10 +17,11 @@ const searchForConversationsErrorMessage = "Error searching for conversations: "
 const createConversationErrorMessage = "Error creating conversation: ";
 const getSelectedConversationErrorMessage = "Error getting selected conversation: ";
 
-export const getConversations = async (user : User, pageNumber = 0, pageSize = 10, accessToken: string) => {
+type CustomQueryOptions<TData> = Pick<UseQueryOptions<TData>, 'onSuccess' | 'enabled'>;
+
+export const getConversations = async (id: string, pageNumber = 0, pageSize = 10, accessToken: string) => {
     try {
-      const memberId = user?.sub?.split('|')[1];
-      const response = await fetch(`${getConversationsPath}/${memberId}`, {
+      const response = await fetch(`${getConversationsPath}/${id}`, {
         method: POST_METHOD,
         headers: {
           ...CONTENT_TYPE_JSON,
@@ -52,6 +53,20 @@ export const getSelectedConversation = async (conversationId: string, accessToke
     console.error(getSelectedConversationErrorMessage, (e as Error).message);
   }
 }
+
+export const useGetConversation = (conversationId: string, accessToken: string, options?: CustomQueryOptions<Conversation>) =>
+  useQuery<Conversation>({
+    queryFn: async () => {
+      const response = await fetch(`${getSingleConversationPath}/${conversationId}`, {
+        method: GET_METHOD,
+        headers: {...CONTENT_TYPE_JSON, "Authorization": `Bearer ${accessToken}`},
+        credentials: "include"
+      });
+      return response.json();
+    },
+    queryKey: ["getConversation", conversationId],
+    ...options
+  });
 
 export const createConversation = async (params: CreateConversationRequest, accessToken: string) => {
   const { members, name } = params;

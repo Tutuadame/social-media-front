@@ -1,4 +1,3 @@
-import { User } from "@auth0/auth0-react";
 import { CreatePostRequest, GetPageablePostsRequest } from "../../interface/profile/post";
 import { CONTENT_TYPE_JSON, DELETE_METHOD, POST_METHOD } from "../methods";
 import { createPostPath, deletePostPath, getConnectionPostsPath, getProfilePostsPath } from "./paths";
@@ -8,8 +7,7 @@ const getProfilePostsErrorMessage = "Error getting user posts: ";
 const createPostErrorMessage = "Error creating the post: ";
 const deletePostErrorMessage = "Error deleting the post: ";
 
-export const getConnectionPosts = async (user: User, requestParams: GetPageablePostsRequest, accessToken: string) => {
-    const id = user?.sub?.split("|")[1];
+export const getConnectionPosts = async (id: string, requestParams: GetPageablePostsRequest, accessToken: string) => {
     const { pageNumber, pageSize } = requestParams;
 
     try {        

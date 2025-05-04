@@ -1,4 +1,3 @@
-import { ProfileInfo } from "./auth0/profile";
 import { ResponseMessage } from "./ResponseMessage";
 import { MessageResponse } from "./communication/message";
 import {
@@ -11,7 +10,6 @@ import { AddMemberRequest, DeleteMemberFromConversationRequest } from "./communi
 export type {
   MessageResponse,
   ResponseMessage,
-  ProfileInfo,
   CheckConnectionRequest,
   CreateConnectionRequest,  
   UpdateConnectionsStatusRequest,

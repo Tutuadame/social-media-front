@@ -26,7 +26,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ profile }) => {
   if(!profile) return <>Profile not set!</>
 
   return <>
-    <button onClick={() => {goToUserProfile(profile.id)}} className={buttonStyle}>
+    <button key={profile.id} onClick={() => {goToUserProfile(profile.id)}} className={buttonStyle}>
       <img src={profile.picture} alt=""  className="w-12 h-12 border-2 border-white rounded-full"/>
       <p className="text-xl my-auto p-2">{profile.firstName + " " + profile.lastName}</p>
     </button>

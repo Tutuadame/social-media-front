@@ -3,7 +3,7 @@ import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx"
 
 export const IdentityButton = () => {
     const navigate = useNavigate();
-    const { profile } = useLayoutContext()
+    const { userProfile } = useLayoutContext()
 
     const profileButtonOnClick = () => {
         navigate('/profile/social');
@@ -13,7 +13,7 @@ export const IdentityButton = () => {
     
     return <div className="flex flex-col gap-y-2 w-24">
         <button className={buttonStyle} onClick={profileButtonOnClick}>
-            <img className={picStyle} src={profile.picture} alt={"Profile"}/>
+            <img className={picStyle} src={userProfile.current.picture} alt={"Profile"}/>
         </button>
         <p className="tracking-wider text-center w-18 text-slate-100">Identity</p>
     </div>

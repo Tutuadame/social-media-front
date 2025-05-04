@@ -1,16 +1,31 @@
-import React, { createContext, MutableRefObject, ReactNode, useContext, useRef, useState } from "react";
+import React, {
+    createContext,
+    Dispatch,
+    MutableRefObject,
+    ReactNode,
+    SetStateAction,
+    useContext,
+    useRef,
+    useState
+} from "react";
+import {ConnectionResponse} from "../../interface/profile/connection.ts";
 
 interface ActivityContextType {
     category: "Posts" | "Requests" | "";
-    switchCategory: (profile: string) => void,    
-    tablePage: MutableRefObject<number>,    
+    switchCategory: (profile: string) => void,
+    requestPage: MutableRefObject<number>,
+    postPage: MutableRefObject<number>,
+    pendingConnections: ConnectionResponse[],
+    setPendingConnections: Dispatch<SetStateAction<ConnectionResponse[]>>,
 }
 
 export const ActivityContext = createContext<ActivityContextType | undefined>(undefined);
 
 export const ActivityMenuProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
     const [category, setCategory] = useState<"Posts" | "Requests" | "">("Requests");
-    const tablePage = useRef(0);
+    const [pendingConnections, setPendingConnections] = useState<ConnectionResponse[]>([]);
+    const requestPage = useRef(0);
+    const postPage = useRef(0);
 
     const switchCategory = (category: string) => {
         if(category === "Posts" || category === "Requests" || category === "") {
@@ -21,7 +36,7 @@ export const ActivityMenuProvider: React.FC<{ children: ReactNode }> = ({ childr
     }
 
     return (
-        <ActivityContext.Provider value={{ category, switchCategory, tablePage }}>
+        <ActivityContext.Provider value={{ category, switchCategory, postPage, requestPage, pendingConnections, setPendingConnections }}>
           {children}
         </ActivityContext.Provider>
     );

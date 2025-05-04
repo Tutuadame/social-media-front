@@ -1,17 +1,17 @@
-import { useState } from "react";
-import { BasicButton } from "../components/Button/General/BasicButton";
-import { createProfile } from "../api/profile/profileAPI";
-import { useAuth0 } from "@auth0/auth0-react";
-import {CreateProfileRequest, ProfileResponse} from "../interface/profile/profile";
-import { createMember } from "../api/communication/memberAPI";
-import { CreateMemberRequest } from "../interface/communication/member";
-import { useNavigate } from "react-router-dom";
+import React, {useState} from "react";
+import {BasicButton} from "../components/Button/General/BasicButton";
+import {createProfile} from "../api/profile/profileAPI";
+import {useAuth0} from "@auth0/auth0-react";
+import {CreateProfileRequest} from "../interface/profile/profile";
+import {createMember} from "../api/communication/memberAPI";
+import {CreateMemberRequest} from "../interface/communication/member";
+import {useNavigate} from "react-router-dom";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 
 export const RegistrationPage = () => {
 
   const { user } = useAuth0();
-  const { setProfile, accessToken } = useLayoutContext();
+  const { userAccessToken, userProfile, refetchProfile} = useLayoutContext();
   const currentId = user?.sub?.split('|')[1] || "no-id";
   const inputContainerStyle = "flex flex-row w-full justify-between bg-slate-800 p-5 rounded-xl shadow-xl";
   const labelStyle = "text-2xl font-normal text-white my-auto";
@@ -38,12 +38,9 @@ export const RegistrationPage = () => {
       lastName: lastName,      
       memberId: currentId
     }
-
-    const response : ProfileResponse = await createProfile(requestParamsProfile, accessToken.current).then(result => result);
-    setProfile(response);
-    console.log(response);
-    await createMember(requestParamsMember, accessToken.current).then(result => result);
-    
+    userProfile.current = await createProfile(requestParamsProfile, userAccessToken || "").then(result => result);
+    await createMember(requestParamsMember, userAccessToken || "").then(result => result);
+    await refetchProfile();
     navigate("/");
   }
 

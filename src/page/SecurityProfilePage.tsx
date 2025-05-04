@@ -4,38 +4,22 @@ import {PasswordForm} from "../components/Form/PasswordForm.tsx";
 import {useAuth0} from "@auth0/auth0-react";
 import {BasicButton} from "../components/Button/General/BasicButton.tsx";
 import {DeleteButton} from "../components";
-import {useEffect, useState} from "react";
-import {ProfileResponse} from "../interface/profile/profile.ts";
-import {getProfile} from "../api/profile/profileAPI.ts";
 import {useNavigate} from "react-router-dom";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
+
 
 export const SecurityProfilePage = () => {
     const { option } = useSecurityMenuContext();
     const identityMenuButtonStyle = "w-1/2 h-full bg-slate-400 text-white text-5xl tracking-widest p-5 transition-all my-auto font-light";
     const activeButtonStyle = "w-1/2 h-full bg-slate-100 text-slate-900 text-5xl tracking-widest p-5 transition-all my-auto font-light";
     const isSecurity = window.location.href.includes("security");
-    const [profile, setProfile] = useState<ProfileResponse>();
     const navigate = useNavigate();
-    const { user } = useAuth0();
-    const currentId = user?.sub?.split('|')[1] || "no-id";
-    const { accessToken } = useLayoutContext();
-    
-    const callUserProfile = async (id: string) => {
-        const response = await getProfile(id, accessToken.current).then(response => response);
-        setProfile(response);
-    }
-    
-    useEffect(() => {
-        (async () => {
-            if (!profile) callUserProfile(currentId);
-        })();
-    }, []);
+    const { userProfile } = useLayoutContext();
 
     return <div className="w-full h-[95vh]">
         <div className="w-full h-[20vh] content-end border-b-4 bg-slate-800 flex flex-row justify-evenly relative">
             <BasicButton action={() => {navigate("/profile/social")}} style={!isSecurity ? activeButtonStyle : identityMenuButtonStyle} text="Social"/>
-            <img src={profile?.picture} alt="" className="w-36 h-36 rounded-full absolute translate-y-1/2 bottom-0 border-8-transparent bg-slate-100 p-1"/>
+            <img src={userProfile.current.picture} alt="" className="w-36 h-36 rounded-full absolute translate-y-1/2 bottom-0 border-8-transparent bg-slate-100 p-1"/>
             <BasicButton action={() => {navigate("/profile/security")}} style={isSecurity ? activeButtonStyle : identityMenuButtonStyle} text="Security"/>
         </div>
         <div className="w-full h-[10vh] my-14">

@@ -1,0 +1,223 @@
+@startuml
+
+' Define node styles
+skinparam componentStyle rectangle
+skinparam backgroundColor transparent
+skinparam defaultFontName Arial
+skinparam arrowColor #666666
+skinparam componentBorderColor #666666
+
+!define PRIMARY_COLOR #475569
+!define SECONDARY_COLOR #64748b
+!define ACCENT_COLOR #0ea5e9
+!define TEXT_COLOR #ffffff
+
+skinparam component {
+  BackgroundColor PRIMARY_COLOR
+  BorderColor SECONDARY_COLOR
+  FontColor TEXT_COLOR
+}
+
+skinparam package {
+  BackgroundColor transparent
+  BorderColor SECONDARY_COLOR
+  FontColor TEXT_COLOR
+}
+
+package "App Structure" {
+  [App] as App
+  [Layout] as Layout
+  [SideBar] as SideBar
+  [Routes] as Routes
+}
+
+package "Pages" {
+  [HomePage] as HomePage
+  [ActivityPage] as ActivityPage
+  [CommunicationPage] as CommunicationPage
+  [SecurityProfilePage] as SecurityProfilePage
+  [SocialProfilePage] as SocialProfilePage
+  [SocialUserPage] as SocialUserPage
+  [RegistrationPage] as RegistrationPage
+  [WelcomePage] as WelcomePage
+  [NoPage] as NoPage
+}
+
+package "Components" {
+  package "General Components" {
+    [PostComponent] as PostComponent
+    [CreatePostComponent] as CreatePostComponent
+    [FoundItemsComponent] as FoundItemsComponent
+    [SearchBar] as SearchBar
+    [MainComponent] as MainComponent
+  }
+
+  package "Button Components" {
+    [BasicButton] as BasicButton
+    [IconButton] as IconButton
+    [LoadMoreButton] as LoadMoreButton
+
+    package "Specific Buttons" {
+      [ProfileButton] as ProfileButton
+      [ActivityButton] as ActivityButton
+      [HomeButton] as HomeButton
+      [LogOutButton] as LogOutButton
+      [MessagesButton] as MessagesButton
+      [NotificationButton] as NotificationButton
+      [IdentityButton] as IdentityButton
+      [LoginButton] as LoginButton
+      [RegistrationButton] as RegistrationButton
+      [VoteButton] as VoteButton
+      [DeleteButton] as DeleteButton
+    }
+  }
+
+  package "Form Components" {
+    [EmailForm] as EmailForm
+    [PasswordForm] as PasswordForm
+  }
+
+  package "Activity Components" {
+    [PendingConnectionsComponent] as PendingConnectionsComponent
+    [UserPostsComponent] as UserPostsComponent
+  }
+
+  package "Communication Components" {
+    [CommunicationComponent] as CommunicationComponent
+
+    package "Conversation Components" {
+      [ConversationComponent] as ConversationComponent
+      [Conversations] as Conversations
+    }
+
+    package "Message Components" {
+      [Header] as Header
+      [Message] as Message
+      [MessageBoard] as MessageBoard
+      [Messenger] as Messenger
+      [UserSideIndicator] as UserSideIndicator
+    }
+  }
+}
+
+package "Context Providers" {
+  [LayoutContextProvider] as LayoutContextProvider
+  [ActivityMenuProvider] as ActivityMenuProvider
+  [ConversationProvider] as ConversationProvider
+  [MessageProvider] as MessageProvider
+  [UIProvider] as UIProvider
+  [SecurityMenuProvider] as SecurityMenuProvider
+}
+
+package "Auth" {
+  [Auth0Provider] as Auth0Provider
+  [useAuth0] as useAuth0
+}
+
+package "API Services" {
+  [profileAPI] as profileAPI
+  [communicationAPI] as communicationAPI
+  [connectionAPI] as connectionAPI
+  [postAPI] as postAPI
+  [notificationAPI] as notificationAPI
+  [voteAPI] as voteAPI
+}
+
+' ===== Main Application Flow =====
+App --> Auth0Provider
+App --> LayoutContextProvider
+App --> Routes
+
+Routes --> Layout
+Layout --> SideBar
+Layout --> Pages
+
+' ===== Context Dependencies =====
+LayoutContextProvider ..> App
+ActivityMenuProvider ..> ActivityPage
+ConversationProvider ..> CommunicationPage
+MessageProvider ..> CommunicationPage
+UIProvider ..> CommunicationPage
+SecurityMenuProvider ..> SecurityProfilePage
+
+' ===== Page Dependencies =====
+HomePage --> WelcomePage
+HomePage --> MainComponent
+
+' ===== Component Hierarchies =====
+
+' --- SideBar Components ---
+SideBar --> HomeButton
+SideBar --> ActivityButton
+SideBar --> LogOutButton
+SideBar --> MessagesButton
+SideBar --> NotificationButton
+SideBar --> IdentityButton
+
+' --- Activity Components ---
+ActivityPage --> PendingConnectionsComponent
+ActivityPage --> UserPostsComponent
+
+' --- Communication Components ---
+CommunicationPage --> CommunicationComponent
+CommunicationComponent --> Conversations
+CommunicationComponent --> Header
+CommunicationComponent --> Messenger
+
+Conversations --> ConversationComponent
+Messenger --> MessageBoard
+MessageBoard --> Message
+MessageBoard --> UserSideIndicator
+
+' --- Profile Components ---
+SecurityProfilePage --> EmailForm
+SecurityProfilePage --> PasswordForm
+SecurityProfilePage --> DeleteButton
+
+SocialProfilePage --> BasicButton
+
+' --- Main Component Dependencies ---
+MainComponent --> CreatePostComponent
+MainComponent --> PostComponent
+MainComponent --> FoundItemsComponent
+MainComponent --> SearchBar
+
+' === Button Hierarchies ===
+ProfileButton --> IconButton
+ActivityButton --> IconButton
+HomeButton --> IconButton
+LogOutButton --> IconButton
+MessagesButton --> IconButton
+NotificationButton --> IconButton
+LoginButton --> BasicButton
+RegistrationButton --> BasicButton
+VoteButton --> IconButton
+LoadMoreButton --> IconButton
+
+' === API Dependencies ===
+PostComponent --> voteAPI
+UserPostsComponent --> postAPI
+PendingConnectionsComponent --> connectionAPI
+MainComponent --> postAPI
+MainComponent --> profileAPI
+SocialProfilePage --> profileAPI
+SecurityProfilePage --> profileAPI
+SocialUserPage --> profileAPI
+SocialUserPage --> connectionAPI
+RegistrationPage --> profileAPI
+CommunicationComponent --> communicationAPI
+Conversations --> communicationAPI
+MessageBoard --> communicationAPI
+Messenger --> communicationAPI
+
+' === Auth Dependencies ===
+Layout --> useAuth0
+MainComponent --> useAuth0
+PendingConnectionsComponent --> useAuth0
+UserPostsComponent --> useAuth0
+LoginButton --> useAuth0
+LogOutButton --> useAuth0
+RegistrationButton --> useAuth0
+DeleteButton --> useAuth0
+
+@enduml

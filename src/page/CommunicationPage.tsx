@@ -1,5 +1,5 @@
 import { ConversationProvider } from "../context/Communication/ConversationContext";
-import { MessageProvider } from "../context/Communication/MessageContext";
+import { MessageProvider } from "../context/Communication/MessengerContext.tsx";
 import { UIProvider } from "../context/Communication/ConversationUIContext.tsx";
 import { CommunicationComponent } from "../components/Communication/CommunicationComponent";
 import { useParams } from "react-router-dom";

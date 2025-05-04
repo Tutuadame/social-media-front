@@ -13,7 +13,7 @@ export const CreatePostComponent = () => {
   const { user } = useAuth0();
   const currentId = user?.sub?.split('|')[1] || "no-id";
   const [newContent, setNewContent] = useState<string>("");
-  const { accessToken } = useLayoutContext();
+  const { userAccessToken } = useLayoutContext();
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setNewContent(e.target.value);
@@ -24,7 +24,7 @@ export const CreatePostComponent = () => {
       content: newContent,
       profileId: currentId
     }
-    await createPost(requestParams, accessToken.current).then(result => result);
+    await createPost(requestParams, userAccessToken).then(result => result);
     setNewContent("");  
   }
 

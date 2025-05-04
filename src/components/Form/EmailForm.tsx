@@ -9,8 +9,8 @@ export const EmailForm = () => {
   const [currentEmail, setCurrentEmail] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [isValid, setIsValid] = useState(true);
-  const { accessToken } = useLayoutContext()
-  const { user } = useAuth0();
+  const { userAccessToken } = useLayoutContext()
+  const { user, loginWithRedirect } = useAuth0();
   const { switchOption } = useSecurityMenuContext();
   const currentId = user?.sub?.split('|')[1] || "no-id";
 
@@ -33,12 +33,13 @@ export const EmailForm = () => {
 
   const onSubmit = async () => {
     if (isValid && user?.email === currentEmail) {
-      await updateUserInfo(currentId, "email", newEmail, accessToken.current);
+      await updateUserInfo(currentId, "email", newEmail, userAccessToken);
       setCurrentEmail("");
       setNewEmail("");
       setIsValid(true);
       switchOption("Overview");
-    }    
+      await loginWithRedirect();
+    }
   }
 
   return (

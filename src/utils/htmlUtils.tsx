@@ -1,5 +1,6 @@
 import { MessageResponse } from "../interface";
 import { format } from "date-fns";
+import {Dispatch, SetStateAction} from "react";
 
 export const createSvg = (paths:string[], strokeWidth = 1, style="") => (  
     <svg
@@ -8,18 +9,19 @@ export const createSvg = (paths:string[], strokeWidth = 1, style="") => (
       strokeWidth={strokeWidth}
       stroke="currentColor"
       className={`size-20 m-auto ${style}`}
-      fill="none"  
+      fill="none"
     >
       
       {paths.map((path:string) => (
-        <path strokeLinecap="round" strokeLinejoin="round" d={path}/>  
+        <path key={path} strokeLinecap="round" strokeLinejoin="round" d={path}/>
       ))}
       
     </svg>
 );
 
-export const orderMessagesToGroupsByConsecutiveIds = (messages: MessageResponse[]): MessageResponse[][] => {  
-  const groups = [];  
+export const orderMessagesToGroupsByConsecutiveIds = (messages: MessageResponse[]): MessageResponse[][] => {
+  if(messages.length < 1) return [];
+  const groups = [];
   let currentId = messages[0].senderId;
   let currentGroup: MessageResponse[] = [];
 
@@ -56,3 +58,8 @@ export const getRelativeTime = (timestamp: string) => {
     return format(date, "yyyy-MM-dd HH:mm");
   }
 };
+
+export function handleArrayMutation<T>(setter: Dispatch<SetStateAction<T[]>>, pageNumber: number, items: T[]) {
+  if (pageNumber === 0) setter(items);
+  else setter((prev) => [...prev, ...items]);
+}

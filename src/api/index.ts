@@ -1,4 +1,4 @@
-import { deleteAuth0User, getUserInfo, updateUserInfo } from "./auth0/auth0API";
+import { deleteAuth0User, updateUserInfo } from "./auth0/auth0API";
 import { getConversations } from "./communication/conversationAPI";
 
-export { getUserInfo, deleteAuth0User, updateUserInfo, getConversations };
+export {deleteAuth0User, updateUserInfo, getConversations };

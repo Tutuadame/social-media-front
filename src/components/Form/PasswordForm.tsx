@@ -9,7 +9,7 @@ export const PasswordForm = () => {
 
   const [formData, setFormData] = useState({"password":"", "passwordAgain":""});
   const [isValid, setIsValid] = useState(true);
-  const { accessToken } = useLayoutContext();
+  const { userAccessToken } = useLayoutContext();
   const { user } = useAuth0();
   const labelStyle = "text-2xl font-normal text-white my-auto";
   const inputStyle = "w-[13vw] border-4 border-slate-400 p-3 rounded-xl";
@@ -29,7 +29,7 @@ export const PasswordForm = () => {
   const onSubmit = async () => {
     const currentId = user?.sub?.split('|')[1] || "no-id";
     if(isStrongPassword(formData.password) && formData.password === formData.passwordAgain) {
-      await updateUserInfo(currentId, "password", formData.password, accessToken.current);
+      await updateUserInfo(currentId, "password", formData.password, userAccessToken);
       setIsValid(true);
       setFormData({"password":"", "passwordAgain":""});
       switchOption("Overview");

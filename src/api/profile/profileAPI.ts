@@ -35,7 +35,6 @@ export const getProfile = async (id: string, accessToken: string) => {
             },
             credentials: "include",
         });
-
         return response.json();
     } catch (e) {
         console.error(getProfileErrorMessage, (e as Error).message);

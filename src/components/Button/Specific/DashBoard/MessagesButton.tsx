@@ -8,7 +8,7 @@ export const MessagesButton = () => {
     
     const navigate = useNavigate();
     const messagesButtonOnClick = () => {
-        navigate('/communication/conversation/start');        
+        navigate('/communication/conversation/start');
     };
     const messagingButtonStyle = "items-center mx-auto w-14 h-14 bg-slate-400 text-white p-3 hover:outline hover:outline-4 hover:outline-offset-4 transition-all rounded-xl text-4xl";
 

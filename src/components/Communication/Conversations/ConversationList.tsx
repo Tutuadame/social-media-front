@@ -1,80 +1,72 @@
 import { useAuth0 } from "@auth0/auth0-react";
-import { SimpleConversation } from "../../../interface/communication/conversation";
+import {SimpleConversation} from "../../../interface/communication/conversation";
 import React, { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import { getConversations } from "../../../api";
 import { LoadMoreButton } from "../../Button/General/LoadMoreButton";
-import { searchForConversations } from "../../../api/communication/conversationAPI";
+import {deleteConversation, searchForConversations} from "../../../api/communication/conversationAPI";
 import { ConversationComponent } from "./Conversation";
 import { SearchBar } from "../../SearchBar";
 import {useLayoutContext} from "../../../context/Layout/LayoutOutContext.tsx";
+import {handleArrayMutation} from "../../../utils/htmlUtils.tsx";
+import {useMutation, useQuery} from "react-query";
+import {useNavigate} from "react-router-dom";
+import {useConversationContext} from "../../../context/Communication/ConversationContext.tsx";
 
 type ConversationsProps = {    
   conversations: SimpleConversation[],
   setConversations: Dispatch<SetStateAction<SimpleConversation[]>>,
-  deleteConversation: (conversationId: string) => void,
-  handleSelectConversation: (conversationId: string) => void,
-} 
+}
 
-export const Conversations: React.FC<ConversationsProps>= ({conversations, setConversations, deleteConversation, handleSelectConversation}) => {
+export const Conversations: React.FC<ConversationsProps>= ({conversations, setConversations}) => {
   
   const { user } = useAuth0();
   const currentId = user?.sub?.split('|')[1] || "no-id";  
   const conversationPage = useRef(0);
-  const [loadMoreStyle, setLoadMoreStyle] = useState("flex justify-center");
   const [foundConversations, setFoundConversations] = useState<SimpleConversation[]>([]);
   const [searchExpression, setSearchExpression] = useState<string>("");
-  const { accessToken } = useLayoutContext();
-
+  const { userAccessToken } = useLayoutContext();
+  const { setConversation } = useConversationContext();
+  const navigate = useNavigate();
+  
   const onConversationSearch = async (name: string) => {
     conversationPage.current = 0;
     setSearchExpression(name);
-    const result = await searchForConversations(name, currentId, conversationPage.current, 10, accessToken.current).then(result => result.content);
+    const result = await searchForConversations(name, currentId, conversationPage.current, 10, userAccessToken).then(result => result.content);
     setFoundConversations(result);
-    if (result.length === 0) {
-      setLoadMoreStyle((prev) => prev + " hidden");
-    } else {
-      conversationPage.current += 1;
-    }
   }
 
-  async function callMoreSearchedConversation() {
-    const result = await searchForConversations(searchExpression, currentId, conversationPage.current, 10,  accessToken.current).then(result => result.content);
+  async function callSearchForConversation() {
+    const result = await searchForConversations(searchExpression, currentId, conversationPage.current, 10, userAccessToken).then(result => result.content);
     setFoundConversations(prev => [...prev, ...result]);
-    if (result.length === 0) {
-      setLoadMoreStyle((prev) => prev + " hidden");
-    } else {
-      conversationPage.current += 1;
-    }
   }
 
   async function callConversations() {
-    if (user) {
-      const response: SimpleConversation[] = await getConversations(user, conversationPage.current,  10, accessToken.current).then(result => result.content);
-      console.log(response);
-      if (response) {        
-        if (response.length === 0) {
-          setLoadMoreStyle((prev) => prev + " hidden");
-        } else {
-          conversationPage.current += 1;
-          setConversations(prev => [...prev, ...response]);
-        }
-      }
-    }
+    const response: SimpleConversation[] = await getConversations(currentId, conversationPage.current,  10, userAccessToken).then(result => result.content);
+    handleArrayMutation(setConversations, conversationPage.current, response);
   }
-
-  useEffect(() => {        
-    if(!conversations[0]) {
-      callConversations();      
+  
+  useQuery({ queryFn: callConversations, queryKey: "getConversations", enabled: !!user });
+  
+  const {mutateAsync: deleteConversationFromList} = useMutation({
+    mutationFn: async (conversationId: string) => {
+      return await deleteConversation(conversationId, userAccessToken);
+    },
+    mutationKey: "deleteConversationFromList",
+    onSuccess: (_data, variables) => {
+      setConversations(conversations.filter((conv) => conv.id !== variables));
+      setConversation(undefined);
+      navigate(`/communication/conversation/start`);
     }
-    
+  });
+
+  useEffect(() => {
     if(searchExpression === "") {
-      setLoadMoreStyle("flex justify-center");
       conversationPage.current += 1;
     } else {
       setFoundConversations( conversations.filter(c => c.name.includes(searchExpression)))
     }
   }, [searchExpression])
-
+  
   return (
     <ul className="flex flex-col">
       <li className="mb-10">
@@ -85,15 +77,15 @@ export const Conversations: React.FC<ConversationsProps>= ({conversations, setCo
           {conversations.map((conversation) => {
             return (
               <ConversationComponent
-                handleSelectConversation={handleSelectConversation}
-                conversation={conversation}                
-                removeConversation={deleteConversation}
+                key={conversation.id}
+                conversation={conversation}
+                deleteConversationFromList={deleteConversationFromList}
               />
             );
           })}
-        <LoadMoreButton
-          callItems={callConversations}
-          loadMoreStyle={loadMoreStyle}
+          <LoadMoreButton
+            pageRef={conversationPage}
+            callItems={callConversations}
           />
         </>
       ) : (
@@ -101,15 +93,15 @@ export const Conversations: React.FC<ConversationsProps>= ({conversations, setCo
           {foundConversations.map((conversation) => {
             return (
               <ConversationComponent
-                handleSelectConversation={handleSelectConversation}
+                key={conversation.id}
                 conversation={conversation}
-                removeConversation={deleteConversation}
+                deleteConversationFromList={deleteConversationFromList}
               />
             );
           })}
           <LoadMoreButton
-            callItems={callMoreSearchedConversation}
-            loadMoreStyle={loadMoreStyle}
+            pageRef={conversationPage}
+            callItems={callSearchForConversation}
           />
         </>
       )}

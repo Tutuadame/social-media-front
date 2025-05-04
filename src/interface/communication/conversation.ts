@@ -6,7 +6,7 @@ export interface SimpleConversation {
 export interface Conversation {
     id: string,
     name: string,
-    members: string[]
+    memberIds: string[]
 }
 
 export interface PagedConversations {

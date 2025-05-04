@@ -1,6 +1,6 @@
 import { createSvg } from "../utils/htmlUtils";
 import { IconButton } from "./Button/General/IconButton";
-import { Dispatch, SetStateAction } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 
 
 type SearchBarProps = {
