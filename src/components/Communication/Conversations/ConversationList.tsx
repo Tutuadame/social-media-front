@@ -31,17 +31,17 @@ export const Conversations: React.FC<ConversationsProps>= ({conversations, setCo
   const onConversationSearch = async (name: string) => {
     conversationPage.current = 0;
     setSearchExpression(name);
-    const result = await searchForConversations(name, currentId, conversationPage.current, 10, userAccessToken).then(result => result.content);
+    const result = await searchForConversations(name, currentId, userAccessToken, conversationPage.current).then(result => result.content);
     setFoundConversations(result);
   }
 
   async function callSearchForConversation() {
-    const result = await searchForConversations(searchExpression, currentId, conversationPage.current, 10, userAccessToken).then(result => result.content);
+    const result = await searchForConversations(searchExpression, currentId, userAccessToken, conversationPage.current).then(result => result.content);
     setFoundConversations(prev => [...prev, ...result]);
   }
 
   async function callConversations() {
-    const response: SimpleConversation[] = await getConversations(currentId, conversationPage.current,  10, userAccessToken).then(result => result.content);
+    const response: SimpleConversation[] = await getConversations(currentId, userAccessToken, conversationPage.current).then(result => result.content);
     handleArrayMutation(setConversations, conversationPage.current, response);
   }
   

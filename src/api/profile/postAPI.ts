@@ -1,5 +1,5 @@
 import { CreatePostRequest, GetPageablePostsRequest } from "../../interface/profile/post";
-import { CONTENT_TYPE_JSON, DELETE_METHOD, POST_METHOD } from "../methods";
+import {CONTENT_TYPE_JSON, DELETE_METHOD, GET_METHOD, POST_METHOD} from "../methods";
 import { createPostPath, deletePostPath, getConnectionPostsPath, getProfilePostsPath } from "./paths";
 
 const getConnectionPostsErrorMessage = "Error getting posts from connections: ";
@@ -7,18 +7,23 @@ const getProfilePostsErrorMessage = "Error getting user posts: ";
 const createPostErrorMessage = "Error creating the post: ";
 const deletePostErrorMessage = "Error deleting the post: ";
 
-export const getConnectionPosts = async (id: string, requestParams: GetPageablePostsRequest, accessToken: string) => {
+export const getConnectionPosts = async (profileId: string, requestParams: GetPageablePostsRequest, accessToken: string) => {
     const { pageNumber, pageSize } = requestParams;
+    
+    const params = new URLSearchParams({
+        profileId: profileId.toString(),
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+    });
 
     try {        
-        const response = await fetch(`${getConnectionPostsPath}/${id}`, {
-            method: POST_METHOD,
+        const response = await fetch(`${getConnectionPostsPath}?${params.toString()}`, {
+            method: GET_METHOD,
             headers: {
                 ...CONTENT_TYPE_JSON,
                 "Authorization": `Bearer ${accessToken}`
             },
-            credentials: "include",
-            body: JSON.stringify({pageNumber, pageSize})
+            credentials: "include"
         });
     
         return response.json();
@@ -27,11 +32,16 @@ export const getConnectionPosts = async (id: string, requestParams: GetPageableP
     }
 };
 
-export const getProfilePosts = async (id: string, requestParams: GetPageablePostsRequest, accessToken: string) => {
+export const getProfilePosts = async (profileId: string, requestParams: GetPageablePostsRequest, accessToken: string) => {
     const { pageNumber, pageSize } = requestParams;
+    const params = new URLSearchParams({
+        profileId: profileId.toString(),
+        pageNumber: pageNumber.toString(),
+        pageSize: pageSize.toString(),
+    });
 
     try {
-        const response = await fetch(`${getProfilePostsPath}/${id}`, {
+        const response = await fetch(`${getProfilePostsPath}?${params.toString()}`, {
             method: POST_METHOD,
             headers: {
                 ...CONTENT_TYPE_JSON,

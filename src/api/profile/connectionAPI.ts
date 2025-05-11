@@ -12,15 +12,12 @@ const isConnectedErrorMessage = "Error checking connection: ";
 export const getAcceptedConnectionsByUser = async (profileId: string, accessToken: string) => {
     try {
       const response = await fetch(`${getAcceptedConnectionsByUserPath}/${profileId}`, {
-        method: POST_METHOD,
+        method: GET_METHOD,
         headers: {
           ...CONTENT_TYPE_JSON,
           "Authorization": `Bearer ${accessToken}`
         },
-        credentials: "include",
-        body: JSON.stringify({
-          profileId,
-        })
+        credentials: "include"
       });
 
       return await response.json();
@@ -30,19 +27,22 @@ export const getAcceptedConnectionsByUser = async (profileId: string, accessToke
 };
 
 export const getPendingConnectionsByUser = async (profileId: string, requestParams: GetPageablePostsRequest, accessToken: string) => {
-  const {pageSize, pageNumber} = requestParams;
+  const { pageSize, pageNumber } = requestParams;
+  
+  const params = new URLSearchParams({
+    profileId: profileId.toString(),
+    pageSize: pageSize.toString(),
+    pageNumber: pageNumber.toString(),
+  });
+  
   try {    
-    const response = await fetch(`${getPendingConnectionsByUserPath}/${profileId}`, {
-      method: POST_METHOD,
+    const response = await fetch(`${getPendingConnectionsByUserPath}?${params.toString()}`, {
+      method: GET_METHOD,
       headers: {
         ...CONTENT_TYPE_JSON,
         "Authorization": `Bearer ${accessToken}`
       },
-      credentials: "include",
-      body: JSON.stringify({
-        pageSize,
-        pageNumber
-      })
+      credentials: "include"
     });
 
     return await response.json();

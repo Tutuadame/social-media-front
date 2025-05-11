@@ -25,10 +25,10 @@ export const createProfile = async (requestParams: CreateProfileRequest, accessT
     }
 }
 
-export const getProfile = async (id: string, accessToken: string) => {
+export const getProfile = async (profileId: string, accessToken: string) => {
     try {
-        const response = await fetch(`${getProfilePath}/${id}`, {
-            method: POST_METHOD,
+        const response = await fetch(`${getProfilePath}/${profileId}`, {
+            method: GET_METHOD,
             headers: {
                 ...CONTENT_TYPE_JSON,
                 "Authorization": `Bearer ${accessToken}`

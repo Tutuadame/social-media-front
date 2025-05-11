@@ -45,7 +45,7 @@ export const CommunicationComponent: React.FC<CommunicationComponentProps> = ({ 
   
   const messageQuery= useQuery({
     queryFn: async () => {
-      return await getMessages(conversationId, messagePage.current, 10, userAccessToken);
+      return await getMessages(conversationId,  userAccessToken, messagePage.current);
     },
     onSuccess: (response) => {
       if (groupedMessages.length && response.length) {

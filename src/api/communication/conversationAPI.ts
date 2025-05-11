@@ -15,43 +15,30 @@ const updateConversationNameErrorMessage = "Error updating user conversation: ";
 const deleteConversationErrorMessage = "Error deleting user conversation: ";
 const searchForConversationsErrorMessage = "Error searching for conversations: ";
 const createConversationErrorMessage = "Error creating conversation: ";
-const getSelectedConversationErrorMessage = "Error getting selected conversation: ";
 
 type CustomQueryOptions<TData> = Pick<UseQueryOptions<TData>, 'onSuccess' | 'enabled'>;
 
-export const getConversations = async (id: string, pageNumber = 0, pageSize = 10, accessToken: string) => {
-    try {
-      const response = await fetch(`${getConversationsPath}/${id}`, {
-        method: POST_METHOD,
+export const getConversations = async (id: string, accessToken: string, pageNumber = 0, pageSize = 10) => {
+  const params = new URLSearchParams({
+    memberId: id.toString(),
+    pageSize: pageSize.toString(),
+    pageNumber: pageNumber.toString()
+  });
+  
+  try {
+      const response = await fetch(`${getConversationsPath}?${params.toString()}`, {
+        method: GET_METHOD,
         headers: {
           ...CONTENT_TYPE_JSON,
           "Authorization": `Bearer ${accessToken}`
         },
-        credentials: "include",
-        body: JSON.stringify({pageNumber, pageSize})
+        credentials: "include"
       });
 
       return response.json();
     } catch (e) {
       console.error(getConversationsErrorMessage, (e as Error).message);
     }
-}
-
-export const getSelectedConversation = async (conversationId: string, accessToken: string) => {
-  try {    
-    const response = await fetch(`${getSingleConversationPath}/${conversationId}`, {
-      method: GET_METHOD,
-      headers: {
-        ...CONTENT_TYPE_JSON,
-        "Authorization": `Bearer ${accessToken}`
-      },
-      credentials: "include"     
-    });
-
-    return response.json();      
-  } catch (e) {
-    console.error(getSelectedConversationErrorMessage, (e as Error).message);
-  }
 }
 
 export const useGetConversation = (conversationId: string, accessToken: string, options?: CustomQueryOptions<Conversation>) =>
@@ -119,7 +106,7 @@ export const deleteConversation = async (conversationId: string, accessToken: st
   }
 };
 
-export const searchForConversations = async (name:string, id:string, pageNumber: number = 0, pageSize:number = 10, accessToken: string) => {
+export const searchForConversations = async (name:string, id:string, accessToken: string, pageNumber: number = 0, pageSize:number = 10) => {
   const params = new URLSearchParams({
     name,
     requesterId: id.toString(),

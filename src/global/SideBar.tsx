@@ -43,7 +43,7 @@ export const SideBar = () => {
     notifications?.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   }
   
-  const {isLoading: isNotificationsLoading } = useQuery({
+  const { isLoading: isNotificationsLoading, refetch: fetchNotifications } = useQuery({
     queryFn: async  () => await callNotifications(),
     queryKey: "setNotifications",
     enabled: showNotifications
@@ -54,6 +54,7 @@ export const SideBar = () => {
   useEffect(() => {
     (async () => {
       await refetchProfile();
+      await fetchNotifications();
     })()
   }, []); //Do not remove! Loads the user info!
   
@@ -73,7 +74,7 @@ export const SideBar = () => {
           numberOfNotifications={notifications?.length || 0}
         />
       </nav>
-      <div className={styles.notificationContainer}> {/* Remove key={nanoid()} */}
+      <div className={styles.notificationContainer}>
         <h2 className={notificationHeaderStyle}>Notifications</h2>
         {!isNotificationsLoading ? notifications?.map((notification, index) => {
           if(!notification) return null;

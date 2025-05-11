@@ -1,20 +1,26 @@
-import { CONTENT_TYPE_JSON, DELETE_METHOD, PATCH_METHOD, POST_METHOD } from "../methods";
+import {CONTENT_TYPE_JSON, DELETE_METHOD, GET_METHOD, PATCH_METHOD, POST_METHOD} from "../methods";
 import { deleteMessagePath, getMessagesPath, sendMessagePath, updateMessagePath } from "./paths";
 
 const getMessagesErrorMessage = "Error fetching conversation messages: ";
 const sendMessageErrorMessage = "Error sending message: ";
 const updateMessageErrorMessage = "Error updating message: ";
 
-export const getMessages = async (conversationId:string = "2", pageNumber = 0, pageSize = 10, accessToken: string) => {
+export const getMessages = async (conversationId:string = "2", accessToken: string, pageNumber = 0, pageSize = 10) => {
+    
+    const params = new URLSearchParams({
+      conversationId:conversationId.toString(),
+      pageNumber: pageNumber.toString(),
+      pageSize: pageSize.toString()
+    });
+  
     try {
-      const response = await fetch(`${getMessagesPath}/${conversationId}`, {
-        method: POST_METHOD,
+      const response = await fetch(`${getMessagesPath}/?${params.toString()}`, {
+        method: GET_METHOD,
         headers: {
           ...CONTENT_TYPE_JSON,
           "Authorization": `Bearer ${accessToken}`
         },
         credentials: "include",
-        body: JSON.stringify({pageNumber, pageSize}),
       });
 
       return response.json()
