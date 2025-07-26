@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx";
+import styles from "./DashBoardButton.module.css";
 
 export const IdentityButton = () => {
     const navigate = useNavigate();
@@ -8,13 +9,11 @@ export const IdentityButton = () => {
     const profileButtonOnClick = () => {
         navigate('/profile/social');
     };
-    const buttonStyle = "h-fit w-fit hover:outline hover:outline-4 hover:outline-offset-4 hover:outline-slate-100 rounded-xl transition-all mx-auto";
-    const picStyle = "rounded-xl w-14 h-14";
     
-    return <div className="flex flex-col gap-y-2 w-24">
-        <button className={buttonStyle} onClick={profileButtonOnClick}>
-            <img className={picStyle} src={userProfile.current.picture} alt={"Profile"}/>
+    return <div className={styles['dashboard-button-container']}>
+        <button className={styles['identity-button']} onClick={profileButtonOnClick}>
+            <img className={styles['identity-pic']} src={userProfile.current.picture} alt={"Profile"}/>
         </button>
-        <p className="tracking-wider text-center w-18 text-slate-100">Identity</p>
+        <p className={styles['dashboard-button-title']}>Identity</p>
     </div>
 }

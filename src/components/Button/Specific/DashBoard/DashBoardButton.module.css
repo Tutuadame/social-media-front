@@ -1,0 +1,27 @@
+.dashboard-button {
+  @apply items-center mx-auto w-14 h-14 bg-slate-400 text-white p-3 transition-all rounded-xl text-4xl hover:outline hover:outline-4 hover:outline-offset-4
+}
+
+.dashboard-notification-active {
+  @apply items-center mx-auto w-14 h-14 bg-slate-100 text-slate-900 p-3 transition-all rounded-xl text-4xl hover:outline hover:outline-4 hover:outline-offset-4 hover:outline-slate-100;
+}
+
+.dashboard-notification-counter {
+  @apply absolute top-0 right-1 -translate-y-1/2 z-20 bg-red-900 w-8 h-8 rounded-full my-auto text-center content-center text-slate-100;
+}
+
+.dashboard-button-title {
+  @apply tracking-wider text-center w-18 text-slate-100;
+}
+
+.dashboard-button-container {
+  @apply flex flex-col gap-y-2 w-24;
+}
+
+.identity-button {
+  @apply h-fit w-fit hover:outline hover:outline-4 hover:outline-offset-4 hover:outline-slate-100 rounded-xl transition-all mx-auto;
+}
+
+.identity-pic {
+  @apply rounded-xl w-14 h-14;
+}
