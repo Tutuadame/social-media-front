@@ -1,4 +1,4 @@
-import { ActivityButton, HomeButton, LogOutButton, MessagesButton, NotificationButton, IdentityButton } from '../components';
+import { ActivityButton, HomeButton, LogOutButton, NotificationButton, IdentityButton } from '../components';
 import { IconButton } from '../components/Button/General/IconButton';
 import {createSvg, getRelativeTime, handleArrayMutation} from '../utils/htmlUtils';
 import {useEffect, useRef, useState} from 'react';
@@ -65,8 +65,7 @@ export const SideBar = () => {
         <IdentityButton key="IdentityButton"/>
         <LogOutButton key="LogOutButton"/>
         <HomeButton key="HomeButton"/>
-        <ActivityButton key="ActivityButton"/>
-        <MessagesButton key="MessagesButton"/>
+        <ActivityButton key="ActivityButton"/>        
         <NotificationButton
           key="NotificationButton"
           setShowNotifications={setShowNotifications}

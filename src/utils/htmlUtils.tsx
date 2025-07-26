@@ -1,4 +1,3 @@
-import { MessageResponse } from "../interface";
 import { format } from "date-fns";
 import {Dispatch, SetStateAction} from "react";
 
@@ -18,28 +17,6 @@ export const createSvg = (paths:string[], strokeWidth = 1, style="") => (
       
     </svg>
 );
-
-export const orderMessagesToGroupsByConsecutiveIds = (messages: MessageResponse[]): MessageResponse[][] => {
-  if(messages.length < 1) return [];
-  const groups = [];
-  let currentId = messages[0].senderId;
-  let currentGroup: MessageResponse[] = [];
-
-  for ( let i=0; i <= messages.length - 1; i++ ) {    
-    if(currentId === messages[i].senderId){
-      currentGroup.push(messages[i]);
-    } else {
-      currentId = messages[i].senderId;
-      groups.push(currentGroup);
-      currentGroup = [messages[i]];
-    }
-  }
-
-  if (currentGroup.length > 0) {
-    groups.push(currentGroup);
-  }
-  return groups;
-};
 
 export const getRelativeTime = (timestamp: string) => {
   const now: Date = new Date();
