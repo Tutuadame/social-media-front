@@ -13,8 +13,8 @@ export const WelcomePage = () => {
         overflow: 'auto',
         height: '100vh',
         width: '100vw'
-
     };
+    
     const [isRegister, setIsRegister] = useState<boolean>(true);
     const pageStyle = "relative flex flex-col w-full h-full items-center gap-10";
     const switchButtonStyle = "items-center justify-center w-fit h-12 text-slate-900 px-5 mx-5 text-xl text-white";

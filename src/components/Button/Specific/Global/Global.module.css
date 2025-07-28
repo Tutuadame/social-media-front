@@ -1,0 +1,11 @@
+.profile-button {
+  @apply transition-all flex flex-row bg-slate-100 rounded-xl min-w-[12vw] max-w-[20] p-2 text-slate-900 gap-x-3 justify-start hover:bg-slate-900 hover:text-slate-100 hover:outline hover:outline-offset-4;
+}
+
+.profile-pic {
+  @apply w-12 h-12 border-2 border-white rounded-full;
+}
+
+.full-name {
+  @apply text-xl my-auto p-2;
+}
