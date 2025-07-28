@@ -9,6 +9,7 @@ import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 import {LoadMoreButton} from "../components/Button/General/LoadMoreButton.tsx";
 import {useQuery} from "react-query";
 import {Loader} from "../components/General/Loader.tsx";
+import styles from "./Global.module.css";
 
 export const SideBar = () => {
   const sidebarMoverSVG = createSvg(['m8.25 4.5 7.5 7.5-7.5 7.5'], 2, "size-9");
@@ -19,23 +20,13 @@ export const SideBar = () => {
   const notificationPageRef = useRef(0);
 
   const getSidebarStyles = (isOpen: boolean) => ({
-    container: `relative transition-all bg-slate-800 h-[100vh] border-r-4 border-white shadow-md flex flex-col ${
-      isOpen ? 'justify-start gap-y-12 p-6 w-3/12' : 'w-[3vw]'
-    }`,
-    toggleButton: `absolute top-1/2 right-0 translate-x-1/2 z-10 items-center w-14 h-14 bg-slate-800 text-white p-2 transition-all rounded-full
-         outline outline-4 hover:outline-white hover:text-slate-800 hover:bg-slate-100 ${
-      isOpen ? 'rotate-180' : ''
-    }`,
-    title: isOpen ? 'text-slate-100 mx-auto h-fit tracking-widest text-3xl' : 'hidden',
-    nav: isOpen ? 'flex flex-row w-full transition-all h-fit gap-10 flex-wrap justify-evenly' : 'hidden',
-    madeByStyle: isOpen ? "text-center tracking-widest content-end mt-auto text-slate-100" : "hidden",
-    notificationContainer: isOpen && showNotifications ? "border-2 scrollbar-webkit scrollbar-thin bg-slate-100 p-5 m-auto w-10/12 rounded-xl shadow-xl max-h-[40vh] overflow-y-auto" : "hidden"
-  });
-  
-  const notificationStyle = "bg-slate-100 border-4 p-2 border-slate-600 rounded-xl my-2";
-  const notificationHeaderStyle = "text-slate-900 text-2xl text-center py-5 tracking-widest";
-  const timeStyle = "text-slate-black rounded-xl text-right tracking-widest";
-  const messageStyle = "text-slate-black p-3 rounded-xl text-left w-full mx-auto tracking-widest";
+    container: isOpen ? `${styles['sidebar-container-open']}` : `${styles['sidebar-container-close']}`,
+    toggleButton: isOpen ? `${styles['toggle-button-open']}`: '',
+    title: isOpen ? `${styles['title-open']}` : `${styles['hide']}`,
+    nav: isOpen ? `${styles['nav-open']}` : `${styles['hide']}`,
+    madeByStyle: isOpen ? `${styles['made-by']}` : `${styles['hide']}`,
+    notificationContainer: isOpen && showNotifications ? `${styles['notification-container']}` : `${styles['hide']}`
+  });  
   
   async function callNotifications() {
     const response = await listNotifications(userProfile.current.id, notificationPageRef.current, 10, userAccessToken).then(result => result.content);
@@ -49,7 +40,7 @@ export const SideBar = () => {
     enabled: showNotifications
   })
 
-  const styles = getSidebarStyles(openSideBar);
+  const dynamicStyles = getSidebarStyles(openSideBar);
   
   useEffect(() => {
     (async () => {
@@ -59,9 +50,9 @@ export const SideBar = () => {
   }, []); //Do not remove! Loads the user info!
   
   return (
-    <div className={styles.container}>
-      <h1 className={styles.title}>Dashboard</h1>
-      <nav className={styles.nav}>
+    <div className={dynamicStyles.container}>
+      <h1 className={dynamicStyles.title}>Dashboard</h1>
+      <nav className={dynamicStyles.nav}>
         <IdentityButton key="IdentityButton"/>
         <LogOutButton key="LogOutButton"/>
         <HomeButton key="HomeButton"/>
@@ -74,36 +65,36 @@ export const SideBar = () => {
           numberOfNotifications={notifications?.length || 0}
         />
       </nav>
-      <div className={styles.notificationContainer}>
-        <h2 className={notificationHeaderStyle}>Notifications</h2>
+      <div className={dynamicStyles.notificationContainer}>
+        <h2 className={styles['notification-header']}>Notifications</h2>
         {!isNotificationsLoading ? notifications?.map((notification, index) => {
           if(!notification) return null;
           return (
             <div
-              className={notificationStyle}
+              className={styles['notification-style']}
               key={`notification-${index}-${notification.createdAt}`}
             >
               <div>
-                <p className={timeStyle}>{getRelativeTime(notification.createdAt)}</p>
+                <p className={styles['time']}>{getRelativeTime(notification.createdAt)}</p>
               </div>
-              <p className={messageStyle}>{notification.message}</p>
+              <p className={styles['notification-message']}>{notification.message}</p>
             </div>
           );
         }) : <Loader />}
         <LoadMoreButton
           pageRef={notificationPageRef}
           callItems={callNotifications}
-          style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"
+          style={styles['load-more']}
         />
       </div>
       <IconButton
-        style={styles.toggleButton}
+        style={dynamicStyles.toggleButton}
         action={() => setOpenSideBar(prev => !prev)}
         ariaLabel="move menu"
       >
         {sidebarMoverSVG}
       </IconButton>
-      <MadeByMark style={styles.madeByStyle}/>
+      <MadeByMark style={dynamicStyles.madeByStyle}/>
     </div>
   );
 };

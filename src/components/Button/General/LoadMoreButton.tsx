@@ -1,6 +1,7 @@
 import { createSvg } from "../../../utils/htmlUtils";
 import { IconButton } from "./IconButton";
 import React, {MutableRefObject,useState} from "react";
+import styles from "./GeneralButton.module.css";
 
 type LoadMoreButtonProps = {
   pageRef: MutableRefObject<number>;
@@ -11,10 +12,9 @@ type LoadMoreButtonProps = {
 export const LoadMoreButton: React.FC<LoadMoreButtonProps> = ({
   pageRef,
   callItems,
-  style = "transition-all bg-slate-200 p-3 mx-2 hover:bg-slate-900 rounded-full mt-4 hover:text-slate-100",
+  style = styles['load-more'],
 }) => {
-  
-  //const hiddenStyle = "flex justify-center hidden";
+    
   const baseStyle = "flex justify-center";
   const loadMoreSVG = createSvg(
     ["m4.5 5.25 7.5 7.5 7.5-7.5m-15 6 7.5 7.5 7.5-7.5"],

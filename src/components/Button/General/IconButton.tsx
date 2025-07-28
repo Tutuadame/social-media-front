@@ -1,4 +1,5 @@
 import React from "react";
+import styles from "./GeneralButton.module.css";
 
 type IconButtonProps = {
   action?: () => void,
@@ -14,11 +15,11 @@ type IconButtonProps = {
 export const IconButton: React.FC<IconButtonProps> = ({
   action,
   children,  
-  style = "h-[6vh] w-[5vw] text-white bg-slate-400 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 transition-all p-2 my-auto",
+  style = styles['icon-button'],
   type = "button",
   disabled = false,
   active,
-  activeStyle = "h-[6vh] w-[5vw] text-white bg-slate-900 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 transition-all p-2 my-auto"
+  activeStyle = styles['active-icon-button']
 }) => {
   
 
@@ -27,7 +28,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       <button 
         disabled={disabled}
         onClick={action}
-        className={active ? activeStyle : style}        
+        className={active ? activeStyle : style}
         type={type}
       >
         {children}

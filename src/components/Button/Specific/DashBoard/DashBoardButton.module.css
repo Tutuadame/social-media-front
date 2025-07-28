@@ -11,7 +11,7 @@
 }
 
 .dashboard-button-title {
-  @apply tracking-wider text-center w-18 text-slate-100;
+  @apply tracking-wider text-center w-auto text-slate-100;
 }
 
 .dashboard-button-container {
@@ -19,7 +19,7 @@
 }
 
 .identity-button {
-  @apply h-fit w-fit hover:outline hover:outline-4 hover:outline-offset-4 hover:outline-slate-100 rounded-xl transition-all mx-auto;
+  @apply h-fit w-fit rounded-xl transition-all mx-auto hover:outline hover:outline-4 hover:outline-offset-4 hover:outline-slate-100;
 }
 
 .identity-pic {
