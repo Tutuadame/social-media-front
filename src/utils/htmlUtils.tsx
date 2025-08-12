@@ -3,20 +3,20 @@ import { format } from "date-fns";
 import {Dispatch, SetStateAction} from "react";
 
 export const createSvg = (paths:string[], strokeWidth = 1, style="") => (  
-    <svg
-      xmlns="http://www.w3.org/2000/svg"      
-      viewBox="0 0 24 24"
-      strokeWidth={strokeWidth}
-      stroke="currentColor"
-      className={`size-20 m-auto ${style}`}
-      fill="none"
-    >
-      
-      {paths.map((path:string) => (
-        <path key={path} strokeLinecap="round" strokeLinejoin="round" d={path}/>
-      ))}
-      
-    </svg>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"      
+    viewBox="0 0 24 24"
+    strokeWidth={strokeWidth}
+    stroke="currentColor"
+    className={`size-20 ${style}`}
+    fill="none"
+  >
+    
+    {paths.map((path:string) => (
+      <path key={path} strokeLinecap="round" strokeLinejoin="round" d={path}/>
+    ))}
+    
+  </svg>
 );
 
 export const orderMessagesToGroupsByConsecutiveIds = (messages: MessageResponse[]): MessageResponse[][] => {

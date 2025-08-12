@@ -1,45 +1,9 @@
-.layout {
-  @apply flex flex-row flex-nowrap flex-auto bg-slate-600;
-}
-
-.main {
-  @apply relative flex flex-grow justify-center;
-}
-
-.sidebar-container {
-  @apply relative transition-all bg-slate-800 h-[100vh] border-r-4 border-white shadow-md flex flex-col
-}
-
-.sidebar-container-open {
-  @apply justify-start gap-y-12 p-6 w-3/12;
-}
-
-.sidebar-container-close {
-  @apply w-[3vw];
-}
-
-.toggle-button-open {
-  @apply absolute top-1/2 right-0 translate-x-1/2 z-10 items-center w-14 h-14 bg-slate-800 text-white p-2 transition-all rounded-full outline outline-4 hover:outline-white hover:text-slate-800 hover:bg-slate-100 rotate-180;
-}
-
-.title-open {
-  @apply text-slate-100 mx-auto h-fit tracking-widest text-3xl;
-}
-
 .nav-open {
-  @apply flex flex-row w-full transition-all h-fit gap-10 flex-wrap justify-evenly;
-}
-
-.made-by {
-  @apply text-center tracking-widest content-end mt-auto text-slate-100;
-}
-
-.notification-container {
-  @apply border-2 scrollbar-webkit scrollbar-thin bg-slate-100 p-5 m-auto w-10/12 rounded-xl shadow-xl max-h-[40vh] overflow-y-auto;
+  @apply flex flex-col w-96 transition-all duration-300 ease-in-out;
 }
 
 .hide {
-  @apply hidden;
+  @apply hidden transition-all duration-300 ease-in-out;
 }
 
 .notification-style {
@@ -50,14 +14,10 @@
   @apply text-slate-900 text-2xl text-center py-5 tracking-widest;
 }
 
-.time {
-  @apply text-slate-black rounded-xl text-right tracking-widest;
+.relative-time {
+  @apply text-slate-900 rounded-xl text-right tracking-widest;
 }
 
 .notification-message {
-  @apply text-slate-black p-3 rounded-xl text-left w-full mx-auto tracking-widest;
-}
-
-.load-more {
-  @apply transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10;
+  @apply text-slate-900 p-3 rounded-xl text-left w-full mx-auto tracking-widest;
 }

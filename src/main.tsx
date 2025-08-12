@@ -34,11 +34,11 @@ const queryClient = new QueryClient();
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <QueryClientProvider client={queryClient}>
-    <Auth0ProviderWithRedirect>
-    <LayoutContextProvider>
-      <App />
-    </LayoutContextProvider>
-    </Auth0ProviderWithRedirect>
+      <Auth0ProviderWithRedirect>
+        <LayoutContextProvider>
+          <App />
+        </LayoutContextProvider>
+      </Auth0ProviderWithRedirect>
     </QueryClientProvider>
   </StrictMode>
 );

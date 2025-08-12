@@ -7,16 +7,13 @@ import {createMember} from "../api/communication/memberAPI";
 import {CreateMemberRequest} from "../interface/communication/member";
 import {useNavigate} from "react-router-dom";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
+import {PAGE} from "./pageStyles.ts";
 
 export const RegistrationPage = () => {
 
   const { user } = useAuth0();
   const { userAccessToken, userProfile, refetchProfile} = useLayoutContext();
   const currentId = user?.sub?.split('|')[1] || "no-id";
-  const inputContainerStyle = "flex flex-row w-full justify-between bg-slate-800 p-5 rounded-xl shadow-xl";
-  const labelStyle = "text-2xl font-normal text-white my-auto";
-  const inputStyle = "w-[13vw] border-4 border-slate-400 p-3 rounded-xl focus:outline-none";
-  const submitButtonStyle = "w-1/3 h-fit bg-slate-400 text-white text-3xl tracking-widest p-3 transition-all font-light mx-auto rounded-xl hover:outline hover:outline-4 hover:outline-offset-4";
   const [formData, setFormData] = useState({"firstName": "", "lastName": "", "gender": "" });
   const navigate = useNavigate();
 
@@ -44,37 +41,37 @@ export const RegistrationPage = () => {
     navigate("/");
   }
 
-  return <div className="flex flex-col w-full h-full text-center">
-    <h2 className="text-4xl tracking-widest text-white my-10">ACCOUNT REGISTRATION</h2>
-    <div className="flex flex-col mx-auto w-2/5 bg-slate-700 p-10 gap-y-14 rounded-xl shadow-xl my-auto">
-      <h3 className="text-left text-2xl tracking-widest text-white">ENTER YOUR DETAILS</h3>
-      <div className={inputContainerStyle}>
-        <h2 className={labelStyle}>First name</h2>
+  return <div className={PAGE.registrationContainer}>
+    <h2 className={PAGE.registrationTitle}>ACCOUNT REGISTRATION</h2>
+    <div className={PAGE.registrationForm}>
+      <h3 className={PAGE.registrationSubtitle}>ENTER YOUR DETAILS</h3>
+      <div className={PAGE.registrationInputContainer}>
+        <h2 className={PAGE.registrationLabel}>First name</h2>
         <input
           type="text"
           name="firstName"
           onChange={handleChange}
           placeholder="Enter your first name"
-          className={inputStyle}
+          className={PAGE.registrationInput}
         />
       </div>
 
-      <div className={inputContainerStyle}>
-        <h2 className={labelStyle}>Last name</h2>
+      <div className={PAGE.registrationInputContainer}>
+        <h2 className={PAGE.registrationLabel}>Last name</h2>
         <input
           type="text"
           name="lastName"
           onChange={handleChange}
           placeholder="Enter your last name"
-          className={inputStyle}
+          className={PAGE.registrationInput}
         />
       </div>
 
-      <div className={inputContainerStyle}>
-        <h2 className={labelStyle}>Gender</h2>
+      <div className={PAGE.registrationInputContainer}>
+        <h2 className={PAGE.registrationLabel}>Gender</h2>
         <select
           name="gender"
-          className={inputStyle}
+          className={PAGE.registrationInput}
           defaultValue=""
           onChange={handleChange}
         >
@@ -86,8 +83,8 @@ export const RegistrationPage = () => {
       </div>
 
 
-      <div className="flex flex-row w-full">
-        <BasicButton action={() => {onSubmit()}} text="Submit" style={submitButtonStyle}/>        
+      <div className={PAGE.registrationButtonContainer}>
+        <BasicButton action={() => {onSubmit()}} text="Submit" style={PAGE.registrationSubmitButton}/>        
       </div>
     </div>
 

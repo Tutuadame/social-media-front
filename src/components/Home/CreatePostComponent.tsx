@@ -7,9 +7,8 @@ import {useLayoutContext} from "../../context/Layout/LayoutOutContext.tsx";
 
 export const CreatePostComponent = () => {
 
-  const newPostContainerStyle = "relative bg-slate-900 p-5 w-[40vw] max-h-[50vh] h-fit flex flex-col mx-auto rounded-xl mt-10";
-  const textAreaStyle = "text-white w-full h-[15vh] bg-slate-400 border-2 rounded-xl p-3 mb-5 tracking-widest focus:outline-none";
-  const newPostTitleStyle = "text-white text-2xl pb-5 tracking-widest";
+  const newPostContainerStyle = "relative bg-slate-400 p-5 w-[40vw] max-h-[50vh] h-fit flex flex-col mx-auto rounded mt-10 shadow-xl";
+  const textAreaStyle = "text-slate-900 w-full h-[15vh] bg-slate-200 border-2 rounded p-3 mb-5 tracking-widest focus:outline-none";  
   const { user } = useAuth0();
   const currentId = user?.sub?.split('|')[1] || "no-id";
   const [newContent, setNewContent] = useState<string>("");
@@ -28,9 +27,8 @@ export const CreatePostComponent = () => {
     setNewContent("");  
   }
 
-  return <div className={newPostContainerStyle}>
-    <h2 className={newPostTitleStyle}>Got something to say?</h2>
-    <textarea name="newContent" id="" value={newContent} className={textAreaStyle} onInput={handleChange}>
+  return <div className={newPostContainerStyle}>    
+    <textarea name="newContent" id="" value={newContent} className={textAreaStyle} onInput={handleChange} placeholder="Got something to say?">
     </textarea>
     <BasicButton action={() => sendCreateRequest()} text="Share"/>
   </div>

@@ -13,29 +13,29 @@ interface ConversationContextType {
 export const ConversationContext = createContext<ConversationContextType | undefined>(undefined);
 
 export const ConversationProvider: React.FC<{ children: ReactNode }> = ({ children }) => {    
-    const [members, setMembers] = useState<ConversationMember[]>([]);
-    const [conversation, setConversation] = useState<Conversation>();
+  const [members, setMembers] = useState<ConversationMember[]>([]);
+  const [conversation, setConversation] = useState<Conversation>();
 
-    return (
-      <ConversationContext.Provider
-        value={{
-          members,
-          setMembers,
-          conversation,
-          setConversation
-        }}
-      >
-        {children}
-      </ConversationContext.Provider>
-    );
+  return (
+    <ConversationContext.Provider
+      value={{
+        members,
+        setMembers,
+        conversation,
+        setConversation
+      }}
+    >
+      {children}
+    </ConversationContext.Provider>
+  );
 }
 
 export function useConversationContext() {
-    const conversationContext = useContext(ConversationContext);
-    
-    if (conversationContext === undefined) {
-      throw new Error("useConversationContext must be used with with ConversationContext!");
-    }
+  const conversationContext = useContext(ConversationContext);
+  
+  if (conversationContext === undefined) {
+    throw new Error("useConversationContext must be used with with ConversationContext!");
+  }
 
-    return conversationContext;
+  return conversationContext;
 }

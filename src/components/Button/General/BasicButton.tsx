@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./GeneralButton.module.css";
+import { BUTTON } from "../buttonStyles";
 
 type ButtonProps = {
   action: () => void;
@@ -11,11 +11,11 @@ type ButtonProps = {
 export const BasicButton: React.FC<ButtonProps> = ({
   action: onClick,
   text,
-  style = styles['basic-button'],
+  style = BUTTON.basic,
   type = "button",
 }) => {
   return (
-    <button type={type} onClick={onClick} className={`${style}`}>
+    <button type={type} onClick={onClick} className={style}>
       {text}
     </button>
   );

@@ -56,7 +56,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ profile, post, likeType,
       <div className={styles['vote-container']}>
         { profile ? <button onClick={() => {sendVote(post.id, profile.id, true)}} className={activeType === "like" ? styles['vote-option'] : styles['active-vote']}>{likeButtonSVG}</button> : <p className={styles['vote-svg-container']}>{likeButtonSVG}</p> }
         <p className={styles['vote-number']}>{post.likes}</p>
-      </div>    
+      </div>
       :      
       <div className={styles['vote-container']}>
         { profile ? <button onClick={() => {sendVote(post.id, profile.id, false)}} className={activeType === "dislike" ? styles['vote-option'] : styles['active-vote']}>{dislikeButtonSVG}</button> : <p className={styles['vote-svg-container']}>{dislikeButtonSVG}</p> }

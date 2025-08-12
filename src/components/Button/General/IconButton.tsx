@@ -1,12 +1,11 @@
 import React from "react";
-import styles from "./GeneralButton.module.css";
+import { BUTTON } from "../buttonStyles";
 
 type IconButtonProps = {
   action?: () => void,
   children: React.ReactNode,
   ariaLabel?: string,
-  style?: string,
-  activeStyle?: string,
+  style?: string,  
   type?: "button" | "submit" | "reset" | undefined,
   disabled?: boolean
   active?: boolean
@@ -14,12 +13,10 @@ type IconButtonProps = {
 
 export const IconButton: React.FC<IconButtonProps> = ({
   action,
-  children,  
-  style = styles['icon-button'],
+  children,
+  style = BUTTON.basic,
   type = "button",
-  disabled = false,
-  active,
-  activeStyle = styles['active-icon-button']
+  disabled = false,  
 }) => {
   
 
@@ -28,7 +25,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
       <button 
         disabled={disabled}
         onClick={action}
-        className={active ? activeStyle : style}
+        className={style}
         type={type}
       >
         {children}

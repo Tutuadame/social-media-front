@@ -1,18 +1,16 @@
-import { ActivityButton, HomeButton, LogOutButton, MessagesButton, NotificationButton, IdentityButton } from '../components';
-import { IconButton } from '../components/Button/General/IconButton';
-import {createSvg, getRelativeTime, handleArrayMutation} from '../utils/htmlUtils';
+import { ActivityButton, HomeButton, LogOutButton, NotificationButton, IdentityButton, SideBarButton } from '../components';
+import { handleArrayMutation} from '../utils/htmlUtils';
 import {useEffect, useRef, useState} from 'react';
-import { MadeByMark } from './MadeByMark';
 import {KafkaNotification} from "../interface/notification/kafkaNotification.ts";
 import {listNotifications} from "../api/notifications/notificationApi.ts";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
-import {LoadMoreButton} from "../components/Button/General/LoadMoreButton.tsx";
 import {useQuery} from "react-query";
-import {Loader} from "../components/General/Loader.tsx";
 import styles from "./Global.module.css";
+import { NOTIFICATIONS, SIDEBAR } from './globalStyle.ts';
+import { NotificationsWindow } from './NotificationsWindow.tsx';
+import { EventButton } from '../components/Button/Specific/DashBoard/EventsButton.tsx';
 
-export const SideBar = () => {
-  const sidebarMoverSVG = createSvg(['m8.25 4.5 7.5 7.5-7.5 7.5'], 2, "size-9");
+export const SideBar = () => {  
   const [openSideBar, setOpenSideBar] = useState(true);
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<KafkaNotification[]>([]);
@@ -20,12 +18,13 @@ export const SideBar = () => {
   const notificationPageRef = useRef(0);
 
   const getSidebarStyles = (isOpen: boolean) => ({
-    container: isOpen ? `${styles['sidebar-container-open']}` : `${styles['sidebar-container-close']}`,
-    toggleButton: isOpen ? `${styles['toggle-button-open']}`: '',
-    title: isOpen ? `${styles['title-open']}` : `${styles['hide']}`,
+    container: isOpen ? SIDEBAR.openContainer : SIDEBAR.closedContainer,    
+    title: isOpen ? SIDEBAR.titleOpen : SIDEBAR.titleClose,
     nav: isOpen ? `${styles['nav-open']}` : `${styles['hide']}`,
     madeByStyle: isOpen ? `${styles['made-by']}` : `${styles['hide']}`,
-    notificationContainer: isOpen && showNotifications ? `${styles['notification-container']}` : `${styles['hide']}`
+    notificationContainer: isOpen && showNotifications ? NOTIFICATIONS.containerOpen : NOTIFICATIONS.containerClose,
+    main: isOpen ? SIDEBAR.openMain : SIDEBAR.closedMain,
+    titleContainer: isOpen ? SIDEBAR.titleContainerOpen : SIDEBAR.titleContainerClosed
   });  
   
   async function callNotifications() {
@@ -38,7 +37,7 @@ export const SideBar = () => {
     queryFn: async  () => await callNotifications(),
     queryKey: "setNotifications",
     enabled: showNotifications
-  })
+  });
 
   const dynamicStyles = getSidebarStyles(openSideBar);
   
@@ -50,51 +49,47 @@ export const SideBar = () => {
   }, []); //Do not remove! Loads the user info!
   
   return (
-    <div className={dynamicStyles.container}>
-      <h1 className={dynamicStyles.title}>Dashboard</h1>
-      <nav className={dynamicStyles.nav}>
-        <IdentityButton key="IdentityButton"/>
-        <LogOutButton key="LogOutButton"/>
-        <HomeButton key="HomeButton"/>
-        <ActivityButton key="ActivityButton"/>
-        <MessagesButton key="MessagesButton"/>
-        <NotificationButton
-          key="NotificationButton"
-          setShowNotifications={setShowNotifications}
-          showNotifications={showNotifications}
-          numberOfNotifications={notifications?.length || 0}
-        />
-      </nav>
-      <div className={dynamicStyles.notificationContainer}>
-        <h2 className={styles['notification-header']}>Notifications</h2>
-        {!isNotificationsLoading ? notifications?.map((notification, index) => {
-          if(!notification) return null;
-          return (
-            <div
-              className={styles['notification-style']}
-              key={`notification-${index}-${notification.createdAt}`}
-            >
-              <div>
-                <p className={styles['time']}>{getRelativeTime(notification.createdAt)}</p>
-              </div>
-              <p className={styles['notification-message']}>{notification.message}</p>
-            </div>
-          );
-        }) : <Loader />}
-        <LoadMoreButton
-          pageRef={notificationPageRef}
-          callItems={callNotifications}
-          style={styles['load-more']}
-        />
+    <div className={dynamicStyles.main}>    
+      <div className={dynamicStyles.titleContainer}>
+        <h1 className={dynamicStyles.title}>Dashboard</h1>
       </div>
-      <IconButton
-        style={dynamicStyles.toggleButton}
-        action={() => setOpenSideBar(prev => !prev)}
-        ariaLabel="move menu"
-      >
-        {sidebarMoverSVG}
-      </IconButton>
-      <MadeByMark style={dynamicStyles.madeByStyle}/>
+      <div className={dynamicStyles.container}>
+        <nav className={dynamicStyles.nav}>
+          <IdentityButton key="IdentityButton"/>
+          <HomeButton key="HomeButton"/>
+          <ActivityButton key="ActivityButton"/>
+          <NotificationButton
+            key="NotificationButton"
+            setShowNotifications={setShowNotifications}            
+            numberOfNotifications={notifications?.length || 0}
+          />
+          <EventButton key="EventButton"/>
+          <LogOutButton key="LogOutButton"/>
+        </nav>
+        <NotificationsWindow 
+          notifications={notifications} 
+          isNotificationsLoading={isNotificationsLoading}
+          notificationPageRef={notificationPageRef}
+          callNotifications={callNotifications}
+          containerStyle={dynamicStyles.notificationContainer}         
+        />
+        <SideBarButton openSideBar={openSideBar} setOpenSideBar={setOpenSideBar}/>
+        {openSideBar ? 
+          <></>
+        :
+        <>
+          <IdentityButton key="IdentityButton" minimalView={true}/>
+          <ActivityButton key="ActivityButton" minimalView={true}/>
+          <HomeButton key="HomeButton" minimalView={true}/>
+          <NotificationButton 
+            key="NotificationButton" 
+            setShowNotifications={setShowNotifications}            
+            numberOfNotifications={notifications?.length || 0}
+            minimalView={true}
+          />
+          <EventButton key="EventButton" minimalView={true}/>
+        </>}
+      </div>
     </div>
   );
 };

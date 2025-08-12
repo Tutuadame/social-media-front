@@ -22,19 +22,19 @@ export const deleteAuth0User = async (profileId: string, accessToken: string) =>
 };
 
 export const updateUserInfo = async (userId: string, key: string, value: string, accessToken: string) => {
-    try {
-      const response = await fetch(`${updateUserInfoPath}/${userId}`, {
-        method: PATCH_METHOD,
-        headers: {
-          ...CONTENT_TYPE_JSON,
-          "Authorization": `Bearer ${accessToken}`
-        },
-        credentials: "include",
-        body: JSON.stringify({ key, value })
-      });
+  try {
+    const response = await fetch(`${updateUserInfoPath}/${userId}`, {
+      method: PATCH_METHOD,
+      headers: {
+        ...CONTENT_TYPE_JSON,
+        "Authorization": `Bearer ${accessToken}`
+      },
+      credentials: "include",
+      body: JSON.stringify({ key, value })
+    });
 
-      return response.text();
-    } catch (e) {
-      console.error(updateUserInfoErrorMessage, (e as Error).message);
-    }
+    return response.text();
+  } catch (e) {
+    console.error(updateUserInfoErrorMessage, (e as Error).message);
+  }
 };

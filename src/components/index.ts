@@ -1,9 +1,9 @@
+import { SideBarButton } from './Button/Specific/DashBoard/SideBarButton';
 import { CommunicationPage } from '../page/CommunicationPage.tsx';
 import { ActivityButton } from './Button/Specific/DashBoard/ActivityButton';
 import { HomeButton } from './Button/Specific/DashBoard/HomeButton';
 import { IdentityButton } from './Button/Specific/DashBoard/IdentityButton';
 import { LogOutButton } from './Button/Specific/DashBoard/LogOutButton';
-import { MessagesButton } from './Button/Specific/DashBoard/MessagesButton';
 import { NotificationButton } from './Button/Specific/DashBoard/NotificationButton';
 import { LoginButton } from './Button/Specific/Home/LoginButton';
 import { RegistrationButton } from './Button/Specific/Home/RegistrationButton';
@@ -21,7 +21,7 @@ export {
   MainComponent,
   WelcomePage,
   HomeButton,
-  ActivityButton,
-  MessagesButton,
-  NotificationButton
+  ActivityButton,  
+  NotificationButton,
+  SideBarButton
 };

@@ -10,11 +10,13 @@ import { FoundItemsComponent } from "./FoundItemsComponent";
 import { BasicButton } from "../Button/General/BasicButton";
 import { SearchBar } from "../SearchBar";
 import {useMutation, useQuery} from "react-query";
-import {handleArrayMutation} from "../../utils/htmlUtils.tsx";
+import {createSvg, handleArrayMutation} from "../../utils/htmlUtils.tsx";
 import {ConnectionResponse} from "../../interface/profile/connection.ts";
 import {ConversationMember} from "../../interface/communication/member.ts";
 import {PostComponent} from "../General/PostComponent.tsx";
 import {nanoid} from "nanoid";
+import { MAIN_AUTH } from "./homeStyle.ts";
+import { IconButton } from "../Button/General/IconButton.tsx";
 
 
 export const MainComponent = () => {
@@ -72,19 +74,29 @@ export const MainComponent = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="w-full bg-slate-800 h-[20vh] flex flex-row justify-center items-center border-b-4 border-white gap-10">
-        <h2 className="tracking-widest text-2xl text-white">Missing somebody?</h2>
-        <SearchBar onSearch={onSearch} searchExpression={searchExpression} setSearchExpression={setSearchExpression} />
-        <BasicButton action={resetSearch} text="Reset" />
+      <div className={MAIN_AUTH.homeHeader}>
+        <div className={MAIN_AUTH.logoContainer}>
+          <img src="src\assets\handball_logo.svg" alt="Description" className={MAIN_AUTH.logo} />
+          <h2 className={MAIN_AUTH.logoTitle}>Sports Maniac</h2>
+        </div>
+        <div className={MAIN_AUTH.searchSection}>
+          <SearchBar 
+            onSearch={onSearch} 
+            searchExpression={searchExpression} 
+            setSearchExpression={setSearchExpression} 
+            resetSearch={resetSearch}
+            />
+        </div>
+
       </div>
       <div className="flex-row flex w-full justify-between h-[80vh]">
-        <FoundItemsComponent
+        {/*<FoundItemsComponent
           foundProfiles={foundProfiles}
           isSearchOn={isSearchOn}
           onSearch={onSearch}
           searchExpression={searchExpression}
           pageRef={searchPageRef}
-        />
+        />*/}
         <div className={timeLineContainerStyle}>
           <CreatePostComponent />
           {!isPostsLoading && posts.map(
