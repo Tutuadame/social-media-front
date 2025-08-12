@@ -68,7 +68,7 @@ export const LayoutContextProvider: React.FC<{ children: ReactNode }> = ({ child
   const userAccessToken = accessToken.current;
   
   return <>
-    { AreConnectionsFetched ?
+    { !isAuthenticated || AreConnectionsFetched ?
       <LayoutContext.Provider value={{ userConnections, userProfile, userAccessToken, refetchProfile, refetchConnections}}>
         {children}
       </LayoutContext.Provider>

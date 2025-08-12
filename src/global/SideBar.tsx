@@ -9,6 +9,7 @@ import styles from "./Global.module.css";
 import { NOTIFICATIONS, SIDEBAR } from './globalStyle.ts';
 import { NotificationsWindow } from './NotificationsWindow.tsx';
 import { EventButton } from '../components/Button/Specific/DashBoard/EventsButton.tsx';
+import { ThemeToggleButton } from '../components/Button/Specific/Global/ThemeToggleButton.tsx';
 
 export const SideBar = () => {  
   const [openSideBar, setOpenSideBar] = useState(true);
@@ -64,6 +65,7 @@ export const SideBar = () => {
             numberOfNotifications={notifications?.length || 0}
           />
           <EventButton key="EventButton"/>
+          <ThemeToggleButton key="ThemeToggleButton"/>
           <LogOutButton key="LogOutButton"/>
         </nav>
         <NotificationsWindow 
