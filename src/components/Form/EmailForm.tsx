@@ -28,7 +28,7 @@ export const EmailForm = () => {
 
   const handleCurrentEmailChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    setCurrentEmail(value);    
+    setCurrentEmail(value);
   };
 
   const onSubmit = async () => {
@@ -43,7 +43,7 @@ export const EmailForm = () => {
   }
 
   return (
-    <div className="flex flex-col mx-auto w-1/3 gap-y-10">      
+    <div className="flex flex-col mx-auto w-1/3 gap-y-10">
       <div className={emailContainerStyle}>
         <h2 className={labelStyle}>Current Email</h2>
         <input
@@ -52,7 +52,7 @@ export const EmailForm = () => {
           onChange={handleCurrentEmailChange}
           placeholder="Enter your current email"
           className={inputStyle}
-        />        
+        />
       </div>
 
       <div className={emailContainerStyle}>

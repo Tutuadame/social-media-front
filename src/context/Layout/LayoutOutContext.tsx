@@ -1,6 +1,6 @@
 import React, {createContext, MutableRefObject, ReactNode, useContext, useRef} from "react";
 import { ConnectionResponse } from "../../interface/profile/connection";
-import { ProfileResponse } from "../../interface/profile/profile";
+import { DetailedProfileResponse } from "../../interface/profile/profile";
 import {useAuth0} from "@auth0/auth0-react";
 import {useQuery} from "react-query";
 import {getProfile} from "../../api/profile/profileAPI.ts";
@@ -9,7 +9,7 @@ import {Loader} from "../../components/General/Loader.tsx";
 
 interface LayoutContextType {
     userConnections: MutableRefObject<ConnectionResponse[]>;
-    userProfile: MutableRefObject<ProfileResponse>,
+    userProfile: MutableRefObject<DetailedProfileResponse>,
     userAccessToken: string,
     refetchProfile: () => Promise<any>,
     refetchConnections: () => Promise<any>
@@ -21,7 +21,7 @@ export const LayoutContextProvider: React.FC<{ children: ReactNode }> = ({ child
     const { user, isLoading: isUserLoading, getAccessTokenSilently, isAuthenticated } = useAuth0();
     
     const connections = useRef<ConnectionResponse[]>([] as ConnectionResponse[]);
-    const profile = useRef<ProfileResponse>({} as ProfileResponse);
+    const profile = useRef<DetailedProfileResponse>({} as DetailedProfileResponse);
     const accessToken = useRef<string>("");
     
     let currentId = user?.sub?.includes('|') ? user.sub.split('|')[1] : null;

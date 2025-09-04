@@ -7,7 +7,7 @@ import {QueryClient, QueryClientProvider} from "react-query";
 import {LayoutContextProvider} from "./context/Layout/LayoutOutContext.tsx";
 
 const Auth0ProviderWithRedirect = ({ children }: { children: React.ReactNode }) => {
- 
+
   const domain = import.meta.env.VITE_AUTH0_DOMAIN!;
   const clientId = import.meta.env.VITE_AUTH0_CLIENT_ID!;
   const redirectUri = window.location.origin;

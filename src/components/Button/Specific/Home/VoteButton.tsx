@@ -1,19 +1,18 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
 import {Post} from "../../../../interface/profile/post.ts";
-import { ConversationMember } from "../../../../interface/communication/member.ts";
 import {createSvg} from "../../../../utils/htmlUtils.tsx";
 import {CreateVoteRequest} from "../../../../interface/profile/vote.ts";
 import {addVote, checkVote} from "../../../../api/profile/voteAPI.ts";
 import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx";
-//import {useQuery} from "react-query";
+import { ProfileResponse } from "../../../../interface/profile/profile.ts";
 
 
 type VoteButtonProps = {
   post: Post,
-  likeType: string, //like, dislike
+  likeType: string,
   activeType: string | undefined,
   setActiveType: Dispatch<SetStateAction<string | undefined>>,
-  profile?: ConversationMember,
+  profile?: ProfileResponse,
   setCurrentPost?: Dispatch<SetStateAction<Post>>
 }
 
@@ -26,7 +25,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ profile, post, likeType,
   const { userAccessToken } = useLayoutContext();
 
   const sendVote = async (postId: number, profileId: string, vote: boolean) => {
-    if (!setCurrentPost) return;    
+    if (!setCurrentPost) return;
     const request : CreateVoteRequest = {
       profileId: profileId,
       postId: postId,
@@ -58,8 +57,8 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ profile, post, likeType,
       <div className="flex flex-row mt-auto gap-x-5 pt-5 text-white">
         { profile ? <button onClick={() => {sendVote(post.id, profile.id, true)}} className={activeType === "like" ? voteActiveStyle : basicVoteStyle}>{likeButtonSVG}</button> : <p className="flex flex-row">{likeButtonSVG}</p> }
         <p className="tracking-widest my-auto">{post.likes}</p>
-      </div>    
-      :      
+      </div>
+      :
       <div className="flex flex-row mt-auto gap-x-5 pt-5 text-white">
         { profile ? <button onClick={() => {sendVote(post.id, profile.id, false)}} className={activeType === "dislike" ? voteActiveStyle : basicVoteStyle}>{dislikeButtonSVG}</button> : <p className="flex flex-row">{dislikeButtonSVG}</p> }
         <p className="tracking-widest my-auto">{post.dislikes}</p>

@@ -7,7 +7,7 @@ export const WelcomePage = () => {
     const homePageStyle: CSSProperties = {
         position: 'absolute',
         backgroundImage: `url('src/assets/home_unauth_bg.webp')`,
-        backgroundSize: "cover",        
+        backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
         filter: `blur(2px) brightness(60%)`,
         overflow: 'auto',
@@ -22,11 +22,11 @@ export const WelcomePage = () => {
     return (
     <>
         <img style={homePageStyle} src="../assets/home_unauth_bg.webp" alt="Background"/>
-        <div className={pageStyle}>   
+        <div className={pageStyle}>
             <h1 className={"mt-28 text-center tracking-widest text-6xl text-white mb-64"}>It all starts now!</h1>
             {isRegister ? <RegistrationButton /> : <LoginButton />}
             <BasicButton style={switchButtonStyle} action={() => {setIsRegister(!isRegister)} } text={isRegister ? "Already have an account?" : "Don't have an account?"}/>
-        </div>        
+        </div>
     </>
     );
 }
