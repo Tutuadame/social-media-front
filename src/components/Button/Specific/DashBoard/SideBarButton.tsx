@@ -5,7 +5,7 @@ import { BUTTON } from "../../buttonStyles";
 
 type SideBarButtonnProps = {
   openSideBar: boolean,
-  setOpenSideBar: Dispatch<SetStateAction<boolean>>  
+  setOpenSideBar: Dispatch<SetStateAction<boolean>>
 }
 
 export const SideBarButton:React.FC<SideBarButtonnProps> = ({ openSideBar, setOpenSideBar }) => {

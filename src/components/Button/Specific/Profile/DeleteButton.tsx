@@ -12,7 +12,6 @@ type DeleteButtonProps ={
 
 export const DeleteButton : React.FC<DeleteButtonProps> = ({ profileId }) => {
 
-    const deleteButtonStyle = "mx-auto h-[6vh] w-[8vw] text-2xl text-white bg-slate-400 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 hover:bg-red-600 transition-all p-2 my-auto tracking-widest";
     const { logout } = useAuth0();
     const { userAccessToken } = useLayoutContext();
     

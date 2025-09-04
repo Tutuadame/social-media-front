@@ -20,5 +20,6 @@ export {
   WelcomePage,
   HomeButton,
   ActivityButton,
-  NotificationButton
+  NotificationButton,
+  SideBarButton
 };

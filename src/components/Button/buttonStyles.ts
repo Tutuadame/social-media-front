@@ -1,10 +1,10 @@
-const basicButton = {  
+const basicButton = {
   text: `text-slate-800 text-2xl tracking-wide`,
   hover: `hover:bg-slate-800 hover:shadow-xl hover:text-slate-200`,
   positioning: `items-center`,
   size: `w-fit h-fit`,
   transition: `transition-all`,
-  border: `rounded`,  
+  border: `rounded`,
   padding: `py-3 px-4`,
   margin: `mx-2 my-2`,
   color: `bg-slate-100`,
@@ -12,8 +12,8 @@ const basicButton = {
 };
 
 const dashboardButton = {
-  hover: basicButton.hover,  
-  size: `w-full`,  
+  hover: basicButton.hover,
+  size: `w-full`,
   text: `text-slate-800`,
   transition: basicButton.transition,
   padding: `p-4`,
@@ -24,10 +24,10 @@ const dashboardButton = {
   group: `group`
 }
 
-const dashboardButtonTitle = {  
+const dashboardButtonTitle = {
   text: `text-center text-2xl`,
   size: `w-auto`,
-  tracking: `tracking-widest`,  
+  tracking: `tracking-widest`,
   transition: `transition-all`,
   hover: `group-hover:tracking-[.3rem]`
 }
@@ -38,7 +38,7 @@ const toggleSidebarButtonOpen = {
   transition: `transition-all duration-300 ease-in-out`,
   rotate: `rotate-180`,
   positioning: `mx-auto`,
-  hover: basicButton.hover,  
+  hover: basicButton.hover,
   rounded: basicButton.border,
 }
 
@@ -65,6 +65,6 @@ export const BUTTON = {
   dashboardButtonTitle: Object.values(dashboardButtonTitle).join(' '),
   toggleSidebarButtonOpen: Object.values(toggleSidebarButtonOpen).join(' '),
   toggleSidebarButtonClose: Object.values(toggleSidebarButtonClose).join(' '),
-  loadMore: Object.values(loadMore).join(' '),  
+  loadMore: Object.values(loadMore).join(' '),
   hidden: "hidden"
 } as const;
