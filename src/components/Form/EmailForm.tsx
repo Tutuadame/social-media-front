@@ -64,14 +64,14 @@ export const EmailForm = () => {
       </div>
 
       <div className={FORM_STYLES.buttonContainer}>
-        <BasicButton 
-          action={onSubmit} 
-          text="Submit" 
+        <BasicButton
+          action={onSubmit}
+          text="Submit"
           style={FORM_STYLES.submitButton}
         />
-        <BasicButton 
-          action={() => switchOption("Overview")} 
-          text="Back" 
+        <BasicButton
+          action={() => switchOption("Overview")}
+          text="Back"
           style={FORM_STYLES.submitButton}
         />
       </div>

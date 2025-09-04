@@ -3,8 +3,6 @@ import {BasicButton} from "../components/Button/General/BasicButton";
 import {createProfile} from "../api/profile/profileAPI";
 import {useAuth0} from "@auth0/auth0-react";
 import {CreateProfileRequest} from "../interface/profile/profile";
-import {createMember} from "../api/communication/memberAPI";
-import {CreateMemberRequest} from "../interface/communication/member";
 import {useNavigate} from "react-router-dom";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 import {PAGE} from "./pageStyles.ts";
@@ -30,13 +28,7 @@ export const RegistrationPage = () => {
       profileId: currentId
     }
 
-    const requestParamsMember: CreateMemberRequest = {
-      firstName: firstName,
-      lastName: lastName,      
-      memberId: currentId
-    }
-    userProfile.current = await createProfile(requestParamsProfile, userAccessToken || "").then(result => result);
-    await createMember(requestParamsMember, userAccessToken || "").then(result => result);
+    userProfile.current = await createProfile(requestParamsProfile, userAccessToken || "").then(result => result);    
     await refetchProfile();
     navigate("/");
   }

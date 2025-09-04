@@ -1,5 +1,4 @@
 import { SideBarButton } from './Button/Specific/DashBoard/SideBarButton';
-import { CommunicationPage } from '../page/CommunicationPage.tsx';
 import { ActivityButton } from './Button/Specific/DashBoard/ActivityButton';
 import { HomeButton } from './Button/Specific/DashBoard/HomeButton';
 import { IdentityButton } from './Button/Specific/DashBoard/IdentityButton';
@@ -16,12 +15,10 @@ export {
   RegistrationButton,
   DeleteButton,
   IdentityButton,
-  CommunicationPage,
   LogOutButton,
   MainComponent,
   WelcomePage,
   HomeButton,
-  ActivityButton,  
-  NotificationButton,
-  SideBarButton
+  ActivityButton,
+  NotificationButton
 };

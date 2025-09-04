@@ -1,12 +1,11 @@
 import { useNavigate } from "react-router-dom";
 import { ProfileResponse } from "../../../../interface/profile/profile";
-import { ConversationMember } from "../../../../interface/communication/member";
 import React from "react";
 import {useAuth0} from "@auth0/auth0-react";
 import styles from "./Global.module.css";
 
 type ProfileButtonProps = {
-  profile: ProfileResponse | ConversationMember,
+  profile: ProfileResponse,
 }
 
 export const ProfileButton: React.FC<ProfileButtonProps> = ({ profile }) => {

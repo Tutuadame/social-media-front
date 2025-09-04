@@ -2,14 +2,15 @@ import { getRelativeTime } from "../../utils/htmlUtils.tsx";
 import { Post } from "../../interface/profile/post.ts";
 import React, { useState } from "react";
 import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
-import { ConversationMember } from "../../interface/communication/member.ts";
 import { VoteButton } from "../Button/Specific/Home/VoteButton.tsx";
 import { POST_STYLES } from "./generalStyle.ts";
+import { ProfileResponse } from "../../interface/profile/profile.ts";
 
 type PostProps = {
-  profile?: ConversationMember,
-  post: Post,  
+  profile?: ProfileResponse,
+  post: Post,
 }
+
 
 export const PostComponent: React.FC<PostProps> = ({profile, post}) => {
   const [currentPost, setCurrentPost] = useState(post);
@@ -31,25 +32,25 @@ export const PostComponent: React.FC<PostProps> = ({profile, post}) => {
 
   return (
     <div className={POST_STYLES.container}>
-      {checkProfile()}        
+      {checkProfile()}
       <div className={POST_STYLES.contentContainer}>
         <p className={POST_STYLES.contentText}>{post.content}</p>
       </div>
       <div className={POST_STYLES.voteSection}>
-        <VoteButton 
-          activeType={activeType} 
-          setActiveType={setActiveType} 
-          likeType="like" 
-          profile={profile} 
-          post={currentPost} 
+        <VoteButton
+          activeType={activeType}
+          setActiveType={setActiveType}
+          likeType="like"
+          profile={profile}
+          post={currentPost}
           setCurrentPost={setCurrentPost}
         />
-        <VoteButton 
-          activeType={activeType} 
-          setActiveType={setActiveType} 
-          likeType="dislike" 
-          profile={profile} 
-          post={currentPost} 
+        <VoteButton
+          activeType={activeType}
+          setActiveType={setActiveType}
+          likeType="dislike"
+          profile={profile}
+          post={currentPost}
           setCurrentPost={setCurrentPost}
         />
       </div>

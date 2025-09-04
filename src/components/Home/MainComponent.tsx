@@ -5,14 +5,13 @@ import { LoadMoreButton } from "../Button/General/LoadMoreButton";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext";
 import { CreatePostComponent } from "./CreatePostComponent";
 import { searchForProfiles } from "../../api/profile/profileAPI";
-import { GenericProfileResponse, SearchForProfileRequest } from "../../interface/profile/profile";
+import { ProfileResponse, SearchForProfileRequest } from "../../interface/profile/profile";
 import { FoundItemsComponent } from "./FoundItemsComponent";
 import { BasicButton } from "../Button/General/BasicButton";
 import { SearchBar } from "../SearchBar";
 import {useMutation, useQuery} from "react-query";
 import {createSvg, handleArrayMutation} from "../../utils/htmlUtils.tsx";
 import {ConnectionResponse} from "../../interface/profile/connection.ts";
-import {ConversationMember} from "../../interface/communication/member.ts";
 import {PostComponent} from "../General/PostComponent.tsx";
 import {nanoid} from "nanoid";
 import { MAIN_AUTH } from "./homeStyle.ts";
@@ -32,7 +31,7 @@ export const MainComponent = () => {
   
   const [posts, setPosts] = useState<Post[]>([]);
   const [isSearchOn, setIsSearchOn] = useState(false);
-  const [foundProfiles, setFoundProfiles] = useState<GenericProfileResponse[]>([]);
+  const [foundProfiles, setFoundProfiles] = useState<ProfileResponse[]>([]);
   const [searchExpression, setSearchExpression] = useState<string>("");
   
   const pageSize = 10;
@@ -105,7 +104,7 @@ export const MainComponent = () => {
                 (userConnection: ConnectionResponse) => userConnection.profileId === post.profileId
               ) || {} as ConnectionResponse;
               
-              let conversationMember: ConversationMember = {
+              let profile: ProfileResponse = {
                 id: connectionProfile.profileId,
                 firstName: connectionProfile.firstName,
                 lastName: connectionProfile.lastName,
@@ -113,11 +112,11 @@ export const MainComponent = () => {
               }
               
               return <div key={nanoid()} className="flex-row flex gap-3 group">
-                <PostComponent post={post} profile={conversationMember} />
+                <PostComponent post={post} profile={profile} />
               </div>
             })}
           <LoadMoreButton pageRef={postsPageRef} callItems={callPosts} style={loadMoreButtonStyle}/>
-        </div>        
+        </div>
       </div>
     </div>
   );

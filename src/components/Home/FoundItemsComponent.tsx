@@ -1,10 +1,10 @@
-import { GenericProfileResponse } from "../../interface/profile/profile"
+import { ProfileResponse } from "../../interface/profile/profile"
 import { LoadMoreButton } from "../Button/General/LoadMoreButton";
 import { ProfileButton } from "../Button/Specific/Global/ProfileButton";
 import React, {MutableRefObject} from "react";
 
 type FoundItemsComponentProps = {
-  foundProfiles: GenericProfileResponse[] | undefined,
+  foundProfiles: ProfileResponse[] | undefined,
   isSearchOn: boolean,
   onSearch: (name: string) => void,
   searchExpression: string,

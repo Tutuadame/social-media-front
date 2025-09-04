@@ -16,8 +16,8 @@ export const ActivityButton : React.FC<ActivityButtonProps> = ({ minimalView = f
         navigate('/profile/activity');
     };
 
-    return minimalView ? <IconButton action={activityButtonOnClick} style={BUTTON.dashboard}>{activityButtonMiniSVG} </IconButton>    
-    : 
-    <IconButton action={activityButtonOnClick} style={BUTTON.dashboard}>{activityButtonSVG}<p className={BUTTON.dashboardButtonTitle}>Activity</p></IconButton> 
+    return minimalView ? <IconButton action={activityButtonOnClick} style={BUTTON.dashboard}>{activityButtonMiniSVG} </IconButton>
+    :
+    <IconButton action={activityButtonOnClick} style={BUTTON.dashboard}>{activityButtonSVG}<p className={BUTTON.dashboardButtonTitle}>Activity</p></IconButton>
 }
 

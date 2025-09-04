@@ -14,7 +14,7 @@ export interface UpdateConnectionsStatusRequest {
 }
 
 export interface UpdateConnectionStatusResponse {
-    id: number    
+    id: number
 }
 
 export interface ConnectionResponse {

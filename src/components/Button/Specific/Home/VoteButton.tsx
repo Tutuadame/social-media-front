@@ -4,16 +4,15 @@ import {createSvg} from "../../../../utils/htmlUtils.tsx";
 import {CreateVoteRequest} from "../../../../interface/profile/vote.ts";
 import {addVote, checkVote} from "../../../../api/profile/voteAPI.ts";
 import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx";
-import styles from "./Home.module.css";
-import { ConversationMember } from "../../../../interface/communication/member.ts";
+import { ProfileResponse } from "../../../../interface/profile/profile.ts";
 
 
 type VoteButtonProps = {
   post: Post,
-  likeType: string, //like, dislike
+  likeType: string,
   activeType: string | undefined,
   setActiveType: Dispatch<SetStateAction<string | undefined>>,
-  profile?: ConversationMember,
+  profile?: ProfileResponse,
   setCurrentPost?: Dispatch<SetStateAction<Post>>
 }
 
@@ -24,7 +23,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ profile, post, likeType,
   const { userAccessToken } = useLayoutContext();
 
   const sendVote = async (postId: number, profileId: string, vote: boolean) => {
-    if (!setCurrentPost) return;    
+    if (!setCurrentPost) return;
     const request : CreateVoteRequest = {
       profileId: profileId,
       postId: postId,
