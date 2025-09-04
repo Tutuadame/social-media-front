@@ -13,7 +13,7 @@ type IconButtonProps = {
 
 export const IconButton: React.FC<IconButtonProps> = ({
   action,
-  children,  
+  children,
   style = "h-[6vh] w-[5vw] text-white bg-slate-400 rounded-xl shadow-xl outline-slate-100 hover:outline hover:outline-2 hover:outline-offset-4 transition-all p-2 my-auto",
   type = "button",
   disabled = false,
@@ -24,10 +24,10 @@ export const IconButton: React.FC<IconButtonProps> = ({
 
   return (
     <>
-      <button 
+      <button
         disabled={disabled}
         onClick={action}
-        className={active ? activeStyle : style}        
+        className={active ? activeStyle : style}
         type={type}
       >
         {children}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { getProfile } from "../api/profile/profileAPI";
-import { ProfileResponse } from "../interface/profile/profile";
-import { useNavigate, useParams } from "react-router-dom";
+import { DetailedProfileResponse } from "../interface/profile/profile";
+import { useParams } from "react-router-dom";
 import { BasicButton } from "../components/Button/General/BasicButton";
 import { createConnection, checkConnectionStatus } from "../api/profile/connectionAPI";
 import { useAuth0 } from "@auth0/auth0-react";
@@ -15,13 +15,12 @@ export const SocialUserPage = () => {
 
   const { userId } = useParams<{userId: string}>();
   const { user } = useAuth0();
-  const currentId = user?.sub?.split('|')[1] || "no-id";  
-  const [userProfile, setUserProfile] = useState<ProfileResponse>();
+  const currentId = user?.sub?.split('|')[1] || "no-id";
+  const [userProfile, setUserProfile] = useState<DetailedProfileResponse>();
   const [connected, setConnected] = useState<string | undefined>(undefined);
   const infoRowContainerStyle = "w-4/5 flex flex-row gap-x-10 text-2xl tracking-widest text-slate-100 bg-slate-800 p-10 justify-between mx-auto shadow-xl rounded-xl font-thin";
   const lastInfoContainerStyle = "w-4/5 mb-10 flex flex-col gap-x-10 text-2xl tracking-widest text-slate-100 bg-slate-800 p-10 justify-between mx-auto shadow-xl rounded-xl font-thin";
   const actionButton = "p-5 bg-slate-900 w-1/2 rounded-xl hover:outline hover:outline-2 hover:outline-offset-4 transition-all mx-auto";
-  const navigate = useNavigate();
   const { userAccessToken, userConnections } = useLayoutContext();
   
   if(!userId) return <NoPage />
@@ -67,9 +66,9 @@ export const SocialUserPage = () => {
       { connected === "PENDING" ?
           <h2 className={"text-white text-2xl tracking-widest"}>Pending...</h2>
             :
-          <BasicButton style={actionButton} text="Connect" action={ async () => { await connect()}}/>
+          <BasicButton style={actionButton} text="Connect" action={ async () => {await connect()}}/>
       }
-    </div>    
+    </div>
     <div className={infoRowContainerStyle}>
       <p className="">Name</p>
       <p>{userProfile?.firstName} {userProfile?.lastName}</p>

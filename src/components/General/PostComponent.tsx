@@ -2,11 +2,11 @@ import { getRelativeTime } from "../../utils/htmlUtils.tsx";
 import { Post } from "../../interface/profile/post.ts";
 import React, { useState } from "react";
 import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
-import { ConversationMember } from "../../interface/communication/member.ts";
 import {VoteButton} from "../Button/Specific/Home/VoteButton.tsx";
+import { ProfileResponse } from "../../interface/profile/profile.ts";
 
 type PostProps = {
-    profile?: ConversationMember,
+    profile?: ProfileResponse,
     post: Post,
     rounded?: string,
 }
@@ -30,7 +30,7 @@ export const PostComponent: React.FC<PostProps> = ({profile, post, rounded="roun
     }
 
     return <div className={`relative bg-slate-900 p-5 ${rounded} w-[40vw] max-h-[50vh] h-fit flex flex-col mx-auto`}>
-        {checkProfile()}        
+        {checkProfile()}
         <div className="w-full h-full border-l-4 border-white content-center">
             <p className="ml-5 text-white py-5">{post.content}</p>
         </div>

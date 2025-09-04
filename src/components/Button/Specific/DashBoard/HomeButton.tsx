@@ -12,7 +12,7 @@ export const HomeButton = () => {
     };
 
     return <div className="flex flex-col gap-y-2 w-24">
-        <IconButton action={homeButtonOnClick} style={homeButtonStyle}> 
+        <IconButton action={homeButtonOnClick} style={homeButtonStyle}>
             {homeButtonSVG}
         </IconButton>
         <p className="tracking-wider text-center w-18 text-slate-100">Home</p>

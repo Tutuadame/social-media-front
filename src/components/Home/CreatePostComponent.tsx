@@ -25,7 +25,7 @@ export const CreatePostComponent = () => {
       profileId: currentId
     }
     await createPost(requestParams, userAccessToken).then(result => result);
-    setNewContent("");  
+    setNewContent("");
   }
 
   return <div className={newPostContainerStyle}>

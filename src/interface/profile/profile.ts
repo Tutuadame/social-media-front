@@ -1,4 +1,4 @@
-export interface ProfileResponse {
+export interface DetailedProfileResponse {
     id: string,
     firstName: string,
     lastName: string,
@@ -14,11 +14,11 @@ export interface CreateProfileRequest {
     lastName: string
 }
 
-export interface GenericProfileResponse {
+export interface ProfileResponse {
     id: string,
     firstName: string,
     lastName: string,
-    picture: string,    
+    picture: string,
 }
 
 export interface SearchForProfileRequest {

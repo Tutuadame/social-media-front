@@ -22,7 +22,7 @@ export const getAcceptedConnectionsByUser = async (profileId: string, accessToke
 
       return await response.json();
     } catch (e) {
-      console.error(getPostByConnectionsErrorMessage, (e as Error).message);     
+      console.error(getPostByConnectionsErrorMessage, (e as Error).message);
     }
 };
 
@@ -35,7 +35,7 @@ export const getPendingConnectionsByUser = async (profileId: string, requestPara
     pageNumber: pageNumber.toString(),
   });
   
-  try {    
+  try {
     const response = await fetch(`${getPendingConnectionsByUserPath}?${params.toString()}`, {
       method: GET_METHOD,
       headers: {
@@ -47,7 +47,7 @@ export const getPendingConnectionsByUser = async (profileId: string, requestPara
 
     return await response.json();
   } catch (e) {
-    console.error(getPostByConnectionsErrorMessage, (e as Error).message);     
+    console.error(getPostByConnectionsErrorMessage, (e as Error).message);
   }
 };
 
@@ -63,13 +63,13 @@ export const updateConnection = async (requestParams: UpdateConnectionsStatusReq
         credentials: "include",
         body: JSON.stringify({
           id,
-          status            
+          status
         })
       });
       return response.json();
 
     } catch (e) {
-      console.error(updateConnectionErrorMessage, (e as Error).message);      
+      console.error(updateConnectionErrorMessage, (e as Error).message);
     }
 };
 

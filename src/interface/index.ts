@@ -1,13 +1,11 @@
-import { ResponseMessage } from "./ResponseMessage";
 import {
-  CheckConnectionRequest,  
-  CreateConnectionRequest,  
+  CheckConnectionRequest,
+  CreateConnectionRequest,
   UpdateConnectionsStatusRequest,
 } from "./profile/connection";
 
-export type {  
-  ResponseMessage,
+export type {
   CheckConnectionRequest,
-  CreateConnectionRequest,  
+  CreateConnectionRequest,
   UpdateConnectionsStatusRequest
 };

@@ -8,16 +8,16 @@ import {createSvg, handleArrayMutation} from "../../utils/htmlUtils.tsx";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext.tsx";
 import { LoadMoreButton } from "../Button/General/LoadMoreButton.tsx";
 import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
-import { ConversationMember } from "../../interface/communication/member.ts";
 import {useQuery} from "react-query";
 import {useEffect} from "react";
+import { ProfileResponse } from "../../interface/profile/profile.ts";
 
 export const PendingConnectionsComponent = () => {
     const { userAccessToken, refetchConnections } = useLayoutContext();
     const { requestPage, pendingConnections, setPendingConnections } = useActivityContext();
     const { user } = useAuth0();
     const currentId = user?.sub?.split('|')[1] || "no-id";
-    const pageSize = 10;    
+    const pageSize = 10;
     const optionStyle = "flex items-center w-16 h-16 bg-slate-100 text-slate-900 p-2 transition rounded-xl my-auto hover:bg-slate-900 hover:text-slate-100 hover:outline";    
     const checkSVG = createSvg(["m4.5 12.75 6 6 9-13.5"], 1, "size-7");
     const exitButtonSVG = createSvg(["M6 18 18 6M6 6l12 12"], 1, "size-7");
@@ -52,7 +52,7 @@ export const PendingConnectionsComponent = () => {
 
         {pendingConnections.length !== 0 ?
         <div className={"overflow-auto"}> {pendingConnections?.map((connection) => {
-          const cM : ConversationMember = {
+          const profile : ProfileResponse = {
             id: connection.profileId,
             firstName: connection.firstName,
             lastName: connection.lastName,
@@ -60,7 +60,7 @@ export const PendingConnectionsComponent = () => {
           }
           return (
             <div key={connection.id} className="flex flex-row gap-y-10 gap-x-16 m-auto mb-[2vh] justify-center bg-slate-900 p-5 rounded-xl w-fit">
-              <ProfileButton profile={cM}/>              
+              <ProfileButton profile={profile}/>
               <div className="flex flex-row gap-x-3">
                 <IconButton style={optionStyle} action={async () => { await callUpdateConnection(connection.id, ACCEPTED_STATUS)}}> {checkSVG} </IconButton>
                 <IconButton style={optionStyle} action={async () => { await callUpdateConnection(connection.id, BLOCKED_STATUS)}}> {exitButtonSVG} </IconButton>
@@ -72,7 +72,7 @@ export const PendingConnectionsComponent = () => {
         <LoadMoreButton
             pageRef={requestPage}
             callItems={callUserPendingConnections}
-            style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"              
+            style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"
           />
         </div>
         : <h3 className="text-white m-auto text-center h-fit w-fit text-2xl p-3 mt-10 mb-20 tracking-widest"> No more requests for now! </h3>}

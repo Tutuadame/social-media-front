@@ -13,7 +13,7 @@ export const ActivityButton = () => {
     const activityButtonStyle = "items-center mx-auto w-14 h-14 bg-slate-400 text-white p-3 hover:outline hover:outline-4 hover:outline-offset-4 transition-all rounded-xl text-4xl";
 
     return <div className="flex flex-col gap-y-2 w-24">
-        <IconButton action={activityButtonOnClick} style={activityButtonStyle}> 
+        <IconButton action={activityButtonOnClick} style={activityButtonStyle}>
             {activityButtonSVG}
         </IconButton>
         <p className="tracking-wider text-center w-18 text-slate-100">Activity</p>
