@@ -1,50 +1,27 @@
-# React + TypeScript + Vite
+# Initial setup
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+1.  Use
 
-Currently, two official plugins are available:
+          npm install
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+2.  To be able to use Auth0 you will need a .env file containing the following:
 
-## Expanding the ESLint configuration
+          VITE_AUTH0_DOMAIN=your-auth0-domain.eu.auth0.com
+          VITE_AUTH0_CLIENT_ID=your-auth0-client-id
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+3.  Run the following command in a bash terminal, this is necessary to be able to receive notifications.
 
-- Configure the top-level `parserOptions` property like this:
+          ./set_up_kafka.sh
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+    Alternatively, you can use, if you have it installed (with the previous command)
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+          ./start_kafka.sh
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+    In case you are using VS code, you might have to unset some environment variables.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+          unset GIO_MODULE_DIR
+          unset GTK_PATH
+
+4.  You can start the frontend with:
+
+           npm run dev
