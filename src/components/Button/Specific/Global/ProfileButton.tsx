@@ -13,7 +13,7 @@ export const ProfileButton: React.FC<ProfileButtonProps> = ({ profile }) => {
   const navigate = useNavigate();
   const { user } = useAuth0();
   // @ts-ignore
-  const currentId = user?.sub.split('|')[1];  
+  const currentId = user?.sub.split('|')[1];
   const goToUserProfile = (userId: string) => {
     if(currentId === userId) {
       navigate("/profile/social")

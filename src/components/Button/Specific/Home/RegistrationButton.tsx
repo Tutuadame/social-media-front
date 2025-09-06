@@ -9,7 +9,7 @@ export const RegistrationButton = () =>{
     const onClickRegistrationButton = () => { loginWithRedirect({
         appState: { flow: "signup" },
         authorizationParams:{ screen_hint: "signup" }
-    }) };    
+    }) };
     
     return <BasicButton style={styles['home-button']} action={onClickRegistrationButton} text="Registration"/>;
 }

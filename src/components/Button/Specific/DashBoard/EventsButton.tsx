@@ -16,7 +16,7 @@ export const EventButton : React.FC<EventButtonProps> = ({ minimalView = false }
     //Use Event Page
   };
 
-  return minimalView ? <IconButton action={eventButtonOnClick} style={BUTTON.dashboard}>{eventButtonMiniSVG}</IconButton>    
-  : 
-  <IconButton action={eventButtonOnClick} style={BUTTON.dashboard}>{eventButtonSVG}<p className={BUTTON.dashboardButtonTitle}>Events</p></IconButton> 
+  return minimalView ? <IconButton action={eventButtonOnClick} style={BUTTON.dashboard}>{eventButtonMiniSVG}</IconButton>
+  :
+  <IconButton action={eventButtonOnClick} style={BUTTON.dashboard}>{eventButtonSVG}<p className={BUTTON.dashboardButtonTitle}>Events</p></IconButton>
 }

@@ -4,7 +4,8 @@ import {createSvg} from "../../../../utils/htmlUtils.tsx";
 import {CreateVoteRequest} from "../../../../interface/profile/vote.ts";
 import {addVote, checkVote} from "../../../../api/profile/voteAPI.ts";
 import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx";
-import { ProfileResponse } from "../../../../interface/profile/profile.ts";
+import {ProfileResponse } from "../../../../interface/profile/profile.ts";
+import styles from "./Global.module.css";
 
 
 type VoteButtonProps = {
@@ -56,7 +57,7 @@ export const VoteButton: React.FC<VoteButtonProps> = ({ profile, post, likeType,
         { profile ? <button onClick={() => {sendVote(post.id, profile.id, true)}} className={activeType === "like" ? styles['vote-option'] : styles['active-vote']}>{likeButtonSVG}</button> : <p className={styles['vote-svg-container']}>{likeButtonSVG}</p> }
         <p className={styles['vote-number']}>{post.likes}</p>
       </div>
-      :      
+      :
       <div className={styles['vote-container']}>
         { profile ? <button onClick={() => {sendVote(post.id, profile.id, false)}} className={activeType === "dislike" ? styles['vote-option'] : styles['active-vote']}>{dislikeButtonSVG}</button> : <p className={styles['vote-svg-container']}>{dislikeButtonSVG}</p> }
         <p className={styles['vote-number']}>{post.dislikes}</p>

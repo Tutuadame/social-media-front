@@ -4,7 +4,7 @@ import React, {Dispatch, SetStateAction} from "react";
 import styles from "./DashBoardButton.module.css";
 import { BUTTON } from "../../buttonStyles.ts";
 
-type NotificationButtonProps = {    
+type NotificationButtonProps = {
     setShowNotifications: Dispatch<SetStateAction<boolean>>,
     numberOfNotifications: number,
     minimalView?: boolean
@@ -17,12 +17,12 @@ export const NotificationButton:React.FC<NotificationButtonProps> = ({ setShowNo
 
     return minimalView ? <IconButton action={() => {setShowNotifications(prev => !prev)}} style={ BUTTON.dashboard }>
         <p className={numberOfNotifications === 0 ? "hidden" : styles['dashboard-notification-counter'] }>{numberOfNotifications === 0 ? "" : numberOfNotifications}</p>
-        {notificationButtonMiniSVG}        
-    </IconButton> 
+        {notificationButtonMiniSVG}
+    </IconButton>
     :
     <IconButton action={() => {setShowNotifications(prev => !prev)}} style={ BUTTON.dashboard }>
         <p className={numberOfNotifications === 0 ? "hidden" : styles['dashboard-notification-counter'] }>{numberOfNotifications === 0 ? "" : numberOfNotifications}</p>
         {notificationButtonSVG}
         <p className={BUTTON.dashboardButtonTitle}>Notifications</p>
-    </IconButton>            
+    </IconButton>
 }

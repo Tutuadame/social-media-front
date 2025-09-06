@@ -5,7 +5,7 @@ import styles from "./Home.module.css";
 export const LoginButton = () => {
   const { loginWithRedirect } = useAuth0();
 
-  const loginOnClick = () => loginWithRedirect();  
+  const loginOnClick = () => loginWithRedirect();
 
   return <BasicButton style={styles['home-button']} action={loginOnClick} text="Login"/>
 };
