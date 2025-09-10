@@ -1,22 +1,26 @@
-import { ActivityButton, HomeButton, LogOutButton, NotificationButton, IdentityButton, SideBarButton } from '../components';
-import { handleArrayMutation, getRelativeTime} from '../utils/htmlUtils';
-import {useEffect, useRef, useState} from 'react';
-import {KafkaNotification} from "../interface/notification/kafkaNotification.ts";
-import {listNotifications} from "../api/notifications/notificationApi.ts";
-import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
-import {useQuery} from "react-query";
+import { NotificationButton, SideBarButton } from '../components';
+import { handleArrayMutation } from '../utils/htmlUtils';
+import { useEffect, useRef, useState } from 'react';
+import { KafkaNotification } from "../interface/notification/kafkaNotification.ts";
+import { listNotifications } from "../api/notifications/notificationApi.ts";
+import { useLayoutContext } from "../context/Layout/LayoutOutContext.tsx";
+import { useQuery } from "react-query";
 import styles from "./Global.module.css";
 import { NOTIFICATIONS, SIDEBAR } from './globalStyle.ts';
 import { NotificationsWindow } from './NotificationsWindow.tsx';
-import { EventButton } from '../components/Button/Specific/DashBoard/EventsButton.tsx';
-import { ThemeToggleButton } from '../components/Button/Specific/Global/ThemeToggleButton.tsx';
+import { useTheme } from '../context/Theme/ThemeContext.tsx';
+import { DashboardButton } from '../components/Button/General/DashBoardButton.tsx';
+import { activityButtonMiniSVG, activityButtonSVG, eventButtonMiniSVG, eventButtonSVG, homeButtonMiniSVG, homeButtonSVG, identityButtonMiniSVG, identityButtonSVG, lightMiniSVG, lightSVG, logOutMiniSVG, logOutSVG } from '../assets/svg.ts';
+import { useAuth0 } from '@auth0/auth0-react';
 
 export const SideBar = () => {
-  const [openSideBar, setOpenSideBar] = useState(true);
+  const {toggleTheme, toggleDashboard, isDashboardOpen, theme} = useTheme();
   const [showNotifications, setShowNotifications] = useState<boolean>(false);
   const [notifications, setNotifications] = useState<KafkaNotification[]>([]);
   const { userProfile, userAccessToken, refetchProfile } = useLayoutContext();
   const notificationPageRef = useRef(0);
+  const { logout } = useAuth0();
+  const logOutAction = () => logout({ logoutParams: { returnTo: window.location.origin }});
 
   const getSidebarStyles = (isOpen: boolean) => ({
     container: isOpen ? SIDEBAR.openContainer : SIDEBAR.closedContainer,
@@ -29,9 +33,13 @@ export const SideBar = () => {
   });
   
   async function callNotifications() {
-    const response = await listNotifications(userProfile.current.id, notificationPageRef.current, 10, userAccessToken).then(result => result.content);
-    handleArrayMutation(setNotifications, notificationPageRef.current, response);
-    notifications?.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    try {
+      const response = await listNotifications(userProfile.current.id, notificationPageRef.current, 10, userAccessToken).then(result => result.content);
+      handleArrayMutation(setNotifications, notificationPageRef.current, response);
+      notifications?.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    } catch (e) {
+      console.log(e);
+    }
   }
   
   const { isLoading: isNotificationsLoading, refetch: fetchNotifications } = useQuery({
@@ -40,7 +48,7 @@ export const SideBar = () => {
     enabled: showNotifications
   });
 
-  const dynamicStyles = getSidebarStyles(openSideBar);
+  const dynamicStyles = getSidebarStyles(isDashboardOpen);
   
   useEffect(() => {
     (async () => {
@@ -56,17 +64,13 @@ export const SideBar = () => {
       </div>
       <div className={dynamicStyles.container}>
         <nav className={dynamicStyles.nav}>
-          <IdentityButton key="IdentityButton"/>
-          <HomeButton key="HomeButton"/>
-          <ActivityButton key="ActivityButton"/>
-          <NotificationButton
-            key="NotificationButton"
-            setShowNotifications={setShowNotifications}
-            numberOfNotifications={notifications?.length || 0}
-          />
-          <EventButton key="EventButton"/>
-          <ThemeToggleButton key="ThemeToggleButton"/>
-          <LogOutButton key="LogOutButton"/>
+          <DashboardButton key="IdentityButton" title='Identity' regularSVG={identityButtonSVG} miniSVG={identityButtonMiniSVG} navigateTo='/profile/social'/>
+          <DashboardButton key="HomeButton" title='Home' regularSVG={homeButtonSVG} miniSVG={homeButtonMiniSVG} navigateTo='/'/>
+          <DashboardButton key="ActivityButton" title='Activity' regularSVG={activityButtonSVG} miniSVG={activityButtonMiniSVG} navigateTo='/profile/activity'/>
+          <DashboardButton key="EventButton" title='Events' regularSVG={eventButtonSVG} miniSVG={eventButtonMiniSVG} navigateTo='/'/>
+          <DashboardButton key="ThemeToggleButton" title='Light' regularSVG={lightSVG} miniSVG={lightMiniSVG} onClick={toggleTheme}/>
+          <DashboardButton key="LogOutButton" title='Log Out' regularSVG={logOutSVG} miniSVG={logOutMiniSVG} onClick={logOutAction}/>
+          <NotificationButton key="NotificationButton" setShowNotifications={setShowNotifications} numberOfNotifications={notifications?.length || 0}/>
         </nav>
         <NotificationsWindow
           notifications={notifications}
@@ -75,23 +79,12 @@ export const SideBar = () => {
           callNotifications={callNotifications}
           containerStyle={dynamicStyles.notificationContainer}
         />
-        <SideBarButton openSideBar={openSideBar} setOpenSideBar={setOpenSideBar}/>
-        {openSideBar ?
-          <></>
-        :
-        <>
-          <IdentityButton key="IdentityButton" minimalView={true}/>
-          <ActivityButton key="ActivityButton" minimalView={true}/>
-          <HomeButton key="HomeButton" minimalView={true}/>
-          <NotificationButton
-            key="NotificationButton"
-            setShowNotifications={setShowNotifications}
-            numberOfNotifications={notifications?.length || 0}
-            minimalView={true}
-          />
-          <EventButton key="EventButton" minimalView={true}/>
-        </>}
       </div>
+      <div className='bg-blue-200 hover:bg-orange-300 transition-all'>
+        <SideBarButton openSideBar={isDashboardOpen} setOpenSideBar={toggleDashboard}/>
+      </div>
+      
     </div>
   );
 };
+

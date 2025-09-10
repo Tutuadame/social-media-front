@@ -1,27 +1,23 @@
 import {useRef, useState} from "react"
 import { GetPageablePostsRequest, Post } from "../../interface/profile/post";
 import { getConnectionPosts } from "../../api/profile/postAPI";
-import { LoadMoreButton } from "../Button/General/LoadMoreButton";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext";
 import { CreatePostComponent } from "./CreatePostComponent";
 import { searchForProfiles } from "../../api/profile/profileAPI";
 import { ProfileResponse, SearchForProfileRequest } from "../../interface/profile/profile";
-import { FoundItemsComponent } from "./FoundItemsComponent";
-import { BasicButton } from "../Button/General/BasicButton";
 import { SearchBar } from "../SearchBar";
 import {useMutation, useQuery} from "react-query";
-import {createSvg, handleArrayMutation} from "../../utils/htmlUtils.tsx";
+import {handleArrayMutation} from "../../utils/htmlUtils.tsx";
 import {ConnectionResponse} from "../../interface/profile/connection.ts";
 import {PostComponent} from "../General/PostComponent.tsx";
 import {nanoid} from "nanoid";
 import { MAIN_AUTH } from "./homeStyle.ts";
-import { IconButton } from "../Button/General/IconButton.tsx";
+import { LoadMoreButton } from "../Button/Specific/LoadMoreButton.tsx";
 
 
 export const MainComponent = () => {
   
-  const loadMoreButtonStyle = "transition-all h-fit p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10";
-  const timeLineContainerStyle = "w-full gap-y-10 flex flex-col overflow-auto h-full pb-[10vh]";
+    const timeLineContainerStyle = "w-full gap-y-10 flex flex-col overflow-auto h-full pb-[10vh] relative";
   
   const { userConnections, userAccessToken, userProfile } = useLayoutContext();
   
@@ -115,7 +111,7 @@ export const MainComponent = () => {
                 <PostComponent post={post} profile={profile} />
               </div>
             })}
-          <LoadMoreButton pageRef={postsPageRef} callItems={callPosts} style={loadMoreButtonStyle}/>
+          <LoadMoreButton pageRef={postsPageRef} callItems={callPosts}/>
         </div>
       </div>
     </div>

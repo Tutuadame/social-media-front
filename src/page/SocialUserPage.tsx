@@ -2,7 +2,6 @@ import { useState } from "react";
 import { getProfile } from "../api/profile/profileAPI";
 import { DetailedProfileResponse } from "../interface/profile/profile";
 import { useParams } from "react-router-dom";
-import { BasicButton } from "../components/Button/General/BasicButton";
 import { createConnection, checkConnectionStatus } from "../api/profile/connectionAPI";
 import { useAuth0 } from "@auth0/auth0-react";
 import { CheckConnectionRequest } from "../interface";
@@ -11,6 +10,7 @@ import { useLayoutContext } from "../context/Layout/LayoutOutContext";
 import {useMutation, useQuery} from "react-query";
 import {NoPage} from "./NoPage.tsx";
 import {PAGE} from "./pageStyles.ts";
+import { Button } from "../components/Button/buttonStyles.ts";
 
 export const SocialUserPage = () => {
 
@@ -67,7 +67,7 @@ export const SocialUserPage = () => {
           connected === "PENDING" ?
             <h2 className={PAGE.socialUserPendingText}>Pending...</h2>
             :
-          <BasicButton style={PAGE.socialUserActionButton} text="Connect" action={ async () => { await connect()}}/>
+            <Button onClick={async () => { await connect()}}>Connect</Button>
       }
     </div>
     <div className={PAGE.socialUserInfoContainer}>

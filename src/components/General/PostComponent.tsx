@@ -1,10 +1,10 @@
 import { getRelativeTime } from "../../utils/htmlUtils.tsx";
 import { Post } from "../../interface/profile/post.ts";
 import React, { useState } from "react";
-import { ProfileButton } from "../Button/Specific/Global/ProfileButton.tsx";
-import { VoteButton } from "../Button/Specific/Home/VoteButton.tsx";
+import { VoteButton } from "../Button/Specific/VoteButton.tsx";
 import { POST_STYLES } from "./generalStyle.ts";
 import { ProfileResponse } from "../../interface/profile/profile.ts";
+import { ProfileButton } from "../Button/Specific/ProfileButton.tsx";
 
 type PostProps = {
   profile?: ProfileResponse,

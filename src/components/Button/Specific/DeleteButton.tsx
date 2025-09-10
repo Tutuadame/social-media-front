@@ -1,10 +1,9 @@
 import { useAuth0 } from "@auth0/auth0-react";
 import React from "react";
-import {deleteAuth0User} from "../../../../api";
-import {deleteProfile} from "../../../../api/profile/profileAPI.ts";
-import {BasicButton} from "../../General/BasicButton.tsx";
-import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx";
-import styles from "./Profile.module.css";
+import {deleteAuth0User} from "../../../api/index.ts";
+import {deleteProfile} from "../../../api/profile/profileAPI.ts";
+import {useLayoutContext} from "../../../context/Layout/LayoutOutContext.tsx";
+import { Button } from "../buttonStyles.ts";
 
 type DeleteButtonProps ={
   profileId: string
@@ -14,7 +13,6 @@ export const DeleteButton : React.FC<DeleteButtonProps> = ({ profileId }) => {
 
     const { logout } = useAuth0();
     const { userAccessToken } = useLayoutContext();
-    
 
     const deleteAllProfiles = async () => {
       try {
@@ -26,6 +24,6 @@ export const DeleteButton : React.FC<DeleteButtonProps> = ({ profileId }) => {
       console.error((e as Error).message);
     }
   }
-
-  return <BasicButton action={deleteAllProfiles} text="Delete" style={styles['delete-button']}/>
+  
+  return <Button onClick={deleteAllProfiles}>Delete</Button>
 }

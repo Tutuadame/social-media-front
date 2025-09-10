@@ -1,9 +1,9 @@
 import { MutableRefObject } from "react";
-import { LoadMoreButton } from "../components/Button/General/LoadMoreButton";
 import { Loader } from "../components/General/Loader";
 import { KafkaNotification } from "../interface/notification/kafkaNotification";
 import { getRelativeTime } from "../utils/htmlUtils";
 import styles from "./Global.module.css";
+import { LoadMoreButton } from "../components/Button/Specific/LoadMoreButton";
 
 type NotificationsWindowProps = {
   notifications: KafkaNotification[],

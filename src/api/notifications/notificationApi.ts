@@ -5,8 +5,8 @@ const listNotificationsPath = "https://social.media:8446/notificationApi/notific
 export const listNotifications = async (userId: string, pageNumber:number, pageSize:number, accessToken: string) => {
   
   const params = new URLSearchParams({
-    pageNumber: pageNumber.toString(),
     pageSize: pageSize.toString(),
+    pageNumber: pageNumber.toString(),
     userId: userId,
   });
   

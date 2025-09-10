@@ -1,3 +1,15 @@
+# WARNING (Move it to the backend!)
+
+You need create a certification locally.
+
+User this command to create a crt file.
+
+            openssl pkcs12 -in service.p12 -clcerts -nokeys -out certificate.crt
+
+That should be imported in the browser under manage certificate options.
+
+![alt text](image.png)
+
 # Initial setup
 
 1.  Use

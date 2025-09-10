@@ -2,11 +2,11 @@ import {useSecurityMenuContext} from "../context/Identity/SecurityMenuContext.ts
 import {EmailForm} from "../components/Form/EmailForm.tsx";
 import {PasswordForm} from "../components/Form/PasswordForm.tsx";
 import {useAuth0} from "@auth0/auth0-react";
-import {BasicButton} from "../components/Button/General/BasicButton.tsx";
 import {DeleteButton} from "../components";
 import {useNavigate} from "react-router-dom";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 import {PAGE} from "./pageStyles.ts";
+import { Button } from "../components/Button/buttonStyles.ts";
 
 
 export const SecurityProfilePage = () => {
@@ -17,9 +17,9 @@ export const SecurityProfilePage = () => {
 
   return <div className="w-full">
     <div className={PAGE.profileHeader}>
-      <BasicButton action={() => {navigate("/profile/social")}} style={!isSecurity ? PAGE.profileActiveButton : PAGE.profileIdentityMenuButton} text="Social"/>
+      <Button onClick={() => {navigate("/profile/social")}}>Social</Button>
       <img src={userProfile.current.picture} alt="" className={PAGE.profileAvatar}/>
-      <BasicButton action={() => {navigate("/profile/security")}} style={isSecurity ? PAGE.profileActiveButton : PAGE.profileIdentityMenuButton} text="Security"/>
+      <Button onClick={() => {navigate("/profile/security")}}>Security</Button>
     </div>
     <div className={PAGE.profileTitleContainer}>
       <h2 className={PAGE.profileTitle}>Security Profile</h2>
@@ -41,12 +41,12 @@ const SecurityOverview = () => {
     <div className={PAGE.securityFormContainer}>
       <div className={PAGE.securityOptionContainer}>
         <h3 className={PAGE.securityContainerTitle}>{EMAIL_TYPE}</h3>
-        <BasicButton action={() => {switchOption(EMAIL_TYPE)}} text="Update" style={PAGE.securityUpdateButton}/>
+        <Button onClick={() => {switchOption(EMAIL_TYPE)}}>Update</Button>
       </div>
 
       <div className={PAGE.securityOptionContainer}>
         <h3 className={PAGE.securityContainerTitle}>{PASSWORD_TYPE}</h3>
-        <BasicButton action={() => {switchOption(PASSWORD_TYPE)}} text="Update" style={PAGE.securityUpdateButton}/>
+        <Button onClick={() => {switchOption(PASSWORD_TYPE)}}>Update</Button>
       </div>
 
       <div className={PAGE.securityDeleteContainer}>

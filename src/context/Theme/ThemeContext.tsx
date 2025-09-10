@@ -5,6 +5,8 @@ export type Theme = 'light' | 'dark';
 interface ThemeContextType {
   theme: Theme;
   toggleTheme: () => void;
+  isDashboardOpen: boolean;
+  toggleDashboard: () => void;
 }
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
@@ -15,13 +17,18 @@ interface ThemeProviderProps {
 
 export const ThemeProvider = ({ children }: ThemeProviderProps) => {
   const [theme, setTheme] = useState<Theme>('light');
+  const [isDashboardOpen, setDashboard] = useState<boolean>(true);
 
   const toggleTheme = () => {
     setTheme(prev => prev === 'light' ? 'dark' : 'light');
   };
 
+  const toggleDashboard = () => {
+    setDashboard(prev => prev === true ? false : true);
+  };
+
   return (
-    <ThemeContext.Provider value={{ theme, toggleTheme }}>
+    <ThemeContext.Provider value={{ theme, toggleTheme, isDashboardOpen, toggleDashboard}}>
       {children}
     </ThemeContext.Provider>
   );

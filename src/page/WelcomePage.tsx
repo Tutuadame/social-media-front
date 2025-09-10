@@ -1,7 +1,7 @@
 import { CSSProperties, useState } from "react";
-import { BasicButton } from "../components/Button/General/BasicButton.tsx";
-import {LoginButton, RegistrationButton} from "../components";
+import { LoginButton, RegistrationButton } from "../components";
 import {PAGE} from "./pageStyles.ts";
+import { Button } from "../components/Button/buttonStyles.ts";
 
 export const WelcomePage = () => {
   
@@ -24,7 +24,7 @@ export const WelcomePage = () => {
     <div className={PAGE.welcomePage}>
       <h1 className={PAGE.welcomeTitle}>It all starts now!</h1>
       {isRegister ? <RegistrationButton /> : <LoginButton />}
-      <BasicButton style={PAGE.welcomeSwitchButton} action={() => {setIsRegister(!isRegister)} } text={isRegister ? "Already have an account?" : "Don't have an account?"}/>
+      <Button onClick={() => {setIsRegister(!isRegister)}}>{isRegister ? "Already have an account?" : "Don't have an account?"}</Button>
     </div>
   </>
   );

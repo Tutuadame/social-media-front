@@ -17,37 +17,37 @@ export const LAYOUT = {
 const openContainer = {
   display: `flex flex-col`,
   positioning: `relative justify-start`,
-  size: `h-full w-full`,  
+  size: `h-full w-full`,
   gap: `gap-y-12`,
   padding: `p-6`,
-  transition: `transition-all duration-500 ease-in-out`,  
+  transition: `transition-all duration-500 ease-in-out`,
 };
 
 const closedContainer = {
   display: `flex flex-col`,
   positioning: `relative justify-start`,
-  size: `h-full w-fit`,   
+  size: `h-full w-full`,
   gap: `gap-y-6`,
-  padding: `p-3`,
-  transition: `transition-all duration-500 ease-in-out`,  
+  margin: `mx-auto mt-5`,
+  transition: `transition-all duration-500 ease-in-out`,
 };
 
 const openMain = {
   display: `flex flex-col relative`,
-  size: `w-[23vw] h-[100vh]`,  
+  size: `w-[23vw] h-[100vh]`,
   transition: `transition-all duration-300 ease-in-out`,
   border: `border-r-2 border-slate-800`
 };
 
 const closedMain = {
   display: openMain.display,
-  size: `w-28 h-[100vh]`,  
-  transition: openMain.transition, 
-  border: `border-r-2 border-slate-800` 
+  size: `w-1/12 h-[100vh]`,
+  transition: openMain.transition,
+  border: `border-r-2 border-slate-800`
 };
 
 const titleContainerOpen = {
-  display: `default`,  
+  display: `default`,
 };
 
 const titleContainerClosed = {
@@ -59,11 +59,11 @@ const titleOpen = {
   margin: `mx-auto my-16`,
   tracking: `tracking-[.3em]`,
   size: `h-fit`,
-  transition: `transition-all duration-300 ease-in-out`,  
+  transition: `transition-all duration-300 ease-in-out`,
 };
 
 const titleClose = {
-  text: `text-slate-900 text-xl text-center`,  
+  text: `text-slate-900 text-xl text-center`,
   size: `h-fit`,
   transition: `transition-all duration-300 ease-in-out`,
   opacity: `invisible absolute opacity-0`,

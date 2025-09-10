@@ -1,10 +1,10 @@
 import { useState } from "react";
-import { BasicButton } from "../Button/General/BasicButton.tsx";
 import { useSecurityMenuContext } from "../../context/Identity/SecurityMenuContext.tsx";
 import { updateUserInfo } from "../../api";
 import { useAuth0 } from "@auth0/auth0-react";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext.tsx";
-import { FORM_STYLES } from "./form-styles.ts";
+import { FORM_STYLES } from "./formStyles.ts";
+import { Button } from "../Button/buttonStyles.ts";
 
 export const PasswordForm = () => {
   const [formData, setFormData] = useState({ password: "", passwordAgain: "" });
@@ -77,16 +77,8 @@ export const PasswordForm = () => {
       </div>
 
       <div className={FORM_STYLES.buttonContainer}>
-        <BasicButton 
-          action={onSubmit} 
-          text="Submit" 
-          style={FORM_STYLES.submitButton}
-        />
-        <BasicButton 
-          action={() => switchOption("Overview")} 
-          text="Back" 
-          style={FORM_STYLES.submitButton}
-        />
+        <Button onClick={onSubmit}>Submit</Button>
+        <Button onClick={() => switchOption("Overview")}>Back</Button>
       </div>
 
       {!isValid && (

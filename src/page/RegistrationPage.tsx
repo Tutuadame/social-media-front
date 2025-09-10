@@ -1,11 +1,11 @@
 import React, {useState} from "react";
-import {BasicButton} from "../components/Button/General/BasicButton";
 import {createProfile} from "../api/profile/profileAPI";
 import {useAuth0} from "@auth0/auth0-react";
 import {CreateProfileRequest} from "../interface/profile/profile";
 import {useNavigate} from "react-router-dom";
 import {useLayoutContext} from "../context/Layout/LayoutOutContext.tsx";
 import {PAGE} from "./pageStyles.ts";
+import { Button } from "../components/Button/buttonStyles.ts";
 
 export const RegistrationPage = () => {
 
@@ -15,7 +15,7 @@ export const RegistrationPage = () => {
   const [formData, setFormData] = useState({"firstName": "", "lastName": "", "gender": "" });
   const navigate = useNavigate();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {    
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -28,7 +28,7 @@ export const RegistrationPage = () => {
       profileId: currentId
     }
 
-    userProfile.current = await createProfile(requestParamsProfile, userAccessToken || "").then(result => result);    
+    userProfile.current = await createProfile(requestParamsProfile, userAccessToken || "").then(result => result);
     await refetchProfile();
     navigate("/");
   }
@@ -76,7 +76,7 @@ export const RegistrationPage = () => {
 
 
       <div className={PAGE.registrationButtonContainer}>
-        <BasicButton action={() => {onSubmit()}} text="Submit" style={PAGE.registrationSubmitButton}/>        
+        <Button onClick={() => {onSubmit()}}>Submit</Button>
       </div>
     </div>
 

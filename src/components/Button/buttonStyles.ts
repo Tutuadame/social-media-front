@@ -1,28 +1,60 @@
-const basicButton = {
-  text: `text-slate-800 text-2xl tracking-wide`,
-  hover: `hover:bg-slate-800 hover:shadow-xl hover:text-slate-200`,
+import tw from 'tw-classed';
+
+const DARK_COLOR = `-slate-800`;
+const LIGHT_COLOR = `-blue-200`;
+
+const basicButtonStyle = {
+  hover: `hover:shadow-xl`,
   positioning: `items-center`,
-  size: `w-fit h-fit`,
   transition: `transition-all`,
   border: `rounded`,
-  padding: `py-3 px-4`,
-  margin: `mx-2 my-2`,
-  color: `bg-slate-100`,
   shadow: `shadow-xl`
 };
 
-const dashboardButton = {
-  hover: basicButton.hover,
-  size: `w-full`,
-  text: `text-slate-800`,
-  transition: basicButton.transition,
-  padding: `p-4`,
-  rounded: basicButton.border,
-  display: `flex flex-row`,
-  positioning: `items-center justify-start`,
-  gap: `gap-10`,
-  group: `group`
-}
+const lightStyle = {
+  hover: `hover:bg-orange-300 hover:text-black`,
+  default: `bg-blue-200 text-black`
+};
+
+const darkStyle = {
+  hover: `hover:bg-blue-200 hover:text-slate-800`,
+  backgroundColor: `bg-orange-300`,
+  textColor: `text-black`
+};
+
+export const Button = tw('button', Object.values(basicButtonStyle).join(' '), {
+    variants: {
+      mode: {
+        light: Object.values(lightStyle).join(' '),
+        dark: Object.values(darkStyle).join(' ')
+      },
+      type:{
+        default: "button",
+        submit: "submit",
+        hidden: "hidden"
+      },
+      role: {
+        dashboard: 'w-fit flex flex-row items-center justify-start gap-10 group',
+        dashboardMini: 'w-20 h-20 flex flex-row items-center justify-start gap-10 group mx-auto',
+        loader: 'mt-10 p-3 rounded-full absolute bottom-0 translate-x-2/4',
+        header: '',
+        submit: '',
+        link: '',
+        interact: '',
+        accept: '',
+      },
+      size: {
+        small: '',
+        medium: 'text-2xl tracking-wide p-3 m-2',
+        large: ''
+      }
+    },
+    defaultVariants: {
+      mode: 'light',
+      type: 'default',
+      size: 'medium'
+    }
+});
 
 const dashboardButtonTitle = {
   text: `text-center text-2xl`,
@@ -30,41 +62,45 @@ const dashboardButtonTitle = {
   tracking: `tracking-widest`,
   transition: `transition-all`,
   hover: `group-hover:tracking-[.3rem]`
-}
+};
 
-const toggleSidebarButtonOpen = {
-  size: `w-20 h-20`,
-  text: dashboardButton.text,
-  transition: `transition-all duration-300 ease-in-out`,
-  rotate: `rotate-180`,
-  positioning: `mx-auto`,
-  hover: basicButton.hover,
-  rounded: basicButton.border,
-}
+export const DashboardButtonTitle = tw('p', Object.values(dashboardButtonTitle).join(' '));
 
-const toggleSidebarButtonClose = {
-  size: `w-20 h-20`,
-  text: dashboardButton.text,
-  transition: `transition-all duration-300 ease-in-out`,
-  padding: `p-6`,
-  hover: basicButton.hover,
-  rounded: basicButton.border,
-}
-
-const loadMore = {
+const notificationCount = {
+  position: `absolute top-0 right-1`,
+  transform: `-translate-y-1/2`,
+  zIndex: `z-20`,
+  background: `bg-red-900`,
+  size: `w-8 h-8`,
   border: `rounded-full`,
-  padding: `p-3`,
-  color: `bg-slate-100`,
-  hover: `hover:bg-slate-900 hover:text-slate-100`,
-  margin: `mt-10`
-}
+  margin: `my-auto`,
+  text: `text-center text-slate-100`,
+  content: `content-center`
+};
 
-export const BUTTON = {
-  basic: Object.values(basicButton).join(' '),
-  dashboard: Object.values(dashboardButton).join(' '),
-  dashboardButtonTitle: Object.values(dashboardButtonTitle).join(' '),
-  toggleSidebarButtonOpen: Object.values(toggleSidebarButtonOpen).join(' '),
-  toggleSidebarButtonClose: Object.values(toggleSidebarButtonClose).join(' '),
-  loadMore: Object.values(loadMore).join(' '),
-  hidden: "hidden"
-} as const;
+export const NotificationCounter = tw('p', 'hidden', {
+  variants: {
+    style: {
+      show: Object.values(notificationCount).join(' '),
+      hide: 'hidden',
+    }
+  }
+});
+
+const toggleDashboard = {
+  size: `w-full h-20`,
+  transition: `transition-all duration-300 ease-in-out`,
+  border: `rounded`
+};
+
+export const DashboardToggle = tw('button', Object.values(toggleDashboard).join(' '), {
+  variants: {
+    style: {
+      open: 'rotate-180 mx-auto',
+      close: 'p-4'
+    }
+  },
+  defaultVariants: {
+    style: 'open',
+  }
+});

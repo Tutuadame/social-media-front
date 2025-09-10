@@ -1,25 +1,17 @@
-import { SideBarButton } from './Button/Specific/DashBoard/SideBarButton';
-import { ActivityButton } from './Button/Specific/DashBoard/ActivityButton';
-import { HomeButton } from './Button/Specific/DashBoard/HomeButton';
-import { IdentityButton } from './Button/Specific/DashBoard/IdentityButton';
-import { LogOutButton } from './Button/Specific/DashBoard/LogOutButton';
-import { NotificationButton } from './Button/Specific/DashBoard/NotificationButton';
-import { LoginButton } from './Button/Specific/Home/LoginButton';
-import { RegistrationButton } from './Button/Specific/Home/RegistrationButton';
-import { DeleteButton } from './Button/Specific/Profile/DeleteButton';
+import { LoginButton } from './Button/Specific/LoginButton.tsx';
+import { RegistrationButton } from './Button/Specific/RegistrationButton.tsx';
+import { DeleteButton } from './Button/Specific/DeleteButton.tsx';
 import { MainComponent } from './Home/MainComponent.tsx';
 import { WelcomePage } from '../page/WelcomePage.tsx';
+import { NotificationButton } from './Button/Specific/NotificationButton.tsx';
+import { SideBarButton } from './Button/Specific/SideBarButton.tsx';
 
 export {
   LoginButton,
   RegistrationButton,
   DeleteButton,
-  IdentityButton,
-  LogOutButton,
   MainComponent,
   WelcomePage,
-  HomeButton,
-  ActivityButton,
   NotificationButton,
   SideBarButton
 };

@@ -1,11 +1,11 @@
 import React, { Dispatch, SetStateAction, useEffect } from "react";
-import {Post} from "../../../../interface/profile/post.ts";
-import {createSvg} from "../../../../utils/htmlUtils.tsx";
-import {CreateVoteRequest} from "../../../../interface/profile/vote.ts";
-import {addVote, checkVote} from "../../../../api/profile/voteAPI.ts";
-import {useLayoutContext} from "../../../../context/Layout/LayoutOutContext.tsx";
-import {ProfileResponse } from "../../../../interface/profile/profile.ts";
-import styles from "./Global.module.css";
+import {Post} from "../../../interface/profile/post.ts";
+import {createSvg} from "../../../utils/htmlUtils.tsx";
+import {CreateVoteRequest} from "../../../interface/profile/vote.ts";
+import {addVote, checkVote} from "../../../api/profile/voteAPI.ts";
+import {useLayoutContext} from "../../../context/Layout/LayoutOutContext.tsx";
+import {ProfileResponse } from "../../../interface/profile/profile.ts";
+import styles from "./Home.module.css";
 
 
 type VoteButtonProps = {
