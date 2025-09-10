@@ -1,25 +1,23 @@
 import {useRef, useState} from "react"
 import { GetPageablePostsRequest, Post } from "../../interface/profile/post";
 import { getConnectionPosts } from "../../api/profile/postAPI";
-import { LoadMoreButton } from "../Button/General/LoadMoreButton";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext";
 import { CreatePostComponent } from "./CreatePostComponent";
 import { searchForProfiles } from "../../api/profile/profileAPI";
 import { ProfileResponse, SearchForProfileRequest } from "../../interface/profile/profile";
-import { FoundItemsComponent } from "./FoundItemsComponent";
-import { BasicButton } from "../Button/General/BasicButton";
 import { SearchBar } from "../SearchBar";
 import {useMutation, useQuery} from "react-query";
 import {handleArrayMutation} from "../../utils/htmlUtils.tsx";
 import {ConnectionResponse} from "../../interface/profile/connection.ts";
 import {PostComponent} from "../General/PostComponent.tsx";
 import {nanoid} from "nanoid";
+import { MAIN_AUTH } from "./homeStyle.ts";
+import { LoadMoreButton } from "../Button/Specific/LoadMoreButton.tsx";
 
 
 export const MainComponent = () => {
   
-  const loadMoreButtonStyle = "transition-all h-fit p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10";
-  const timeLineContainerStyle = "w-full gap-y-10 flex flex-col overflow-auto h-full pb-[10vh]";
+    const timeLineContainerStyle = "w-full gap-y-10 flex flex-col overflow-auto h-full pb-[10vh] relative";
   
   const { userConnections, userAccessToken, userProfile } = useLayoutContext();
   
@@ -71,19 +69,29 @@ export const MainComponent = () => {
 
   return (
     <div className="flex flex-col w-full">
-      <div className="w-full bg-slate-800 h-[20vh] flex flex-row justify-center items-center border-b-4 border-white gap-10">
-        <h2 className="tracking-widest text-2xl text-white">Missing somebody?</h2>
-        <SearchBar onSearch={onSearch} searchExpression={searchExpression} setSearchExpression={setSearchExpression} />
-        <BasicButton action={resetSearch} text="Reset" />
+      <div className={MAIN_AUTH.homeHeader}>
+        <div className={MAIN_AUTH.logoContainer}>
+          <img src="src\assets\handball_logo.svg" alt="Description" className={MAIN_AUTH.logo} />
+          <h2 className={MAIN_AUTH.logoTitle}>Sports Maniac</h2>
+        </div>
+        <div className={MAIN_AUTH.searchSection}>
+          <SearchBar 
+            onSearch={onSearch} 
+            searchExpression={searchExpression} 
+            setSearchExpression={setSearchExpression} 
+            resetSearch={resetSearch}
+            />
+        </div>
+
       </div>
       <div className="flex-row flex w-full justify-between h-[80vh]">
-        <FoundItemsComponent
+        {/*<FoundItemsComponent
           foundProfiles={foundProfiles}
           isSearchOn={isSearchOn}
           onSearch={onSearch}
           searchExpression={searchExpression}
           pageRef={searchPageRef}
-        />
+        />*/}
         <div className={timeLineContainerStyle}>
           <CreatePostComponent />
           {!isPostsLoading && posts.map(
@@ -103,7 +111,7 @@ export const MainComponent = () => {
                 <PostComponent post={post} profile={profile} />
               </div>
             })}
-          <LoadMoreButton pageRef={postsPageRef} callItems={callPosts} style={loadMoreButtonStyle}/>
+          <LoadMoreButton pageRef={postsPageRef} callItems={callPosts}/>
         </div>
       </div>
     </div>

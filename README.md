@@ -1,50 +1,39 @@
-# React + TypeScript + Vite
+# WARNING (Move it to the backend!)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+You need create a certification locally.
 
-Currently, two official plugins are available:
+User this command to create a crt file.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+            openssl pkcs12 -in service.p12 -clcerts -nokeys -out certificate.crt
 
-## Expanding the ESLint configuration
+That should be imported in the browser under manage certificate options.
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+![alt text](image.png)
 
-- Configure the top-level `parserOptions` property like this:
+# Initial setup
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+1.  Use
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+          npm install
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+2.  To be able to use Auth0 you will need a .env file containing the following:
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+          VITE_AUTH0_DOMAIN=your-auth0-domain.eu.auth0.com
+          VITE_AUTH0_CLIENT_ID=your-auth0-client-id
+
+3.  Run the following command in a bash terminal, this is necessary to be able to receive notifications.
+
+          ./set_up_kafka.sh
+
+    Alternatively, you can use, if you have it installed (with the previous command)
+
+          ./start_kafka.sh
+
+    In case you are using VS code, you might have to unset some environment variables.
+
+          unset GIO_MODULE_DIR
+          unset GTK_PATH
+
+4.  You can start the frontend with:
+
+           npm run dev

@@ -5,10 +5,10 @@ import {useEffect, useState} from "react";
 import { useActivityContext } from "../../context/Activity/ActivityContext.tsx";
 import { PostComponent } from "../General/PostComponent.tsx";
 import { useLayoutContext } from "../../context/Layout/LayoutOutContext.tsx";
-import { IconButton } from "../Button/General/IconButton.tsx";
 import {createSvg, handleArrayMutation} from "../../utils/htmlUtils.tsx";
-import { LoadMoreButton } from "../Button/General/LoadMoreButton.tsx";
 import {useMutation, useQuery} from "react-query";
+import { Button } from "../Button/buttonStyles.ts";
+import { LoadMoreButton } from "../Button/Specific/LoadMoreButton.tsx";
 
 export const UserPostsComponent = () => {
 
@@ -57,18 +57,13 @@ export const UserPostsComponent = () => {
           {posts?.map((post) => {
             return (
               <div key={post.id} className="flex flex-row gap-y-10 m-auto">
-                <PostComponent post={post} rounded="rounded-l-xl"/>
-                <IconButton ariaLabel="Delete" style={deletePostStyle} action={async () => {await deleteUserPost(post.id)}}>
-                  {deleteSVG}
-                </IconButton>
+                <PostComponent post={post}/>
+                <Button onClick={async () => {await deleteUserPost(post.id)}}>{deleteSVG}</Button>
               </div>
             );
           })}
-          <LoadMoreButton
-            pageRef={postPage}
-            callItems={callUserPosts}
-            style="transition-all p-3 rounded-full bg-slate-100 hover:bg-slate-900 hover:text-slate-100 mt-10"
-          />
+          
+          <LoadMoreButton pageRef={postPage} callItems={callUserPosts}/>
         </div>}
       </div>
     

@@ -6,6 +6,10 @@ KAFKA_URL="https://downloads.apache.org/kafka/4.0.0/kafka_${KAFKA_VERSION}.tgz"
 DOWNLOAD_DIR="$HOME/Documents"
 KAFKA_DIR="$DOWNLOAD_DIR/kafka"
 KAFKA_ARCHIVE="kafka_${KAFKA_VERSION}.tgz"
+CONFIG_SERVER="$KAFKA_DIR/config/server.properties"
+LOGS_PATH="$KAFKA_DIR/logs"
+RESET=0
+
 
 echo "=== Kafka Download and Setup Script ==="
 
@@ -16,11 +20,14 @@ cd "$DOWNLOAD_DIR"
 # Check if Kafka is already installed
 if [[ -d "$KAFKA_DIR" ]]; then
     echo "Kafka directory already exists: $KAFKA_DIR"
+    echo "Setting permissions..."
+    chmod -R a+rwx "$KAFKA_DIR"
     read -p "Do you want to re-download and overwrite? (y/N): " overwrite
     if [[ ! "$overwrite" =~ ^[Yy]$ ]]; then
         echo "Using existing Kafka installation..."
     else
         echo "Removing existing Kafka directory..."
+        RESET=1
         rm -rf "$KAFKA_DIR"
     fi
 fi
@@ -56,15 +63,14 @@ if [[ ! -d "$KAFKA_DIR" ]]; then
     rm "$KAFKA_ARCHIVE"
     
     echo "Kafka extracted to: $KAFKA_DIR"
-    kafka_home="$KAFKA_DIR"
 fi
 
 # Set up paths
-log4j2_path="$kafka_home/config/tools-log4j2.yaml"
-kafka_storage="$kafka_home/bin/kafka-storage.sh"
+log4j2_path="$KAFKA_DIR/config/tools-log4j2.yaml"
+kafka_storage="$KAFKA_DIR/bin/kafka-storage.sh"
 
 # Verify installation
-if [[ ! -d "$kafka_home" ]]; then
+if [[ ! -d "$KAFKA_DIR" ]]; then
     echo "Error: Kafka installation failed!"
     exit 1
 fi
@@ -74,38 +80,49 @@ if [[ ! -f "$kafka_storage" ]]; then
     exit 1
 fi
 
-# Make scripts executable (just in case)
-chmod +x "$kafka_home/bin"/*.sh
+log_dirs_ln="$(grep -n "log.dirs" $CONFIG_SERVER | head -n 1 | cut -d: -f1)"
+cluster_id="$KAFKA_CLUSTER_ID"
 
 echo "=== Set up Kafka ==="
 
+
+
 # Start Kafka in new terminal
-gnome-terminal -- bash -c "
-    set -e
-    cd '$kafka_home' &&
-    
+gnome-terminal -- bash -c '
+    set -m
+    cd '$KAFKA_DIR' &&
+
+    echo Remove default path... &&
+    sed -in '73d' '$CONFIG_SERVER'
+
+    echo Configure logging directory... &&
+    sed -in "73i\log.dirs='$LOGS_PATH'" '$CONFIG_SERVER'
+
     # Set log4j config if file exists
     if [[ -f '$log4j2_path' ]]; then
-        export KAFKA_LOG4J_OPTS=\"-Dlog4j.configurationFile=$log4j2_path\"
-        echo \"Setting log4j config: \$KAFKA_LOG4J_OPTS\"
+        export KAFKA_LOG4J_OPTS="-Dlog4j.configurationFile='$log4j2_path'"
+        echo Setting log4j config: $KAFKA_LOG4J_OPTS
     fi
-    
-    echo \"Generating cluster ID...\" &&
-    KAFKA_CLUSTER_ID=\"\$(bin/kafka-storage.sh random-uuid 2>/dev/null)\" &&
-    echo \"Generated Cluster ID: \$KAFKA_CLUSTER_ID\" &&
-    
-    echo \"Formatting Kafka storage...\" &&
-    bin/kafka-storage.sh format -t \"\$KAFKA_CLUSTER_ID\" -c config/server.properties --standalone &&
-    
-    echo \"Starting Kafka server...\" &&
-    echo \"Kafka is running! Use Ctrl+C to stop.\" &&
-    bin/kafka-server-start.sh config/server.properties ||
-    echo \"Kafka stopped with exit code: \$?\"
-    
-    echo \"\"
-    echo \"Kafka server stopped. Press Enter to close terminal.\"
+
+    if [[ '$RESET' -eq 1 ]]; then
+        echo Kafka setup initiated... &&
+        echo Generating cluster ID... &&
+        KAFKA_CLUSTER_ID="$(bin/kafka-storage.sh random-uuid 2>/dev/null)" &&
+        
+        echo Generated Cluster ID: $KAFKA_CLUSTER_ID &&
+        echo Formatting Kafka storage... &&
+        bin/kafka-storage.sh format -t $KAFKA_CLUSTER_ID -c '$CONFIG_SERVER' --standalone
+    fi
+
+    echo Starting Kafka server... &&
+    echo Kafka is running! Use Ctrl+C to stop. &&
+    bin/kafka-server-start.sh '$CONFIG_SERVER' ||
+    echo Kafka stopped with exit code: $?
+
+    echo
+    echo Kafka server stopped. Press Enter to close terminal.
     read
-"
+'
 
 echo "Kafka startup initiated in new terminal window."
 echo "Check the terminal window for Kafka server status."

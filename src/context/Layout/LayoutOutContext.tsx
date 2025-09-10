@@ -81,9 +81,9 @@ export const LayoutContextProvider: React.FC<{ children: ReactNode }> = ({ child
 }
 
 export function useLayoutContext() {
-    const layoutContext = useContext(LayoutContext);
-    if (layoutContext === undefined) {
-        throw new Error("useLayoutContext must be used with with LayoutContext!");
-    }
-    return layoutContext;
+  const layoutContext = useContext(LayoutContext);
+  if (layoutContext === undefined) {
+    throw new Error("useLayoutContext must be used with with LayoutContext!");
+  }
+  return layoutContext;
 }

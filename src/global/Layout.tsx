@@ -1,24 +1,33 @@
 import { Outlet } from "react-router-dom";
 import { SideBar } from "./index";
-import {CSSProperties} from "react";
 import {ActivityMenuProvider} from "../context/Activity/ActivityContext.tsx";
 import {SecurityMenuProvider} from "../context/Identity/SecurityMenuContext.tsx";
 import {useAuth0} from "@auth0/auth0-react";
+import { ThemeProvider, useTheme } from "../context/Theme/ThemeContext.tsx";
+import { getLayoutStyles } from "./themeManager.ts";
+
+const LayoutContent = () => {
+  const { isAuthenticated } = useAuth0();
+  const { theme } = useTheme();
+  const isRegistration = window.location.href === "https://social.media:3000/registration";
+  const layoutStyles = getLayoutStyles(theme);
+  
+  return (
+    <div className={layoutStyles.basic}>
+      { isAuthenticated && !isRegistration ? <SideBar/> : <></> }
+      <main className={layoutStyles.main}><Outlet /></main>
+    </div>
+  );
+};
 
 export const Layout = () => {
-  const { isAuthenticated } = useAuth0();
-  const layoutStyle = "flex flex-row flex-nowrap flex-auto bg-slate-600";
-  const mainStyle: CSSProperties = {width: "100vw", height: "100vh"};
-  const isRegistration = window.location.href === "https://social.media:3000/registration";
-  
-  return <>
-    <ActivityMenuProvider>
-      <SecurityMenuProvider>
-        <div className={layoutStyle}>
-          { isAuthenticated && !isRegistration ? <SideBar/> : <></> }
-          <main className="relative flex flex-grow justify-center" style={mainStyle}><Outlet /></main>
-        </div>
-      </SecurityMenuProvider>
-    </ActivityMenuProvider>
-  </>
+  return (
+    <ThemeProvider>
+      <ActivityMenuProvider>
+        <SecurityMenuProvider>
+          <LayoutContent />
+        </SecurityMenuProvider>
+      </ActivityMenuProvider>
+    </ThemeProvider>
+  );
 };
